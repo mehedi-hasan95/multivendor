@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { headers } from "next/headers";
-import { auth } from "@/lib/auth";
+import { authSession } from "./lib/auth-session";
 
 export async function middleware(request: NextRequest) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await authSession();
 
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (session?.user.role !== "admin" && request.nextUrl.pathname === "/admin") {
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
