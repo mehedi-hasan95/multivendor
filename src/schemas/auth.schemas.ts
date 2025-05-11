@@ -1,4 +1,3 @@
-import { userRole } from "@/generated/prisma";
 import { z } from "zod";
 
 export const loginSchema = z.object({
@@ -15,7 +14,6 @@ export const registerSchema = z
     name: z.string().min(2, { message: "Name is required" }),
     email: z.string().email({ message: "Email is required" }),
     username: z.string().min(2, { message: "Username is required" }),
-    role: z.enum([userRole.user, userRole.vendor]).default(userRole.user),
     password: z
       .string()
       .min(4, { message: "Your password must be atleast 4 characters long" })

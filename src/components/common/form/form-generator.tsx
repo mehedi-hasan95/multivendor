@@ -97,14 +97,18 @@ export const FormGenerator = ({
             <FormItem>
               {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
               <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
+                <FormControl className="w-full cursor-pointer">
                   <SelectTrigger>
                     <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
                   {options?.map((item) => (
-                    <SelectItem key={item.id} value={item.value}>
+                    <SelectItem
+                      key={item.id}
+                      value={item.value}
+                      className="cursor-pointer"
+                    >
                       {item.label}
                     </SelectItem>
                   ))}

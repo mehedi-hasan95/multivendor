@@ -9,19 +9,6 @@ export type AuthProps = {
   options?: { value: string; label: string; id: string }[];
 };
 
-const options = [
-  {
-    id: "1",
-    value: "user",
-    label: "User",
-  },
-  {
-    id: "2",
-    value: "vendor",
-    label: "Vendor",
-  },
-];
-
 export const LOGIN_FORM: AuthProps[] = [
   {
     id: "1",
@@ -65,14 +52,6 @@ export const REGISTER_FORM: AuthProps[] = [
     placeholder: "me@me.com",
     label: "Email",
     name: "email",
-  },
-  {
-    id: "4",
-    inputType: "select",
-    placeholder: "Your User Role",
-    label: "User Role",
-    name: "role",
-    options: options,
   },
   {
     id: "5",
