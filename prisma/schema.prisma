@@ -89,3 +89,29 @@ model Verification {
 
   @@map("verification")
 }
+
+model Categories {
+  id            String          @id @default(uuid())
+  name          String
+  slug          String
+  color         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  SubCategories SubCategories[]
+
+  @@unique([slug])
+  @@index([slug])
+}
+
+model SubCategories {
+  id           String     @id @default(uuid())
+  name         String
+  slug         String
+  categorySlug String
+  categorys    Categories @relation(fields: [categorySlug], references: [slug], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([slug])
+  @@index([slug])
+}

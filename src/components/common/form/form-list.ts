@@ -70,3 +70,22 @@ export const REGISTER_FORM: AuthProps[] = [
     name: "confirmPassword",
   },
 ];
+
+export const CATEGORY_FORM: AuthProps[] = [
+  {
+    id: "1",
+    type: "text",
+    inputType: "input",
+    placeholder: "e.g. Web Development",
+    name: "name",
+    label: "Category Name",
+  },
+  {
+    id: "2",
+    type: "text",
+    inputType: "input",
+    placeholder: "Hasan",
+    label: "Slug",
+    name: "slug",
+  },
+];
