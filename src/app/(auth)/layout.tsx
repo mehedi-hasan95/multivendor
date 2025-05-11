@@ -1,11 +1,14 @@
 import BackdropGradient from "@/components/generated/backdrop-gradient";
 import GlassCard from "@/components/generated/glass-card";
+import Link from "next/link";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="container mx-auto px-3 md:px-5 h-screen flex justify-center items-center">
       <div className="flex flex-col w-full items-center py-24">
-        <h2 className="text-4xl font-bold text-themeDarkGray">Nestify</h2>
+        <Link href={"/"}>
+          <h2 className="text-4xl font-bold text-themeDarkGray">Nestify</h2>
+        </Link>
         <BackdropGradient
           className="w-4/12 h-2/6 opacity-40"
           container="flex flex-col items-center"
