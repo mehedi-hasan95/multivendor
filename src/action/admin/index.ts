@@ -52,6 +52,7 @@ export const getSingelCategoyAction = async (slug: string) => {
 
 // update a category
 export const updateCategoryAction = async (
+  id: string,
   slug: string,
   values: z.infer<typeof categorySchema>
 ) => {
@@ -65,7 +66,7 @@ export const updateCategoryAction = async (
         slug: values.slug,
       },
     });
-    if (uniqueSlue) {
+    if (uniqueSlue && uniqueSlue.id !== id) {
       return { error: "Slug already exit, try another slug" };
     }
     await db.categories.update({
