@@ -13,15 +13,11 @@ import {
 } from "@/components/ui/form";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { categorySchema } from "@/schemas/schemas";
-import { ColorPicker } from "./color-picker";
 import BackdropGradient from "@/components/generated/backdrop-gradient";
-import { createCategoryAction, updateCategoryAction } from "@/action/admin";
-import { toast } from "sonner";
-import { LoadingButton } from "@/components/common/loading-button";
-import { Categories } from "@/generated/prisma";
 import { Input } from "@/components/ui/input";
-import { HeaderTitle } from "@/components/common/header-title";
+import { subCategorySchema } from "@/schemas/schemas";
+import { createSubCategory } from "@/action/admin";
+import { toast } from "sonner";
 
 const slugify = (str: string) =>
   str
@@ -31,24 +27,21 @@ const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-interface CategoryFormProps {
-  initialData: Categories | null;
+interface SubCategoryFormProps {
+  catSlug: string;
 }
-
-export const CategoryForm = ({ initialData }: CategoryFormProps) => {
+export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
   const router = useRouter();
   const [isPending, startTransaction] = useTransition();
   const [isSlugEdited, setIsSlugEdited] = useState(false);
   const prevTitleRef = useRef("");
 
-  const buttonLabel = initialData ? "Update Category" : "Create Category";
-
-  const form = useForm<z.infer<typeof categorySchema>>({
-    resolver: zodResolver(categorySchema),
+  const form = useForm<z.infer<typeof subCategorySchema>>({
+    resolver: zodResolver(subCategorySchema),
     defaultValues: {
-      name: initialData?.name || "",
-      slug: initialData?.slug || "",
-      color: initialData?.color || undefined,
+      name: "",
+      slug: "",
+      categorySlug: catSlug,
     },
   });
 
@@ -56,13 +49,13 @@ export const CategoryForm = ({ initialData }: CategoryFormProps) => {
   const slug = form.watch("slug");
 
   // Initialize slug edit state and title ref if editing
-  useEffect(() => {
-    if (initialData) {
-      form.setValue("slug", initialData.slug);
-      prevTitleRef.current = initialData.name;
-      setIsSlugEdited(true);
-    }
-  }, [initialData, form]);
+  //   useEffect(() => {
+  //     if (initialData) {
+  //       form.setValue("slug", initialData.slug);
+  //       prevTitleRef.current = initialData.name;
+  //       setIsSlugEdited(true);
+  //     }
+  //   }, [initialData, form]);
 
   // Auto-generate slug from title unless manually edited
   useEffect(() => {
@@ -73,41 +66,21 @@ export const CategoryForm = ({ initialData }: CategoryFormProps) => {
     }
   }, [title, slug, isSlugEdited, form]);
 
-  function onSubmit(values: z.infer<typeof categorySchema>) {
+  function onSubmit(values: z.infer<typeof subCategorySchema>) {
     startTransaction(() => {
-      if (initialData) {
-        updateCategoryAction(initialData.id, initialData.slug, values).then(
-          (data) => {
-            if (data.success) {
-              toast(data.success);
-              router.push("/admin/categories");
-            } else {
-              toast.error(data.error);
-            }
-          }
-        );
-      } else {
-        createCategoryAction(values).then((data) => {
-          if (data.success) {
-            toast(data.success);
-            router.push("/admin/categories");
-          } else {
-            toast.error(data.error);
-          }
-        });
-      }
+      createSubCategory(catSlug, values).then((data) => {
+        if (data.success) {
+          toast(data.success);
+          router.push("/admin/categories");
+        } else {
+          toast.error(data.error);
+        }
+      });
     });
   }
 
   return (
     <>
-      {initialData && (
-        <HeaderTitle
-          title="Edit this category"
-          linkText="Create Subcategory"
-          linkHref={`/admin/categories/${slug}/new`}
-        />
-      )}
       <BackdropGradient
         className="w-4/12 h-2/6 opacity-40"
         container="flex flex-col items-center"
@@ -151,25 +124,19 @@ export const CategoryForm = ({ initialData }: CategoryFormProps) => {
             />
             <FormField
               control={form.control}
-              name="color"
+              name="categorySlug"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Color</FormLabel>
+                  <FormLabel>Sub Category</FormLabel>
                   <FormControl>
-                    <ColorPicker
-                      onPickerChange={field.onChange}
-                      value={field.value}
-                    />
+                    <Input {...field} readOnly />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {isPending ? (
-              <LoadingButton className="w-auto" />
-            ) : (
-              <Button type="submit">{buttonLabel}</Button>
-            )}
+
+            <Button type="submit">Create Sub Category</Button>
           </form>
         </Form>
       </BackdropGradient>

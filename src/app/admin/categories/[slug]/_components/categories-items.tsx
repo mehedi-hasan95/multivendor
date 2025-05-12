@@ -2,22 +2,29 @@
 
 import { ChevronRight } from "lucide-react";
 
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Categories } from "@/generated/prisma";
+import { Categories, SubCategories } from "@/generated/prisma";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 
 interface CategoryItemsProps {
-  categories: Categories[];
+  categories: (Categories & { SubCategories: SubCategories[] })[];
 }
 export function CategoryItems({ categories }: CategoryItemsProps) {
   return (
-    <SidebarMenu className="grid md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5">
+    <SidebarMenu className="grid md:grid-cols-3 lg:grid-cols-4 items-start gap-5 mt-5">
       {categories.map((item) => (
         <Card key={item.slug}>
           <CardContent>
@@ -40,19 +47,21 @@ export function CategoryItems({ categories }: CategoryItemsProps) {
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   </SidebarMenuButton>
                 </CollapsibleTrigger>
-                {/* <CollapsibleContent>
+                <CollapsibleContent>
                   <SidebarMenuSub>
-                    {item.items?.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
+                    {item.SubCategories?.map((subItem) => (
+                      <SidebarMenuSubItem key={subItem.id}>
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
-                            <span>{subItem.title}</span>
-                          </a>
+                          <Link
+                            href={`/admin/categories/${item.slug}/${subItem.slug}`}
+                          >
+                            <span>{subItem.name}</span>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
                   </SidebarMenuSub>
-                </CollapsibleContent> */}
+                </CollapsibleContent>
               </SidebarMenuItem>
             </Collapsible>
           </CardContent>

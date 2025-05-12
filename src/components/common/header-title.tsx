@@ -19,7 +19,7 @@ export const HeaderTitle = ({
         <p className="text-gray-500">{description}</p>
       </div>
       <Link
-        className="bg-blue-700 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-800 transition-colors duration-200"
+        className="bg-slate-900 text-white px-4 py-2 rounded-md font-semibold hover:bg-slate-800 transition-colors duration-200"
         href={linkHref}
       >
         {linkText}

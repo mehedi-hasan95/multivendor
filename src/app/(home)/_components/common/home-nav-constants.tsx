@@ -11,9 +11,14 @@ export const HOME_NAV_ITEMS = [
     label: "Features",
     href: "/features",
   },
+
   {
     label: "Pricing",
     href: "/pricing",
+  },
+  {
+    label: "Admin",
+    href: "/admin",
   },
 ];
 
