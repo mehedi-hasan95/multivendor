@@ -119,8 +119,50 @@ export const createSubCategory = async (
     });
 
     revalidatePath("/admin/categories");
-    return { success: "Category update successfully" };
+    return { success: "Sub Category create successfully" };
   } catch (error) {
     return { error: "Something went wrong" };
   }
+};
+
+// update sub category
+
+export const updateSubCategoryAction = async (
+  id: string,
+  slug: string,
+  values: z.infer<typeof subCategorySchema>
+) => {
+  try {
+    const userRole = await authSession();
+    if (userRole?.user.role !== "admin") {
+      return { error: "Unauthorize user" };
+    }
+    const uniqueSlue = await db.subCategories.findUnique({
+      where: {
+        slug: values.slug,
+      },
+    });
+    if (uniqueSlue && uniqueSlue.id !== id) {
+      return { error: "Slug already exit, try another slug" };
+    }
+    await db.subCategories.update({
+      where: {
+        slug,
+      },
+      data: { ...values },
+    });
+
+    revalidatePath("/admin/categories");
+    return { success: "Sbu Category update successfully" };
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
+};
+
+// get single category
+export const getSingelSubCategory = async (slug: string) => {
+  const category = await db.subCategories.findUnique({
+    where: { slug },
+  });
+  return category;
 };

@@ -16,8 +16,10 @@ import { useRouter } from "next/navigation";
 import BackdropGradient from "@/components/generated/backdrop-gradient";
 import { Input } from "@/components/ui/input";
 import { subCategorySchema } from "@/schemas/schemas";
-import { createSubCategory } from "@/action/admin";
+import { createSubCategory, updateSubCategoryAction } from "@/action/admin";
 import { toast } from "sonner";
+import { SubCategories } from "@/generated/prisma";
+import { LoadingButton } from "@/components/common/loading-button";
 
 const slugify = (str: string) =>
   str
@@ -29,8 +31,15 @@ const slugify = (str: string) =>
 
 interface SubCategoryFormProps {
   catSlug: string;
+  initialData: SubCategories | null;
 }
-export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
+export const SubCategoryForm = ({
+  catSlug,
+  initialData,
+}: SubCategoryFormProps) => {
+  const buttonTitle = initialData
+    ? "Update Sub Category"
+    : "Create Sub Category";
   const router = useRouter();
   const [isPending, startTransaction] = useTransition();
   const [isSlugEdited, setIsSlugEdited] = useState(false);
@@ -38,7 +47,7 @@ export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
 
   const form = useForm<z.infer<typeof subCategorySchema>>({
     resolver: zodResolver(subCategorySchema),
-    defaultValues: {
+    defaultValues: initialData || {
       name: "",
       slug: "",
       categorySlug: catSlug,
@@ -49,13 +58,13 @@ export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
   const slug = form.watch("slug");
 
   // Initialize slug edit state and title ref if editing
-  //   useEffect(() => {
-  //     if (initialData) {
-  //       form.setValue("slug", initialData.slug);
-  //       prevTitleRef.current = initialData.name;
-  //       setIsSlugEdited(true);
-  //     }
-  //   }, [initialData, form]);
+  useEffect(() => {
+    if (initialData) {
+      form.setValue("slug", initialData.slug);
+      prevTitleRef.current = initialData.name;
+      setIsSlugEdited(true);
+    }
+  }, [initialData, form]);
 
   // Auto-generate slug from title unless manually edited
   useEffect(() => {
@@ -68,14 +77,28 @@ export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
 
   function onSubmit(values: z.infer<typeof subCategorySchema>) {
     startTransaction(() => {
-      createSubCategory(catSlug, values).then((data) => {
-        if (data.success) {
-          toast(data.success);
-          router.push("/admin/categories");
-        } else {
-          toast.error(data.error);
-        }
-      });
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      initialData
+        ? updateSubCategoryAction(
+            initialData.id,
+            initialData.slug,
+            values
+          ).then((data) => {
+            if (data.success) {
+              toast(data.success);
+              router.push("/admin/categories");
+            } else {
+              toast.error(data.error);
+            }
+          })
+        : createSubCategory(catSlug, values).then((data) => {
+            if (data.success) {
+              toast(data.success);
+              router.push("/admin/categories");
+            } else {
+              toast.error(data.error);
+            }
+          });
     });
   }
 
@@ -136,7 +159,11 @@ export const SubCategoryForm = ({ catSlug }: SubCategoryFormProps) => {
               )}
             />
 
-            <Button type="submit">Create Sub Category</Button>
+            {isPending ? (
+              <LoadingButton className="w-auto" />
+            ) : (
+              <Button type="submit">{buttonTitle}</Button>
+            )}
           </form>
         </Form>
       </BackdropGradient>
