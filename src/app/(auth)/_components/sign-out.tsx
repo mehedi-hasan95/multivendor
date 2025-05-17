@@ -8,6 +8,7 @@ export const SignOutButton = () => {
   const router = useRouter();
   return (
     <Button
+      variant={"outline"}
       onClick={async () =>
         await authClient.signOut({
           fetchOptions: {

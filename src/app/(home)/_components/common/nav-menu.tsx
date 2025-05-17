@@ -18,7 +18,7 @@ export const NavMenu = () => {
             variant={"outline"}
             className={cn(
               "",
-              pathName === item.href && "bg-slate-900 dark:bg-slate-900",
+              pathName === item.href && "iconBackground",
               session.session?.user.role !== "admin" &&
                 item.href === "/admin" &&
                 "hidden"
