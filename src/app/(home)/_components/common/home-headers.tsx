@@ -7,7 +7,7 @@ import { SearchFilters } from "../search/search-filters";
 export const HomeHeaders = () => {
   return (
     <header className="">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center px-4 lg:px-12">
         <Logo />
         <NavMenu />
         <HomeAuth />

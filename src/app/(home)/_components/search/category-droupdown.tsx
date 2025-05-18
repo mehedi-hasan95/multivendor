@@ -1,13 +1,14 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Categories, SubCategories } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { useDropdownPosition } from "./use-dropdown-position";
 import { SubCategoryMenu } from "./sub-category-menu";
+import { CategoriesType } from "@/constants/types";
+import Link from "next/link";
 
 interface Props {
-  category: Categories & { SubCategories: SubCategories[] };
+  category: CategoriesType;
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }
@@ -20,28 +21,39 @@ export const CategoryDorupdown = ({
   const droupdownRef = useRef<HTMLDivElement>(null);
   const { getDropdownPostion } = useDropdownPosition(droupdownRef);
   const droupdownPosition = getDropdownPostion();
+  const toggleDropdown = () => {
+    if (category.SubCategories.length) {
+      setIsOpen(!isOpen);
+    }
+  };
   const onMouseEnter = () => {
     if (category.SubCategories) {
       setIsOpen(true);
     }
   };
   const onMouseLeave = () => setIsOpen(false);
+
   return (
     <div
       className="relative"
       ref={droupdownRef}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onClick={toggleDropdown}
     >
       <div className="relative">
         <Button
           variant={"elevated"}
           className={cn(
-            "h-11 capitalize",
-            isActive && !isNavigationHovered && "bg-white border-primary"
+            "h-11 capitalize bg-transparent",
+            isActive && !isNavigationHovered && "border-themePurple",
+            isOpen &&
+              "shadow-[4px_4px_0px_0px_rgba(167,110,246,0.8)] -translate-x-1 -translate-y-1"
           )}
         >
-          {category.name}
+          <Link href={`/${category.slug === "all" ? "" : category.slug}`}>
+            {category.name}
+          </Link>
         </Button>
         {category.SubCategories && category.SubCategories.length > 0 && (
           <div

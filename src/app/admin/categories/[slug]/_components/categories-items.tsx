@@ -15,12 +15,12 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Categories, SubCategories } from "@/generated/prisma";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { CategoriesType } from "@/constants/types";
 
 interface CategoryItemsProps {
-  categories: (Categories & { SubCategories: SubCategories[] })[];
+  categories: CategoriesType[];
 }
 export function CategoryItems({ categories }: CategoryItemsProps) {
   return (

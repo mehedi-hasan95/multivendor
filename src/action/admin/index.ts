@@ -37,6 +37,9 @@ export const createCategoryAction = async (
 // get categories
 export const getCategoriesAction = async () => {
   const categories = await db.categories.findMany({
+    orderBy: {
+      name: "asc",
+    },
     include: {
       SubCategories: true,
     },
