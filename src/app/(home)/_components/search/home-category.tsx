@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
-import { CategoriesType } from "@/constants/types";
+import { categoriesGetManyOutput } from "@/constants/trpc.types";
 
 interface Props {
-  categories: CategoriesType[];
+  categories: categoriesGetManyOutput;
 }
 export const HomeCategory = ({ categories }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -52,11 +52,7 @@ export const HomeCategory = ({ categories }: Props) => {
   return (
     <div className="relative w-full">
       {/* Category sidebar open while click on the view all button  */}
-      <CategoriesSidebar
-        onOpenChange={setIsSidebarOpen}
-        open={isSidebarOpen}
-        categories={categories}
-      />
+      <CategoriesSidebar onOpenChange={setIsSidebarOpen} open={isSidebarOpen} />
       {/* Meserment the length  */}
       <div
         ref={measureRef}
@@ -73,7 +69,7 @@ export const HomeCategory = ({ categories }: Props) => {
         ))}
       </div>
       <div
-        className="flex gap-2 flex-none justify-between items-center"
+        className="flex gap-2 justify-between items-center"
         ref={containerRef}
         onMouseEnter={() => setIsAnyHovered(true)}
         onMouseLeave={() => setIsAnyHovered(false)}

@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { useDropdownPosition } from "./use-dropdown-position";
 import { SubCategoryMenu } from "./sub-category-menu";
-import { CategoriesType } from "@/constants/types";
 import Link from "next/link";
+import { categoriesGetManyOutput } from "@/constants/trpc.types";
 
 interface Props {
-  category: CategoriesType;
+  category: categoriesGetManyOutput[1];
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }

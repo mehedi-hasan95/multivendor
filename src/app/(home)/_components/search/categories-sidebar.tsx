@@ -6,7 +6,9 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { CategoriesType } from "@/constants/types";
+import { categoriesGetManyOutput } from "@/constants/trpc.types";
+import { useTRPC } from "@/trpc/client";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,20 +17,17 @@ import { useState } from "react";
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  categories: CategoriesType[];
 }
-export const CategoriesSidebar = ({
-  onOpenChange,
-  open,
-  categories,
-}: Props) => {
+export const CategoriesSidebar = ({ onOpenChange, open }: Props) => {
+  const trpc = useTRPC();
+  const { data: categories } = useQuery(trpc.categories.getMany.queryOptions());
   const router = useRouter();
 
-  const [parentCategories, setParentCategories] = useState<
-    CategoriesType[] | null
+  const [parentCategories, setParentCategories] =
+    useState<categoriesGetManyOutput | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<
+    categoriesGetManyOutput[1] | null
   >(null);
-  const [selectedCategory, setSelectedCategory] =
-    useState<CategoriesType | null>(null);
   const currentCategories = parentCategories ?? categories ?? [];
   const handleOpenChange = (open: boolean) => {
     setSelectedCategory(null);
@@ -41,7 +40,7 @@ export const CategoriesSidebar = ({
       setParentCategories(null);
     }
   };
-  const handleCategoryClick = (category: CategoriesType) => {
+  const handleCategoryClick = (category: categoriesGetManyOutput[1]) => {
     if (category.SubCategories && category.SubCategories.length > 0) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setParentCategories(category.SubCategories as any);

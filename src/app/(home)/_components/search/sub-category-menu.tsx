@@ -1,8 +1,8 @@
-import { CategoriesType } from "@/constants/types";
+import { categoriesGetManyOutput } from "@/constants/trpc.types";
 import Link from "next/link";
 
 interface Props {
-  category: CategoriesType;
+  category: categoriesGetManyOutput[1];
   isOpen: boolean;
   position: { top: number; left: number };
 }
