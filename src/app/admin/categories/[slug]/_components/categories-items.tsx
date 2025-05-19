@@ -17,12 +17,14 @@ import {
 } from "@/components/ui/sidebar";
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
-import { CategoriesType } from "@/constants/types";
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
-interface CategoryItemsProps {
-  categories: CategoriesType[];
-}
-export function CategoryItems({ categories }: CategoryItemsProps) {
+export function CategoryItems() {
+  const trpc = useTRPC();
+  const { data: categories } = useSuspenseQuery(
+    trpc.categories.getMany.queryOptions()
+  );
   return (
     <SidebarMenu className="grid md:grid-cols-3 lg:grid-cols-4 items-start gap-5 mt-5">
       {categories.map((item) => (

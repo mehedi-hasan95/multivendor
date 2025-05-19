@@ -2,7 +2,7 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { Footer } from "./_components/common/footer";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { LoadingSkeleton } from "./_components/common/loading-skeleton";
+import { HomeSkeleton } from "./_components/common/loading-skeleton";
 import { SearchFilters } from "./_components/search/search-filters";
 import { Navbar } from "./_components/common/navbar";
 
@@ -13,7 +13,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-col justify-between min-h-screen">
       <Navbar />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense fallback={<LoadingSkeleton />}>
+        <Suspense fallback={<HomeSkeleton />}>
           <SearchFilters />
         </Suspense>
       </HydrationBoundary>

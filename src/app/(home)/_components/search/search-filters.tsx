@@ -18,7 +18,6 @@ export const SearchFilters = () => {
   const activeCategoryData = categories.find(
     (category) => category.slug === activeCategory
   );
-  console.log("Data:", activeCategoryData);
   const activeCategoryName = activeCategoryData?.name;
   const activeSubCategory = params.subcategory as string | undefined;
   const activeSubCategoryName =
