@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 import { ListFilterIcon } from "lucide-react";
 import { CategoriesSidebar } from "./categories-sidebar";
 import { categoriesGetManyOutput } from "@/constants/trpc.types";
+import { useParams } from "next/navigation";
 
 interface Props {
   categories: categoriesGetManyOutput;
 }
 export const HomeCategory = ({ categories }: Props) => {
+  const params = useParams();
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -18,7 +20,9 @@ export const HomeCategory = ({ categories }: Props) => {
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const activeCategory = "all";
+  const categoryParam = params.category as string | undefined;
+
+  const activeCategory = categoryParam || "all";
   const activeCategoryIndex = categories.findIndex(
     (cat) => cat.slug === activeCategory
   );
@@ -87,7 +91,9 @@ export const HomeCategory = ({ categories }: Props) => {
             variant={"outline"}
             className={cn(
               "h-11 capitalize bg-transparent",
-              isActiveCategoryHidden && !isAnyHovered && "border-themePurple"
+              isActiveCategoryHidden &&
+                !isAnyHovered &&
+                "border !border-themePurple"
             )}
             onClick={() => setIsSidebarOpen(true)}
           >
