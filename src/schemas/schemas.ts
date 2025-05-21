@@ -31,3 +31,62 @@ export const subCategorySchema = z.object({
     message: "Please select the category.",
   }),
 });
+
+export const productSchema = z
+  .object({
+    title: z.string().min(2, { message: "Product name is required" }),
+    price: z.coerce
+      .number({ message: "Price is required" })
+      .int()
+      .positive({ message: "Must be a positive number" }),
+    basePrice: z.coerce
+      .number({ message: "Price is required" })
+      .int()
+      .positive({ message: "Must be a positive number" }),
+    description: z.string().min(2, { message: "Description is required" }),
+    categoryId: z.string({ message: "Please select a category" }),
+    subCategoryId: z.string({ message: "Please select a sub-category" }),
+    stock: z.coerce
+      .number()
+      .int()
+      .positive({ message: "Must be a positive number" })
+      .optional(),
+    hasDiscount: z.boolean(),
+    discount: z.coerce
+      .number()
+      .int()
+      .min(0, { message: "Must be a positive number" })
+      .lte(100, { message: "Discount cannot exceed 100" })
+      .optional(),
+    discountcode: z.string({ message: "Add Cuppon Code" }).optional(),
+    images: z.object({ url: z.string() }).array(),
+  })
+  .refine((data) => data.basePrice >= data.price, {
+    message: "Base price must be less than or equal to price",
+    path: ["basePrice"],
+  })
+  .refine(
+    (data) => {
+      if (data.discount !== undefined) {
+        return !!data.discountcode?.trim();
+      }
+      return true;
+    },
+    {
+      message: "Discount code is required when discount is applied",
+      path: ["discountcode"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.hasDiscount === true) {
+        return !!data.discount;
+      }
+      return true;
+    },
+    {
+      message:
+        "Discount code and persentage is required when discount is applied",
+      path: ["discount"],
+    }
+  );

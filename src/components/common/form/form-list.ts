@@ -89,3 +89,14 @@ export const CATEGORY_FORM: AuthProps[] = [
     name: "slug",
   },
 ];
+
+export const CREATE_PRODUCT_FORM: AuthProps[] = [
+  {
+    id: "1",
+    inputType: "input",
+    name: "title",
+    label: "Product Name",
+    placeholder: "e.g. Web Development",
+    type: "text",
+  },
+];

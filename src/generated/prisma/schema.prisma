@@ -33,10 +33,11 @@ model User {
 
   username        String
   displayUsername String?
-  role            userRole  @default(user)
+  role            userRole   @default(user)
   banned          Boolean?
   banReason       String?
   banExpires      DateTime?
+  Products        Products[]
 
   @@unique([email])
   @@unique([username])
@@ -98,6 +99,7 @@ model Categories {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   SubCategories SubCategories[]
+  Products      Products[]
 
   @@unique([slug])
   @@index([slug])
@@ -111,7 +113,43 @@ model SubCategories {
   categorys    Categories @relation(fields: [categorySlug], references: [slug], onDelete: Cascade)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  Products     Products[]
 
   @@unique([slug])
   @@index([slug])
+}
+
+model Products {
+  id            String         @id @default(uuid())
+  title         String
+  price         Int
+  basePrice     Int
+  description   String
+  sellerId      String
+  seller        User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  categoryId    String
+  category      Categories     @relation(fields: [categoryId], references: [slug], onDelete: Cascade)
+  subCategoryId String
+  subCategory   SubCategories  @relation(fields: [subCategoryId], references: [slug], onDelete: Cascade)
+  stock         Int?
+  sale          Int            @default(0)
+  images        ProductImage[]
+  hasDiscount   Boolean        @default(false)
+  discount      Int?
+  discountcode  String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([id])
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  productId String
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
 }

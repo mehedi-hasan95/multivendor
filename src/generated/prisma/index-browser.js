@@ -191,6 +191,32 @@ exports.Prisma.SubCategoriesScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ProductsScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  price: 'price',
+  basePrice: 'basePrice',
+  description: 'description',
+  sellerId: 'sellerId',
+  categoryId: 'categoryId',
+  subCategoryId: 'subCategoryId',
+  stock: 'stock',
+  sale: 'sale',
+  hasDiscount: 'hasDiscount',
+  discount: 'discount',
+  discountcode: 'discountcode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProductImageScalarFieldEnum = {
+  id: 'id',
+  productId: 'productId',
+  url: 'url',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -217,7 +243,9 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Verification: 'Verification',
   Categories: 'Categories',
-  SubCategories: 'SubCategories'
+  SubCategories: 'SubCategories',
+  Products: 'Products',
+  ProductImage: 'ProductImage'
 };
 
 /**
