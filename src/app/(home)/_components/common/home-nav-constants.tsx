@@ -20,6 +20,7 @@ export const HOME_NAV_ITEMS = [
     label: "Admin",
     href: "/admin",
   },
+  { label: "Vendor", href: "/vendor" },
 ];
 
 export const AUTH_NAV_ITEMS = [

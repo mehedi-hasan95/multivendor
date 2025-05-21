@@ -23,7 +23,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 export function CategoryItems() {
   const trpc = useTRPC();
   const { data: categories } = useSuspenseQuery(
-    trpc.categories.getMany.queryOptions()
+    trpc.categories.getMany.queryOptions({})
   );
   return (
     <SidebarMenu className="grid md:grid-cols-3 lg:grid-cols-4 items-start gap-5 mt-5">

@@ -21,6 +21,10 @@ export const NavMenu = () => {
               pathName === item.href && "iconBackground",
               session.session?.user.role !== "admin" &&
                 item.href === "/admin" &&
+                "hidden",
+              session.session?.user.role !== "admin" &&
+                session.session?.user.role !== "vendor" &&
+                item.href === "/vendor" &&
                 "hidden"
             )}
           >

@@ -9,7 +9,7 @@ import { BreadcrumbNavigation } from "./breadcrumb-navigateion";
 export const SearchFilters = () => {
   const trpc = useTRPC();
   const { data: categories } = useSuspenseQuery(
-    trpc.categories.getMany.queryOptions()
+    trpc.categories.getMany.queryOptions({})
   );
   const params = useParams();
   const categoryParam = params.category as string | undefined;

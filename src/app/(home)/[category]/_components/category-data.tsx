@@ -5,20 +5,16 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-const SubCategoryPage = () => {
+export const CategoryData = () => {
   const params = useParams();
   const categoryParam = params.category as string | undefined;
-  const sbuCategoryParam = params.subcategory as string | undefined;
 
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.categories.getMany.queryOptions({
-      category: categoryParam,
-      subCategory: sbuCategoryParam,
-    })
+    trpc.categories.getMany.queryOptions({ category: categoryParam })
   );
   return (
-    <div>
+    <>
       {data.map((product) => (
         <div
           key={product.id}
@@ -40,8 +36,6 @@ const SubCategoryPage = () => {
           ))}
         </div>
       ))}
-    </div>
+    </>
   );
 };
-
-export default SubCategoryPage;

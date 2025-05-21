@@ -25,7 +25,6 @@ export const ImageUpload = ({ endPoint, onChange, value }: Props) => {
         endpoint={endPoint}
         onClientUploadComplete={(res) => {
           onChange(res);
-          console.log(res);
         }}
         onUploadError={(error: Error) => {
           // Do something with the error.

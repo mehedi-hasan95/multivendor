@@ -16,14 +16,12 @@ interface AdminLayoutProps {
 }
 const AdminLayout = async ({ children }: AdminLayoutProps) => {
   const session = await authSession();
-  if (session?.user.role !== "admin") {
+  if (session?.user.role !== "admin" && session?.user.role !== "vendor") {
     redirect("/");
   }
   const queryClient = getQueryClient();
-  // todo : type any
-  void queryClient.prefetchQuery(
-    trpc.products.getMany.queryOptions(session?.user?.id as any)
-  );
+
+  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions());
   return (
     <SidebarProvider>
       <AppSidebar />
