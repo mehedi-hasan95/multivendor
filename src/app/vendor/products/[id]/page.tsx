@@ -5,7 +5,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 const ProductPage = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions({}));
+  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
   return (
     <div>
       <Separator className="mb-3" />

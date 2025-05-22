@@ -1,10 +1,15 @@
-import { authSession } from "@/lib/auth-session";
+"use client";
 
-export default async function Home() {
-  const session = await authSession();
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { ProductCard } from "./_components/common/product-card";
+
+export default function Home() {
+  const trpc = useTRPC();
+  const { data } = useSuspenseQuery(trpc.products.getMany.queryOptions({}));
   return (
     <div>
-      <p>{session?.user.role}</p>
+      <ProductCard data={data} />
     </div>
   );
 }

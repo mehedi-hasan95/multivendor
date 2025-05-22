@@ -7,7 +7,7 @@ import { LoadingSkeleton } from "@/app/(home)/_components/common/loading-skeleto
 
 const CategoriesPage = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions({}));
+  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
   return (
     <div>
       <HeaderTitle

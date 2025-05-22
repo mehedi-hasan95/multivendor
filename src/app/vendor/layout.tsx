@@ -21,7 +21,7 @@ const AdminLayout = async ({ children }: AdminLayoutProps) => {
   }
   const queryClient = getQueryClient();
 
-  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions());
+  void queryClient.prefetchQuery(trpc.products.getManyBySeller.queryOptions());
   return (
     <SidebarProvider>
       <AppSidebar />

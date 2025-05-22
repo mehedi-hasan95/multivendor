@@ -31,7 +31,7 @@ export const CreateProduct = () => {
   const router = useRouter();
   const trpc = useTRPC();
 
-  const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions({}));
+  const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),

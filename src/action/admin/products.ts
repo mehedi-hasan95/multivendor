@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { productSchema } from "@/schemas/schemas";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
   create: baseProcedure.input(productSchema).mutation(async ({ input }) => {
@@ -51,7 +52,7 @@ export const productRouter = createTRPCRouter({
       return { error: "Something went wrong", ot: error };
     }
   }),
-  getMany: baseProcedure.query(async () => {
+  getManyBySeller: baseProcedure.query(async () => {
     const session = await authSession();
     const products = await db.products.findMany({
       where: {
@@ -62,4 +63,24 @@ export const productRouter = createTRPCRouter({
     });
     return products;
   }),
+  getMany: baseProcedure
+    .input(
+      z.object({
+        category: z.string().optional(),
+        subCategory: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const products = await db.products.findMany({
+        where: {
+          categoryId: input.category,
+          subCategoryId: input.subCategory,
+        },
+        include: {
+          images: true,
+        },
+        orderBy: { createdAt: "asc" },
+      });
+      return products;
+    }),
 });

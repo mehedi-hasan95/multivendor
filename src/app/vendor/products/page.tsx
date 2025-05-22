@@ -7,7 +7,9 @@ import Image from "next/image";
 
 const VendorProductPage = () => {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.products.getMany.queryOptions());
+  const { data } = useSuspenseQuery(
+    trpc.products.getManyBySeller.queryOptions()
+  );
   return (
     <div>
       <HeaderTitle

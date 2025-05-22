@@ -5,5 +5,8 @@ export type categoriesGetManyOutput =
 
 export type productCreateOutput =
   inferRouterOutputs<AppRouter>["products"]["create"];
-export type productGetManyOutput =
+export type productBySeller =
+  inferRouterOutputs<AppRouter>["products"]["getManyBySeller"];
+
+export type productGetMany =
   inferRouterOutputs<AppRouter>["products"]["getMany"];

@@ -2,8 +2,8 @@
 
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import Image from "next/image";
 import { useParams } from "next/navigation";
+import { ProductCard } from "../../_components/common/product-card";
 
 const SubCategoryPage = () => {
   const params = useParams();
@@ -11,35 +11,16 @@ const SubCategoryPage = () => {
   const sbuCategoryParam = params.subcategory as string | undefined;
 
   const trpc = useTRPC();
+
   const { data } = useSuspenseQuery(
-    trpc.categories.getMany.queryOptions({
+    trpc.products.getMany.queryOptions({
       category: categoryParam,
       subCategory: sbuCategoryParam,
     })
   );
   return (
     <div>
-      {data.map((product) => (
-        <div
-          key={product.id}
-          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"
-        >
-          {product.SubCategories.map((item) => (
-            <div key={item.id}>
-              {item.Products.map((c) => (
-                <div key={c.id}>
-                  <Image
-                    src={c.images[0]?.url as string}
-                    alt=""
-                    height={400}
-                    width={500}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      ))}
+      <ProductCard data={data} />
     </div>
   );
 };

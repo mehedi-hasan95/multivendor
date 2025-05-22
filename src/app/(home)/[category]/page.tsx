@@ -4,19 +4,9 @@ import { Suspense } from "react";
 import { LoadingSkeleton } from "../_components/common/loading-skeleton";
 import { CategoryData } from "./_components/category-data";
 
-interface Props {
-  params: Promise<{
-    category: string;
-  }>;
-}
-const CategoryPage = async ({ params }: Props) => {
-  const { category } = await params;
+const CategoryPage = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.categories.getMany.queryOptions({
-      category,
-    })
-  );
+  void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense fallback={<LoadingSkeleton items={12} />}>

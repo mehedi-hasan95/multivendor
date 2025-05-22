@@ -20,9 +20,7 @@ interface Props {
 }
 export const CategoriesSidebar = ({ onOpenChange, open }: Props) => {
   const trpc = useTRPC();
-  const { data: categories } = useQuery(
-    trpc.categories.getMany.queryOptions({})
-  );
+  const { data: categories } = useQuery(trpc.categories.getMany.queryOptions());
   const router = useRouter();
 
   const [parentCategories, setParentCategories] =
