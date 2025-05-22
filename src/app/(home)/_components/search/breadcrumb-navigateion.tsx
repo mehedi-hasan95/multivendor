@@ -6,6 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Home } from "lucide-react";
 import Link from "next/link";
 
 interface Props {
@@ -26,24 +27,45 @@ export const BreadcrumbNavigation = ({
           <>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href={`/${activeCategory}`} className="capitalize">
+                <Link href={`/`} className="capitalize font-semibold text-base">
+                  <Home />
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link
+                  href={`/${activeCategory}`}
+                  className="capitalize font-semibold text-base"
+                >
                   {activeCategoryName}
                 </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage className="capitalize">
+              <BreadcrumbPage className="capitalize font-semibold text-base">
                 {subCategoryName}
               </BreadcrumbPage>
             </BreadcrumbItem>
           </>
         ) : (
-          <BreadcrumbItem>
-            <BreadcrumbPage className="capitalize">
-              {activeCategoryName}
-            </BreadcrumbPage>
-          </BreadcrumbItem>
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href={`/`} className="capitalize font-semibold text-base">
+                  <Home />
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage className="capitalize font-semibold text-base">
+                {activeCategoryName}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </>
         )}
       </BreadcrumbList>
     </Breadcrumb>

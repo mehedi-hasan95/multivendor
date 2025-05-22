@@ -2,7 +2,7 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { LoadingSkeleton } from "../_components/common/loading-skeleton";
-import { CategoryData } from "./_components/category-data";
+import { ProductCard } from "../_components/common/product/product-card";
 
 const CategoryPage = async () => {
   const queryClient = getQueryClient();
@@ -10,7 +10,7 @@ const CategoryPage = async () => {
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <Suspense fallback={<LoadingSkeleton items={12} />}>
-        <CategoryData />
+        <ProductCard />
       </Suspense>
     </HydrationBoundary>
   );

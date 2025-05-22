@@ -1,15 +1,15 @@
-"use client";
-
-import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { ProductCard } from "./_components/common/product-card";
+import { ProductCard } from "./_components/common/product/product-card";
+import { ProductFilters } from "./_components/common/product/products-filter";
 
 export default function Home() {
-  const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.products.getMany.queryOptions({}));
   return (
-    <div>
-      <ProductCard data={data} />
+    <div className="grid grid-cols-8 gap-4 col-span-full lg:col-span-4 mx-4 lg:mx-12">
+      <div className="col-span-full sm:col-span-2">
+        <ProductFilters />
+      </div>
+      <div className="col-span-full sm:col-span-6">
+        <ProductCard />
+      </div>
     </div>
   );
 }

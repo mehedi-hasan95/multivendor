@@ -1,12 +1,25 @@
-import { productGetMany } from "@/constants/trpc.types";
+"use client";
+// import { productGetMany } from "@/constants/trpc.types";
+import { useTRPC } from "@/trpc/client";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
-interface Props {
-  data: productGetMany;
-}
-export const ProductCard = ({ data }: Props) => {
+export const ProductCard = () => {
+  const params = useParams();
+  const categoryParam = params.category as string | undefined;
+  const sbuCategoryParam = params.subcategory as string | undefined;
+
+  const trpc = useTRPC();
+
+  const { data } = useSuspenseQuery(
+    trpc.products.getMany.queryOptions({
+      category: categoryParam,
+      subCategory: sbuCategoryParam,
+    })
+  );
   if (data.length < 1) return <p>No product in this category</p>;
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
