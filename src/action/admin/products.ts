@@ -77,6 +77,10 @@ export const productRouter = createTRPCRouter({
         where: {
           categoryId: input.category,
           subCategoryId: input.subCategory,
+          price: {
+            gte: input.minPrice ? parseFloat(input.minPrice) : undefined,
+            lte: input.maxPrice ? parseFloat(input.maxPrice) : undefined,
+          },
         },
         include: {
           images: true,

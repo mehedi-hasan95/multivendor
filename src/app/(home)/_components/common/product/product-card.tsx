@@ -6,13 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useProductFilters } from "../../hooks/use-product-filter";
+import NoProductsFound from "@/components/common/no-products-found";
 
 export const ProductCard = () => {
   const [filters] = useProductFilters();
   const params = useParams();
   const categoryParam = params.category as string | undefined;
   const sbuCategoryParam = params.subcategory as string | undefined;
-  console.log(filters);
+
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
     trpc.products.getMany.queryOptions({
@@ -21,7 +22,7 @@ export const ProductCard = () => {
       ...filters,
     })
   );
-  if (data.length < 1) return <p>No product in this category</p>;
+  if (data.length < 1) return <NoProductsFound />;
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
       {data.map((product) => (
