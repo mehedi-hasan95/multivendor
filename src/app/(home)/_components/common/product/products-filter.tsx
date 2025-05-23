@@ -39,7 +39,7 @@ export const ProductFilters = () => {
       className="w-4/12 h-3/6 opacity-50"
       container="flex flex-col items-center"
     >
-      <GlassCard className="border rounded-md p-5 gap-0 mt-16 z-50 w-full">
+      <GlassCard className="border rounded-md p-5 gap-0 z-50 w-full">
         <div className="flex justify-between items-center border-b pb-4">
           <p className="font-medium">Filter</p>
           <button

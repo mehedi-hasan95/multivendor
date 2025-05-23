@@ -68,6 +68,14 @@ export const productRouter = createTRPCRouter({
       z.object({
         category: z.string().optional(),
         subCategory: z.string().optional(),
+        minPrice: z
+          .string()
+          .transform((value) => (value ? parseFloat(value) : undefined))
+          .optional(),
+        maxPrice: z
+          .string()
+          .transform((value) => (value ? parseFloat(value) : undefined))
+          .optional(),
       })
     )
     .query(async ({ input }) => {
@@ -75,6 +83,10 @@ export const productRouter = createTRPCRouter({
         where: {
           categoryId: input.category,
           subCategoryId: input.subCategory,
+          price: {
+            gte: input.minPrice,
+            lte: input.maxPrice,
+          },
         },
         include: {
           images: true,

@@ -6,18 +6,20 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useProductFilters } from "../../hooks/use-product-filter";
 
 export const ProductCard = () => {
+  const [filters] = useProductFilters();
   const params = useParams();
   const categoryParam = params.category as string | undefined;
   const sbuCategoryParam = params.subcategory as string | undefined;
-
+  console.log(filters);
   const trpc = useTRPC();
-
   const { data } = useSuspenseQuery(
     trpc.products.getMany.queryOptions({
       category: categoryParam,
       subCategory: sbuCategoryParam,
+      ...filters,
     })
   );
   if (data.length < 1) return <p>No product in this category</p>;

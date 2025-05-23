@@ -25,7 +25,7 @@ export const SearchFilters = () => {
       (subcat) => subcat.slug === activeSubCategory
     )?.name || null;
   return (
-    <div className="px-4 lg:px-12 py-3 flex flex-col gap-3 pb-5">
+    <div className="px-4 lg:px-12 py-3 flex flex-col gap-3 pb-10">
       <SearchInput categories={categories} />
       <div className="hidden lg:flex">
         <HomeCategory categories={categories} />
