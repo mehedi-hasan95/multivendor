@@ -1,5 +1,4 @@
 "use client";
-// import { productGetMany } from "@/constants/trpc.types";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { ShoppingCart } from "lucide-react";
