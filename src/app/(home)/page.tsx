@@ -1,4 +1,3 @@
-import { ProductCard } from "./_components/common/product/product-card";
 import { ProductFilters } from "./_components/common/product/products-filter";
 
 export const dynamic = "force-dynamic";
@@ -8,9 +7,7 @@ export default function Home() {
       <div className="col-span-full sm:col-span-2">
         <ProductFilters />
       </div>
-      <div className="col-span-full sm:col-span-6">
-        <ProductCard />
-      </div>
+      <div className="col-span-full sm:col-span-6">Mehedi</div>
     </div>
   );
 }

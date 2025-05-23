@@ -9,7 +9,6 @@ import { Navbar } from "./_components/common/navbar";
 const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
-  void queryClient.prefetchQuery(trpc.products.getMany.queryOptions({}));
   return (
     <div className="flex flex-col justify-between min-h-screen">
       <Navbar />
