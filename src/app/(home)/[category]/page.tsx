@@ -4,6 +4,7 @@ import { ProductCard } from "../_components/common/product/product-card";
 import { ProductFilters } from "../_components/common/product/products-filter";
 import { SearchParams } from "nuqs/server";
 import { loadProductFilters } from "../_components/hooks/use-product-filter";
+import { Suspense } from "react";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -23,7 +24,9 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
       </div>
       <div className="col-span-full sm:col-span-6">
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <ProductCard />
+          <Suspense>
+            <ProductCard />
+          </Suspense>
         </HydrationBoundary>
       </div>
     </div>
