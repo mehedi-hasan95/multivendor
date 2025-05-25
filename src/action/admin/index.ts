@@ -2,7 +2,11 @@
 
 import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
-import { categorySchema, subCategorySchema } from "@/schemas/schemas";
+import {
+  categorySchema,
+  subCategorySchema,
+  tagSchema,
+} from "@/schemas/schemas";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
@@ -168,4 +172,32 @@ export const getSingelSubCategory = async (slug: string) => {
     where: { slug },
   });
   return category;
+};
+
+export const createTagAction = async (values: z.infer<typeof tagSchema>) => {
+  try {
+    const { name, slug } = values;
+
+    // Check uniqueness
+    const existingTag = await db.tags.findFirst({
+      where: {
+        OR: [{ name }, { slug }],
+      },
+    });
+    if (existingTag) {
+      return {
+        error:
+          existingTag.name === name
+            ? "Tag name already exists"
+            : "Tag slug already exists",
+      };
+    }
+    const tag = await db.tags.create({
+      data: { name, slug },
+    });
+    revalidatePath("/admin/tags");
+    return { success: "Tag created successfully", tag };
+  } catch (error) {
+    return { error: "Something went wrong", ot: error };
+  }
 };

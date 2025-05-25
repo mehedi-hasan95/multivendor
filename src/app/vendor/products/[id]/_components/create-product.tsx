@@ -32,6 +32,7 @@ export const CreateProduct = () => {
   const trpc = useTRPC();
 
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
+  const { data: tags } = useSuspenseQuery(trpc.tags.getMany.queryOptions());
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -46,6 +47,7 @@ export const CreateProduct = () => {
       subCategoryId: "",
       hasDiscount: false,
       discountcode: "",
+      tagSlug: "",
       images: [],
     },
   });
@@ -121,7 +123,7 @@ export const CreateProduct = () => {
                 )}
               />
               <div className="grid grid-cols-6 space-x-4 col-span-full lg:col-span-3 space-y-8">
-                <div className="col-span-full sm:col-span-3">
+                <div className="col-span-full sm:col-span-2">
                   <FormField
                     control={form.control}
                     name="categoryId"
@@ -142,7 +144,7 @@ export const CreateProduct = () => {
                     )}
                   />
                 </div>
-                <div className="col-span-full sm:col-span-3">
+                <div className="col-span-full sm:col-span-2">
                   <FormField
                     control={form.control}
                     name="subCategoryId"
@@ -153,11 +155,32 @@ export const CreateProduct = () => {
                           <ComboboxModify
                             optoins={subCategories.map((subCat) => ({
                               label: subCat.name,
-                              value: subCat.slug || subCat.id,
+                              value: subCat.slug,
                             }))}
                             disabled={
                               !selectedCategoryId || subCategories.length === 0
                             }
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="col-span-full sm:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="tagSlug"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Select a Tag</FormLabel>
+                        <FormControl>
+                          <ComboboxModify
+                            optoins={tags.map((tag) => ({
+                              label: tag.name,
+                              value: tag.slug,
+                            }))}
                             {...field}
                           />
                         </FormControl>
@@ -307,7 +330,7 @@ export const CreateProduct = () => {
                 </div>
               </div>
               {createProduct.isPending ? (
-                <LoadingButton />
+                <LoadingButton className="w-auto" />
               ) : (
                 <Button type="submit">Submit</Button>
               )}

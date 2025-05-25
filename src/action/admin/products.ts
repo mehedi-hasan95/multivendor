@@ -2,7 +2,7 @@ import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import { productSchema } from "@/schemas/schemas";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-import { revalidatePath } from "next/cache";
+// import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
@@ -25,6 +25,7 @@ export const productRouter = createTRPCRouter({
         discountcode,
         stock,
         images,
+        tagSlug,
       } = validateField.data;
       const product = await db.products.create({
         data: {
@@ -39,6 +40,7 @@ export const productRouter = createTRPCRouter({
           discountcode,
           stock,
           sellerId: session.user.id,
+          tagSlug,
           images: {
             createMany: {
               data: [...images.map((images: { url: string }) => images)],
@@ -46,7 +48,7 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
-      revalidatePath("/vendor/products");
+      // revalidatePath("/vendor/products");
       return product;
     } catch (error) {
       return { error: "Something went wrong", ot: error };

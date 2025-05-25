@@ -44,6 +44,11 @@ export type Categories = $Result.DefaultSelection<Prisma.$CategoriesPayload>
  */
 export type SubCategories = $Result.DefaultSelection<Prisma.$SubCategoriesPayload>
 /**
+ * Model Tags
+ * 
+ */
+export type Tags = $Result.DefaultSelection<Prisma.$TagsPayload>
+/**
  * Model Products
  * 
  */
@@ -256,6 +261,16 @@ export class PrismaClient<
     * ```
     */
   get subCategories(): Prisma.SubCategoriesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.tags`: Exposes CRUD operations for the **Tags** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Tags
+    * const tags = await prisma.tags.findMany()
+    * ```
+    */
+  get tags(): Prisma.TagsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.products`: Exposes CRUD operations for the **Products** model.
@@ -722,6 +737,7 @@ export namespace Prisma {
     Verification: 'Verification',
     Categories: 'Categories',
     SubCategories: 'SubCategories',
+    Tags: 'Tags',
     Products: 'Products',
     ProductImage: 'ProductImage'
   };
@@ -742,7 +758,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "categories" | "subCategories" | "products" | "productImage"
+      modelProps: "user" | "session" | "account" | "verification" | "categories" | "subCategories" | "tags" | "products" | "productImage"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1190,6 +1206,80 @@ export namespace Prisma {
           }
         }
       }
+      Tags: {
+        payload: Prisma.$TagsPayload<ExtArgs>
+        fields: Prisma.TagsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TagsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TagsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          findFirst: {
+            args: Prisma.TagsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TagsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          findMany: {
+            args: Prisma.TagsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>[]
+          }
+          create: {
+            args: Prisma.TagsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          createMany: {
+            args: Prisma.TagsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TagsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>[]
+          }
+          delete: {
+            args: Prisma.TagsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          update: {
+            args: Prisma.TagsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          deleteMany: {
+            args: Prisma.TagsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TagsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TagsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>[]
+          }
+          upsert: {
+            args: Prisma.TagsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TagsPayload>
+          }
+          aggregate: {
+            args: Prisma.TagsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTags>
+          }
+          groupBy: {
+            args: Prisma.TagsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TagsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TagsCountArgs<ExtArgs>
+            result: $Utils.Optional<TagsCountAggregateOutputType> | number
+          }
+        }
+      }
       Products: {
         payload: Prisma.$ProductsPayload<ExtArgs>
         fields: Prisma.ProductsFieldRefs
@@ -1428,6 +1518,7 @@ export namespace Prisma {
     verification?: VerificationOmit
     categories?: CategoriesOmit
     subCategories?: SubCategoriesOmit
+    tags?: TagsOmit
     products?: ProductsOmit
     productImage?: ProductImageOmit
   }
@@ -1635,6 +1726,37 @@ export namespace Prisma {
    * SubCategoriesCountOutputType without action
    */
   export type SubCategoriesCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProductsWhereInput
+  }
+
+
+  /**
+   * Count Type TagsCountOutputType
+   */
+
+  export type TagsCountOutputType = {
+    products: number
+  }
+
+  export type TagsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    products?: boolean | TagsCountOutputTypeCountProductsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TagsCountOutputType without action
+   */
+  export type TagsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TagsCountOutputType
+     */
+    select?: TagsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TagsCountOutputType without action
+   */
+  export type TagsCountOutputTypeCountProductsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProductsWhereInput
   }
 
@@ -8397,6 +8519,1076 @@ export namespace Prisma {
 
 
   /**
+   * Model Tags
+   */
+
+  export type AggregateTags = {
+    _count: TagsCountAggregateOutputType | null
+    _min: TagsMinAggregateOutputType | null
+    _max: TagsMaxAggregateOutputType | null
+  }
+
+  export type TagsMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TagsMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    slug: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TagsCountAggregateOutputType = {
+    id: number
+    name: number
+    slug: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TagsMinAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TagsMaxAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TagsCountAggregateInputType = {
+    id?: true
+    name?: true
+    slug?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TagsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tags to aggregate.
+     */
+    where?: TagsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tags to fetch.
+     */
+    orderBy?: TagsOrderByWithRelationInput | TagsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TagsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Tags
+    **/
+    _count?: true | TagsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TagsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TagsMaxAggregateInputType
+  }
+
+  export type GetTagsAggregateType<T extends TagsAggregateArgs> = {
+        [P in keyof T & keyof AggregateTags]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTags[P]>
+      : GetScalarType<T[P], AggregateTags[P]>
+  }
+
+
+
+
+  export type TagsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TagsWhereInput
+    orderBy?: TagsOrderByWithAggregationInput | TagsOrderByWithAggregationInput[]
+    by: TagsScalarFieldEnum[] | TagsScalarFieldEnum
+    having?: TagsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TagsCountAggregateInputType | true
+    _min?: TagsMinAggregateInputType
+    _max?: TagsMaxAggregateInputType
+  }
+
+  export type TagsGroupByOutputType = {
+    id: string
+    name: string
+    slug: string
+    createdAt: Date
+    updatedAt: Date
+    _count: TagsCountAggregateOutputType | null
+    _min: TagsMinAggregateOutputType | null
+    _max: TagsMaxAggregateOutputType | null
+  }
+
+  type GetTagsGroupByPayload<T extends TagsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TagsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TagsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TagsGroupByOutputType[P]>
+            : GetScalarType<T[P], TagsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TagsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    products?: boolean | Tags$productsArgs<ExtArgs>
+    _count?: boolean | TagsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["tags"]>
+
+  export type TagsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tags"]>
+
+  export type TagsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }, ExtArgs["result"]["tags"]>
+
+  export type TagsSelectScalar = {
+    id?: boolean
+    name?: boolean
+    slug?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TagsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "slug" | "createdAt" | "updatedAt", ExtArgs["result"]["tags"]>
+  export type TagsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    products?: boolean | Tags$productsArgs<ExtArgs>
+    _count?: boolean | TagsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TagsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type TagsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $TagsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Tags"
+    objects: {
+      products: Prisma.$ProductsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      slug: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["tags"]>
+    composites: {}
+  }
+
+  type TagsGetPayload<S extends boolean | null | undefined | TagsDefaultArgs> = $Result.GetResult<Prisma.$TagsPayload, S>
+
+  type TagsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TagsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TagsCountAggregateInputType | true
+    }
+
+  export interface TagsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Tags'], meta: { name: 'Tags' } }
+    /**
+     * Find zero or one Tags that matches the filter.
+     * @param {TagsFindUniqueArgs} args - Arguments to find a Tags
+     * @example
+     * // Get one Tags
+     * const tags = await prisma.tags.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TagsFindUniqueArgs>(args: SelectSubset<T, TagsFindUniqueArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Tags that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TagsFindUniqueOrThrowArgs} args - Arguments to find a Tags
+     * @example
+     * // Get one Tags
+     * const tags = await prisma.tags.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TagsFindUniqueOrThrowArgs>(args: SelectSubset<T, TagsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsFindFirstArgs} args - Arguments to find a Tags
+     * @example
+     * // Get one Tags
+     * const tags = await prisma.tags.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TagsFindFirstArgs>(args?: SelectSubset<T, TagsFindFirstArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Tags that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsFindFirstOrThrowArgs} args - Arguments to find a Tags
+     * @example
+     * // Get one Tags
+     * const tags = await prisma.tags.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TagsFindFirstOrThrowArgs>(args?: SelectSubset<T, TagsFindFirstOrThrowArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Tags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Tags
+     * const tags = await prisma.tags.findMany()
+     * 
+     * // Get first 10 Tags
+     * const tags = await prisma.tags.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const tagsWithIdOnly = await prisma.tags.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TagsFindManyArgs>(args?: SelectSubset<T, TagsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Tags.
+     * @param {TagsCreateArgs} args - Arguments to create a Tags.
+     * @example
+     * // Create one Tags
+     * const Tags = await prisma.tags.create({
+     *   data: {
+     *     // ... data to create a Tags
+     *   }
+     * })
+     * 
+     */
+    create<T extends TagsCreateArgs>(args: SelectSubset<T, TagsCreateArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Tags.
+     * @param {TagsCreateManyArgs} args - Arguments to create many Tags.
+     * @example
+     * // Create many Tags
+     * const tags = await prisma.tags.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TagsCreateManyArgs>(args?: SelectSubset<T, TagsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Tags and returns the data saved in the database.
+     * @param {TagsCreateManyAndReturnArgs} args - Arguments to create many Tags.
+     * @example
+     * // Create many Tags
+     * const tags = await prisma.tags.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Tags and only return the `id`
+     * const tagsWithIdOnly = await prisma.tags.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TagsCreateManyAndReturnArgs>(args?: SelectSubset<T, TagsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Tags.
+     * @param {TagsDeleteArgs} args - Arguments to delete one Tags.
+     * @example
+     * // Delete one Tags
+     * const Tags = await prisma.tags.delete({
+     *   where: {
+     *     // ... filter to delete one Tags
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TagsDeleteArgs>(args: SelectSubset<T, TagsDeleteArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Tags.
+     * @param {TagsUpdateArgs} args - Arguments to update one Tags.
+     * @example
+     * // Update one Tags
+     * const tags = await prisma.tags.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TagsUpdateArgs>(args: SelectSubset<T, TagsUpdateArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Tags.
+     * @param {TagsDeleteManyArgs} args - Arguments to filter Tags to delete.
+     * @example
+     * // Delete a few Tags
+     * const { count } = await prisma.tags.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TagsDeleteManyArgs>(args?: SelectSubset<T, TagsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Tags
+     * const tags = await prisma.tags.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TagsUpdateManyArgs>(args: SelectSubset<T, TagsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Tags and returns the data updated in the database.
+     * @param {TagsUpdateManyAndReturnArgs} args - Arguments to update many Tags.
+     * @example
+     * // Update many Tags
+     * const tags = await prisma.tags.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Tags and only return the `id`
+     * const tagsWithIdOnly = await prisma.tags.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TagsUpdateManyAndReturnArgs>(args: SelectSubset<T, TagsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Tags.
+     * @param {TagsUpsertArgs} args - Arguments to update or create a Tags.
+     * @example
+     * // Update or create a Tags
+     * const tags = await prisma.tags.upsert({
+     *   create: {
+     *     // ... data to create a Tags
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Tags we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TagsUpsertArgs>(args: SelectSubset<T, TagsUpsertArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Tags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsCountArgs} args - Arguments to filter Tags to count.
+     * @example
+     * // Count the number of Tags
+     * const count = await prisma.tags.count({
+     *   where: {
+     *     // ... the filter for the Tags we want to count
+     *   }
+     * })
+    **/
+    count<T extends TagsCountArgs>(
+      args?: Subset<T, TagsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TagsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Tags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TagsAggregateArgs>(args: Subset<T, TagsAggregateArgs>): Prisma.PrismaPromise<GetTagsAggregateType<T>>
+
+    /**
+     * Group by Tags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TagsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TagsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TagsGroupByArgs['orderBy'] }
+        : { orderBy?: TagsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TagsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTagsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Tags model
+   */
+  readonly fields: TagsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Tags.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TagsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    products<T extends Tags$productsArgs<ExtArgs> = {}>(args?: Subset<T, Tags$productsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Tags model
+   */
+  interface TagsFieldRefs {
+    readonly id: FieldRef<"Tags", 'String'>
+    readonly name: FieldRef<"Tags", 'String'>
+    readonly slug: FieldRef<"Tags", 'String'>
+    readonly createdAt: FieldRef<"Tags", 'DateTime'>
+    readonly updatedAt: FieldRef<"Tags", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Tags findUnique
+   */
+  export type TagsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter, which Tags to fetch.
+     */
+    where: TagsWhereUniqueInput
+  }
+
+  /**
+   * Tags findUniqueOrThrow
+   */
+  export type TagsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter, which Tags to fetch.
+     */
+    where: TagsWhereUniqueInput
+  }
+
+  /**
+   * Tags findFirst
+   */
+  export type TagsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter, which Tags to fetch.
+     */
+    where?: TagsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tags to fetch.
+     */
+    orderBy?: TagsOrderByWithRelationInput | TagsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tags.
+     */
+    cursor?: TagsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tags.
+     */
+    distinct?: TagsScalarFieldEnum | TagsScalarFieldEnum[]
+  }
+
+  /**
+   * Tags findFirstOrThrow
+   */
+  export type TagsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter, which Tags to fetch.
+     */
+    where?: TagsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tags to fetch.
+     */
+    orderBy?: TagsOrderByWithRelationInput | TagsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Tags.
+     */
+    cursor?: TagsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Tags.
+     */
+    distinct?: TagsScalarFieldEnum | TagsScalarFieldEnum[]
+  }
+
+  /**
+   * Tags findMany
+   */
+  export type TagsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter, which Tags to fetch.
+     */
+    where?: TagsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Tags to fetch.
+     */
+    orderBy?: TagsOrderByWithRelationInput | TagsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Tags.
+     */
+    cursor?: TagsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Tags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Tags.
+     */
+    skip?: number
+    distinct?: TagsScalarFieldEnum | TagsScalarFieldEnum[]
+  }
+
+  /**
+   * Tags create
+   */
+  export type TagsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Tags.
+     */
+    data: XOR<TagsCreateInput, TagsUncheckedCreateInput>
+  }
+
+  /**
+   * Tags createMany
+   */
+  export type TagsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Tags.
+     */
+    data: TagsCreateManyInput | TagsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tags createManyAndReturn
+   */
+  export type TagsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * The data used to create many Tags.
+     */
+    data: TagsCreateManyInput | TagsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Tags update
+   */
+  export type TagsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Tags.
+     */
+    data: XOR<TagsUpdateInput, TagsUncheckedUpdateInput>
+    /**
+     * Choose, which Tags to update.
+     */
+    where: TagsWhereUniqueInput
+  }
+
+  /**
+   * Tags updateMany
+   */
+  export type TagsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Tags.
+     */
+    data: XOR<TagsUpdateManyMutationInput, TagsUncheckedUpdateManyInput>
+    /**
+     * Filter which Tags to update
+     */
+    where?: TagsWhereInput
+    /**
+     * Limit how many Tags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tags updateManyAndReturn
+   */
+  export type TagsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * The data used to update Tags.
+     */
+    data: XOR<TagsUpdateManyMutationInput, TagsUncheckedUpdateManyInput>
+    /**
+     * Filter which Tags to update
+     */
+    where?: TagsWhereInput
+    /**
+     * Limit how many Tags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tags upsert
+   */
+  export type TagsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Tags to update in case it exists.
+     */
+    where: TagsWhereUniqueInput
+    /**
+     * In case the Tags found by the `where` argument doesn't exist, create a new Tags with this data.
+     */
+    create: XOR<TagsCreateInput, TagsUncheckedCreateInput>
+    /**
+     * In case the Tags was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TagsUpdateInput, TagsUncheckedUpdateInput>
+  }
+
+  /**
+   * Tags delete
+   */
+  export type TagsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+    /**
+     * Filter which Tags to delete.
+     */
+    where: TagsWhereUniqueInput
+  }
+
+  /**
+   * Tags deleteMany
+   */
+  export type TagsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Tags to delete
+     */
+    where?: TagsWhereInput
+    /**
+     * Limit how many Tags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Tags.products
+   */
+  export type Tags$productsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Products
+     */
+    select?: ProductsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Products
+     */
+    omit?: ProductsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProductsInclude<ExtArgs> | null
+    where?: ProductsWhereInput
+    orderBy?: ProductsOrderByWithRelationInput | ProductsOrderByWithRelationInput[]
+    cursor?: ProductsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProductsScalarFieldEnum | ProductsScalarFieldEnum[]
+  }
+
+  /**
+   * Tags without action
+   */
+  export type TagsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tags
+     */
+    select?: TagsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Tags
+     */
+    omit?: TagsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TagsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Products
    */
 
@@ -8433,6 +9625,7 @@ export namespace Prisma {
     sellerId: string | null
     categoryId: string | null
     subCategoryId: string | null
+    tagSlug: string | null
     stock: number | null
     sale: number | null
     hasDiscount: boolean | null
@@ -8451,6 +9644,7 @@ export namespace Prisma {
     sellerId: string | null
     categoryId: string | null
     subCategoryId: string | null
+    tagSlug: string | null
     stock: number | null
     sale: number | null
     hasDiscount: boolean | null
@@ -8469,6 +9663,7 @@ export namespace Prisma {
     sellerId: number
     categoryId: number
     subCategoryId: number
+    tagSlug: number
     stock: number
     sale: number
     hasDiscount: number
@@ -8505,6 +9700,7 @@ export namespace Prisma {
     sellerId?: true
     categoryId?: true
     subCategoryId?: true
+    tagSlug?: true
     stock?: true
     sale?: true
     hasDiscount?: true
@@ -8523,6 +9719,7 @@ export namespace Prisma {
     sellerId?: true
     categoryId?: true
     subCategoryId?: true
+    tagSlug?: true
     stock?: true
     sale?: true
     hasDiscount?: true
@@ -8541,6 +9738,7 @@ export namespace Prisma {
     sellerId?: true
     categoryId?: true
     subCategoryId?: true
+    tagSlug?: true
     stock?: true
     sale?: true
     hasDiscount?: true
@@ -8646,6 +9844,7 @@ export namespace Prisma {
     sellerId: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock: number | null
     sale: number
     hasDiscount: boolean
@@ -8683,6 +9882,7 @@ export namespace Prisma {
     sellerId?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
+    tagSlug?: boolean
     stock?: boolean
     sale?: boolean
     hasDiscount?: boolean
@@ -8693,6 +9893,7 @@ export namespace Prisma {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
     images?: boolean | Products$imagesArgs<ExtArgs>
     _count?: boolean | ProductsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["products"]>
@@ -8706,6 +9907,7 @@ export namespace Prisma {
     sellerId?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
+    tagSlug?: boolean
     stock?: boolean
     sale?: boolean
     hasDiscount?: boolean
@@ -8716,6 +9918,7 @@ export namespace Prisma {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["products"]>
 
   export type ProductsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -8727,6 +9930,7 @@ export namespace Prisma {
     sellerId?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
+    tagSlug?: boolean
     stock?: boolean
     sale?: boolean
     hasDiscount?: boolean
@@ -8737,6 +9941,7 @@ export namespace Prisma {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["products"]>
 
   export type ProductsSelectScalar = {
@@ -8748,6 +9953,7 @@ export namespace Prisma {
     sellerId?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
+    tagSlug?: boolean
     stock?: boolean
     sale?: boolean
     hasDiscount?: boolean
@@ -8757,11 +9963,12 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "price" | "basePrice" | "description" | "sellerId" | "categoryId" | "subCategoryId" | "stock" | "sale" | "hasDiscount" | "discount" | "discountcode" | "createdAt" | "updatedAt", ExtArgs["result"]["products"]>
+  export type ProductsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "price" | "basePrice" | "description" | "sellerId" | "categoryId" | "subCategoryId" | "tagSlug" | "stock" | "sale" | "hasDiscount" | "discount" | "discountcode" | "createdAt" | "updatedAt", ExtArgs["result"]["products"]>
   export type ProductsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
     images?: boolean | Products$imagesArgs<ExtArgs>
     _count?: boolean | ProductsCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -8769,11 +9976,13 @@ export namespace Prisma {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
   }
   export type ProductsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
     subCategory?: boolean | SubCategoriesDefaultArgs<ExtArgs>
+    tags?: boolean | TagsDefaultArgs<ExtArgs>
   }
 
   export type $ProductsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8782,6 +9991,7 @@ export namespace Prisma {
       seller: Prisma.$UserPayload<ExtArgs>
       category: Prisma.$CategoriesPayload<ExtArgs>
       subCategory: Prisma.$SubCategoriesPayload<ExtArgs>
+      tags: Prisma.$TagsPayload<ExtArgs>
       images: Prisma.$ProductImagePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8793,6 +10003,7 @@ export namespace Prisma {
       sellerId: string
       categoryId: string
       subCategoryId: string
+      tagSlug: string
       stock: number | null
       sale: number
       hasDiscount: boolean
@@ -9197,6 +10408,7 @@ export namespace Prisma {
     seller<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     category<T extends CategoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CategoriesDefaultArgs<ExtArgs>>): Prisma__CategoriesClient<$Result.GetResult<Prisma.$CategoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     subCategory<T extends SubCategoriesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubCategoriesDefaultArgs<ExtArgs>>): Prisma__SubCategoriesClient<$Result.GetResult<Prisma.$SubCategoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    tags<T extends TagsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TagsDefaultArgs<ExtArgs>>): Prisma__TagsClient<$Result.GetResult<Prisma.$TagsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     images<T extends Products$imagesArgs<ExtArgs> = {}>(args?: Subset<T, Products$imagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProductImagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9235,6 +10447,7 @@ export namespace Prisma {
     readonly sellerId: FieldRef<"Products", 'String'>
     readonly categoryId: FieldRef<"Products", 'String'>
     readonly subCategoryId: FieldRef<"Products", 'String'>
+    readonly tagSlug: FieldRef<"Products", 'String'>
     readonly stock: FieldRef<"Products", 'Int'>
     readonly sale: FieldRef<"Products", 'Int'>
     readonly hasDiscount: FieldRef<"Products", 'Boolean'>
@@ -10841,6 +12054,17 @@ export namespace Prisma {
   export type SubCategoriesScalarFieldEnum = (typeof SubCategoriesScalarFieldEnum)[keyof typeof SubCategoriesScalarFieldEnum]
 
 
+  export const TagsScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    slug: 'slug',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TagsScalarFieldEnum = (typeof TagsScalarFieldEnum)[keyof typeof TagsScalarFieldEnum]
+
+
   export const ProductsScalarFieldEnum: {
     id: 'id',
     title: 'title',
@@ -10850,6 +12074,7 @@ export namespace Prisma {
     sellerId: 'sellerId',
     categoryId: 'categoryId',
     subCategoryId: 'subCategoryId',
+    tagSlug: 'tagSlug',
     stock: 'stock',
     sale: 'sale',
     hasDiscount: 'hasDiscount',
@@ -11436,6 +12661,61 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SubCategories"> | Date | string
   }
 
+  export type TagsWhereInput = {
+    AND?: TagsWhereInput | TagsWhereInput[]
+    OR?: TagsWhereInput[]
+    NOT?: TagsWhereInput | TagsWhereInput[]
+    id?: StringFilter<"Tags"> | string
+    name?: StringFilter<"Tags"> | string
+    slug?: StringFilter<"Tags"> | string
+    createdAt?: DateTimeFilter<"Tags"> | Date | string
+    updatedAt?: DateTimeFilter<"Tags"> | Date | string
+    products?: ProductsListRelationFilter
+  }
+
+  export type TagsOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    products?: ProductsOrderByRelationAggregateInput
+  }
+
+  export type TagsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    slug?: string
+    AND?: TagsWhereInput | TagsWhereInput[]
+    OR?: TagsWhereInput[]
+    NOT?: TagsWhereInput | TagsWhereInput[]
+    name?: StringFilter<"Tags"> | string
+    createdAt?: DateTimeFilter<"Tags"> | Date | string
+    updatedAt?: DateTimeFilter<"Tags"> | Date | string
+    products?: ProductsListRelationFilter
+  }, "id" | "slug">
+
+  export type TagsOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TagsCountOrderByAggregateInput
+    _max?: TagsMaxOrderByAggregateInput
+    _min?: TagsMinOrderByAggregateInput
+  }
+
+  export type TagsScalarWhereWithAggregatesInput = {
+    AND?: TagsScalarWhereWithAggregatesInput | TagsScalarWhereWithAggregatesInput[]
+    OR?: TagsScalarWhereWithAggregatesInput[]
+    NOT?: TagsScalarWhereWithAggregatesInput | TagsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Tags"> | string
+    name?: StringWithAggregatesFilter<"Tags"> | string
+    slug?: StringWithAggregatesFilter<"Tags"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Tags"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Tags"> | Date | string
+  }
+
   export type ProductsWhereInput = {
     AND?: ProductsWhereInput | ProductsWhereInput[]
     OR?: ProductsWhereInput[]
@@ -11448,6 +12728,7 @@ export namespace Prisma {
     sellerId?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
+    tagSlug?: StringFilter<"Products"> | string
     stock?: IntNullableFilter<"Products"> | number | null
     sale?: IntFilter<"Products"> | number
     hasDiscount?: BoolFilter<"Products"> | boolean
@@ -11458,6 +12739,7 @@ export namespace Prisma {
     seller?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoriesScalarRelationFilter, CategoriesWhereInput>
     subCategory?: XOR<SubCategoriesScalarRelationFilter, SubCategoriesWhereInput>
+    tags?: XOR<TagsScalarRelationFilter, TagsWhereInput>
     images?: ProductImageListRelationFilter
   }
 
@@ -11470,6 +12752,7 @@ export namespace Prisma {
     sellerId?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
+    tagSlug?: SortOrder
     stock?: SortOrderInput | SortOrder
     sale?: SortOrder
     hasDiscount?: SortOrder
@@ -11480,6 +12763,7 @@ export namespace Prisma {
     seller?: UserOrderByWithRelationInput
     category?: CategoriesOrderByWithRelationInput
     subCategory?: SubCategoriesOrderByWithRelationInput
+    tags?: TagsOrderByWithRelationInput
     images?: ProductImageOrderByRelationAggregateInput
   }
 
@@ -11495,6 +12779,7 @@ export namespace Prisma {
     sellerId?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
+    tagSlug?: StringFilter<"Products"> | string
     stock?: IntNullableFilter<"Products"> | number | null
     sale?: IntFilter<"Products"> | number
     hasDiscount?: BoolFilter<"Products"> | boolean
@@ -11505,6 +12790,7 @@ export namespace Prisma {
     seller?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoriesScalarRelationFilter, CategoriesWhereInput>
     subCategory?: XOR<SubCategoriesScalarRelationFilter, SubCategoriesWhereInput>
+    tags?: XOR<TagsScalarRelationFilter, TagsWhereInput>
     images?: ProductImageListRelationFilter
   }, "id">
 
@@ -11517,6 +12803,7 @@ export namespace Prisma {
     sellerId?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
+    tagSlug?: SortOrder
     stock?: SortOrderInput | SortOrder
     sale?: SortOrder
     hasDiscount?: SortOrder
@@ -11543,6 +12830,7 @@ export namespace Prisma {
     sellerId?: StringWithAggregatesFilter<"Products"> | string
     categoryId?: StringWithAggregatesFilter<"Products"> | string
     subCategoryId?: StringWithAggregatesFilter<"Products"> | string
+    tagSlug?: StringWithAggregatesFilter<"Products"> | string
     stock?: IntNullableWithAggregatesFilter<"Products"> | number | null
     sale?: IntWithAggregatesFilter<"Products"> | number
     hasDiscount?: BoolWithAggregatesFilter<"Products"> | boolean
@@ -12125,6 +13413,66 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TagsCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    products?: ProductsCreateNestedManyWithoutTagsInput
+  }
+
+  export type TagsUncheckedCreateInput = {
+    id?: string
+    name: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    products?: ProductsUncheckedCreateNestedManyWithoutTagsInput
+  }
+
+  export type TagsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductsUpdateManyWithoutTagsNestedInput
+  }
+
+  export type TagsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    products?: ProductsUncheckedUpdateManyWithoutTagsNestedInput
+  }
+
+  export type TagsCreateManyInput = {
+    id?: string
+    name: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TagsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TagsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductsCreateInput = {
     id?: string
     title: string
@@ -12141,6 +13489,7 @@ export namespace Prisma {
     seller: UserCreateNestedOneWithoutProductsInput
     category: CategoriesCreateNestedOneWithoutProductsInput
     subCategory: SubCategoriesCreateNestedOneWithoutProductsInput
+    tags: TagsCreateNestedOneWithoutProductsInput
     images?: ProductImageCreateNestedManyWithoutProductInput
   }
 
@@ -12153,6 +13502,7 @@ export namespace Prisma {
     sellerId: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -12179,6 +13529,7 @@ export namespace Prisma {
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoriesUpdateOneRequiredWithoutProductsNestedInput
     subCategory?: SubCategoriesUpdateOneRequiredWithoutProductsNestedInput
+    tags?: TagsUpdateOneRequiredWithoutProductsNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
   }
 
@@ -12191,6 +13542,7 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -12210,6 +13562,7 @@ export namespace Prisma {
     sellerId: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -12243,6 +13596,7 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -12734,6 +14088,30 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type TagsCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TagsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TagsMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    slug?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -12761,6 +14139,11 @@ export namespace Prisma {
     isNot?: SubCategoriesWhereInput
   }
 
+  export type TagsScalarRelationFilter = {
+    is?: TagsWhereInput
+    isNot?: TagsWhereInput
+  }
+
   export type ProductImageListRelationFilter = {
     every?: ProductImageWhereInput
     some?: ProductImageWhereInput
@@ -12780,6 +14163,7 @@ export namespace Prisma {
     sellerId?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
+    tagSlug?: SortOrder
     stock?: SortOrder
     sale?: SortOrder
     hasDiscount?: SortOrder
@@ -12806,6 +14190,7 @@ export namespace Prisma {
     sellerId?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
+    tagSlug?: SortOrder
     stock?: SortOrder
     sale?: SortOrder
     hasDiscount?: SortOrder
@@ -12824,6 +14209,7 @@ export namespace Prisma {
     sellerId?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
+    tagSlug?: SortOrder
     stock?: SortOrder
     sale?: SortOrder
     hasDiscount?: SortOrder
@@ -13224,6 +14610,48 @@ export namespace Prisma {
     deleteMany?: ProductsScalarWhereInput | ProductsScalarWhereInput[]
   }
 
+  export type ProductsCreateNestedManyWithoutTagsInput = {
+    create?: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput> | ProductsCreateWithoutTagsInput[] | ProductsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ProductsCreateOrConnectWithoutTagsInput | ProductsCreateOrConnectWithoutTagsInput[]
+    createMany?: ProductsCreateManyTagsInputEnvelope
+    connect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+  }
+
+  export type ProductsUncheckedCreateNestedManyWithoutTagsInput = {
+    create?: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput> | ProductsCreateWithoutTagsInput[] | ProductsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ProductsCreateOrConnectWithoutTagsInput | ProductsCreateOrConnectWithoutTagsInput[]
+    createMany?: ProductsCreateManyTagsInputEnvelope
+    connect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+  }
+
+  export type ProductsUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput> | ProductsCreateWithoutTagsInput[] | ProductsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ProductsCreateOrConnectWithoutTagsInput | ProductsCreateOrConnectWithoutTagsInput[]
+    upsert?: ProductsUpsertWithWhereUniqueWithoutTagsInput | ProductsUpsertWithWhereUniqueWithoutTagsInput[]
+    createMany?: ProductsCreateManyTagsInputEnvelope
+    set?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    disconnect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    delete?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    connect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    update?: ProductsUpdateWithWhereUniqueWithoutTagsInput | ProductsUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: ProductsUpdateManyWithWhereWithoutTagsInput | ProductsUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: ProductsScalarWhereInput | ProductsScalarWhereInput[]
+  }
+
+  export type ProductsUncheckedUpdateManyWithoutTagsNestedInput = {
+    create?: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput> | ProductsCreateWithoutTagsInput[] | ProductsUncheckedCreateWithoutTagsInput[]
+    connectOrCreate?: ProductsCreateOrConnectWithoutTagsInput | ProductsCreateOrConnectWithoutTagsInput[]
+    upsert?: ProductsUpsertWithWhereUniqueWithoutTagsInput | ProductsUpsertWithWhereUniqueWithoutTagsInput[]
+    createMany?: ProductsCreateManyTagsInputEnvelope
+    set?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    disconnect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    delete?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    connect?: ProductsWhereUniqueInput | ProductsWhereUniqueInput[]
+    update?: ProductsUpdateWithWhereUniqueWithoutTagsInput | ProductsUpdateWithWhereUniqueWithoutTagsInput[]
+    updateMany?: ProductsUpdateManyWithWhereWithoutTagsInput | ProductsUpdateManyWithWhereWithoutTagsInput[]
+    deleteMany?: ProductsScalarWhereInput | ProductsScalarWhereInput[]
+  }
+
   export type UserCreateNestedOneWithoutProductsInput = {
     create?: XOR<UserCreateWithoutProductsInput, UserUncheckedCreateWithoutProductsInput>
     connectOrCreate?: UserCreateOrConnectWithoutProductsInput
@@ -13240,6 +14668,12 @@ export namespace Prisma {
     create?: XOR<SubCategoriesCreateWithoutProductsInput, SubCategoriesUncheckedCreateWithoutProductsInput>
     connectOrCreate?: SubCategoriesCreateOrConnectWithoutProductsInput
     connect?: SubCategoriesWhereUniqueInput
+  }
+
+  export type TagsCreateNestedOneWithoutProductsInput = {
+    create?: XOR<TagsCreateWithoutProductsInput, TagsUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: TagsCreateOrConnectWithoutProductsInput
+    connect?: TagsWhereUniqueInput
   }
 
   export type ProductImageCreateNestedManyWithoutProductInput = {
@@ -13294,6 +14728,14 @@ export namespace Prisma {
     upsert?: SubCategoriesUpsertWithoutProductsInput
     connect?: SubCategoriesWhereUniqueInput
     update?: XOR<XOR<SubCategoriesUpdateToOneWithWhereWithoutProductsInput, SubCategoriesUpdateWithoutProductsInput>, SubCategoriesUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type TagsUpdateOneRequiredWithoutProductsNestedInput = {
+    create?: XOR<TagsCreateWithoutProductsInput, TagsUncheckedCreateWithoutProductsInput>
+    connectOrCreate?: TagsCreateOrConnectWithoutProductsInput
+    upsert?: TagsUpsertWithoutProductsInput
+    connect?: TagsWhereUniqueInput
+    update?: XOR<XOR<TagsUpdateToOneWithWhereWithoutProductsInput, TagsUpdateWithoutProductsInput>, TagsUncheckedUpdateWithoutProductsInput>
   }
 
   export type ProductImageUpdateManyWithoutProductNestedInput = {
@@ -13656,6 +15098,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     category: CategoriesCreateNestedOneWithoutProductsInput
     subCategory: SubCategoriesCreateNestedOneWithoutProductsInput
+    tags: TagsCreateNestedOneWithoutProductsInput
     images?: ProductImageCreateNestedManyWithoutProductInput
   }
 
@@ -13667,6 +15110,7 @@ export namespace Prisma {
     description: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -13781,6 +15225,7 @@ export namespace Prisma {
     sellerId?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
+    tagSlug?: StringFilter<"Products"> | string
     stock?: IntNullableFilter<"Products"> | number | null
     sale?: IntFilter<"Products"> | number
     hasDiscount?: BoolFilter<"Products"> | boolean
@@ -14009,6 +15454,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seller: UserCreateNestedOneWithoutProductsInput
     subCategory: SubCategoriesCreateNestedOneWithoutProductsInput
+    tags: TagsCreateNestedOneWithoutProductsInput
     images?: ProductImageCreateNestedManyWithoutProductInput
   }
 
@@ -14020,6 +15466,7 @@ export namespace Prisma {
     description: string
     sellerId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14124,6 +15571,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     seller: UserCreateNestedOneWithoutProductsInput
     category: CategoriesCreateNestedOneWithoutProductsInput
+    tags: TagsCreateNestedOneWithoutProductsInput
     images?: ProductImageCreateNestedManyWithoutProductInput
   }
 
@@ -14135,6 +15583,7 @@ export namespace Prisma {
     description: string
     sellerId: string
     categoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14200,6 +15649,70 @@ export namespace Prisma {
   export type ProductsUpdateManyWithWhereWithoutSubCategoryInput = {
     where: ProductsScalarWhereInput
     data: XOR<ProductsUpdateManyMutationInput, ProductsUncheckedUpdateManyWithoutSubCategoryInput>
+  }
+
+  export type ProductsCreateWithoutTagsInput = {
+    id?: string
+    title: string
+    price: number
+    basePrice: number
+    description: string
+    stock?: number | null
+    sale?: number
+    hasDiscount?: boolean
+    discount?: number | null
+    discountcode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    seller: UserCreateNestedOneWithoutProductsInput
+    category: CategoriesCreateNestedOneWithoutProductsInput
+    subCategory: SubCategoriesCreateNestedOneWithoutProductsInput
+    images?: ProductImageCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductsUncheckedCreateWithoutTagsInput = {
+    id?: string
+    title: string
+    price: number
+    basePrice: number
+    description: string
+    sellerId: string
+    categoryId: string
+    subCategoryId: string
+    stock?: number | null
+    sale?: number
+    hasDiscount?: boolean
+    discount?: number | null
+    discountcode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    images?: ProductImageUncheckedCreateNestedManyWithoutProductInput
+  }
+
+  export type ProductsCreateOrConnectWithoutTagsInput = {
+    where: ProductsWhereUniqueInput
+    create: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput>
+  }
+
+  export type ProductsCreateManyTagsInputEnvelope = {
+    data: ProductsCreateManyTagsInput | ProductsCreateManyTagsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProductsUpsertWithWhereUniqueWithoutTagsInput = {
+    where: ProductsWhereUniqueInput
+    update: XOR<ProductsUpdateWithoutTagsInput, ProductsUncheckedUpdateWithoutTagsInput>
+    create: XOR<ProductsCreateWithoutTagsInput, ProductsUncheckedCreateWithoutTagsInput>
+  }
+
+  export type ProductsUpdateWithWhereUniqueWithoutTagsInput = {
+    where: ProductsWhereUniqueInput
+    data: XOR<ProductsUpdateWithoutTagsInput, ProductsUncheckedUpdateWithoutTagsInput>
+  }
+
+  export type ProductsUpdateManyWithWhereWithoutTagsInput = {
+    where: ProductsScalarWhereInput
+    data: XOR<ProductsUpdateManyMutationInput, ProductsUncheckedUpdateManyWithoutTagsInput>
   }
 
   export type UserCreateWithoutProductsInput = {
@@ -14289,6 +15802,27 @@ export namespace Prisma {
   export type SubCategoriesCreateOrConnectWithoutProductsInput = {
     where: SubCategoriesWhereUniqueInput
     create: XOR<SubCategoriesCreateWithoutProductsInput, SubCategoriesUncheckedCreateWithoutProductsInput>
+  }
+
+  export type TagsCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TagsUncheckedCreateWithoutProductsInput = {
+    id?: string
+    name: string
+    slug: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TagsCreateOrConnectWithoutProductsInput = {
+    where: TagsWhereUniqueInput
+    create: XOR<TagsCreateWithoutProductsInput, TagsUncheckedCreateWithoutProductsInput>
   }
 
   export type ProductImageCreateWithoutProductInput = {
@@ -14422,6 +15956,33 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TagsUpsertWithoutProductsInput = {
+    update: XOR<TagsUpdateWithoutProductsInput, TagsUncheckedUpdateWithoutProductsInput>
+    create: XOR<TagsCreateWithoutProductsInput, TagsUncheckedCreateWithoutProductsInput>
+    where?: TagsWhereInput
+  }
+
+  export type TagsUpdateToOneWithWhereWithoutProductsInput = {
+    where?: TagsWhereInput
+    data: XOR<TagsUpdateWithoutProductsInput, TagsUncheckedUpdateWithoutProductsInput>
+  }
+
+  export type TagsUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TagsUncheckedUpdateWithoutProductsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProductImageUpsertWithWhereUniqueWithoutProductInput = {
     where: ProductImageWhereUniqueInput
     update: XOR<ProductImageUpdateWithoutProductInput, ProductImageUncheckedUpdateWithoutProductInput>
@@ -14465,6 +16026,7 @@ export namespace Prisma {
     seller: UserCreateNestedOneWithoutProductsInput
     category: CategoriesCreateNestedOneWithoutProductsInput
     subCategory: SubCategoriesCreateNestedOneWithoutProductsInput
+    tags: TagsCreateNestedOneWithoutProductsInput
   }
 
   export type ProductsUncheckedCreateWithoutImagesInput = {
@@ -14476,6 +16038,7 @@ export namespace Prisma {
     sellerId: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14517,6 +16080,7 @@ export namespace Prisma {
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoriesUpdateOneRequiredWithoutProductsNestedInput
     subCategory?: SubCategoriesUpdateOneRequiredWithoutProductsNestedInput
+    tags?: TagsUpdateOneRequiredWithoutProductsNestedInput
   }
 
   export type ProductsUncheckedUpdateWithoutImagesInput = {
@@ -14528,6 +16092,7 @@ export namespace Prisma {
     sellerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14571,6 +16136,7 @@ export namespace Prisma {
     description: string
     categoryId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14673,6 +16239,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     category?: CategoriesUpdateOneRequiredWithoutProductsNestedInput
     subCategory?: SubCategoriesUpdateOneRequiredWithoutProductsNestedInput
+    tags?: TagsUpdateOneRequiredWithoutProductsNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
   }
 
@@ -14684,6 +16251,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14702,6 +16270,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14727,6 +16296,7 @@ export namespace Prisma {
     description: string
     sellerId: string
     subCategoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14777,6 +16347,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput
     subCategory?: SubCategoriesUpdateOneRequiredWithoutProductsNestedInput
+    tags?: TagsUpdateOneRequiredWithoutProductsNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
   }
 
@@ -14788,6 +16359,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     sellerId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14806,6 +16378,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     sellerId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14823,6 +16396,7 @@ export namespace Prisma {
     description: string
     sellerId: string
     categoryId: string
+    tagSlug: string
     stock?: number | null
     sale?: number
     hasDiscount?: boolean
@@ -14847,6 +16421,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     seller?: UserUpdateOneRequiredWithoutProductsNestedInput
     category?: CategoriesUpdateOneRequiredWithoutProductsNestedInput
+    tags?: TagsUpdateOneRequiredWithoutProductsNestedInput
     images?: ProductImageUpdateManyWithoutProductNestedInput
   }
 
@@ -14858,6 +16433,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     sellerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean
@@ -14876,6 +16452,81 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     sellerId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
+    tagSlug?: StringFieldUpdateOperationsInput | string
+    stock?: NullableIntFieldUpdateOperationsInput | number | null
+    sale?: IntFieldUpdateOperationsInput | number
+    hasDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
+    discountcode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProductsCreateManyTagsInput = {
+    id?: string
+    title: string
+    price: number
+    basePrice: number
+    description: string
+    sellerId: string
+    categoryId: string
+    subCategoryId: string
+    stock?: number | null
+    sale?: number
+    hasDiscount?: boolean
+    discount?: number | null
+    discountcode?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProductsUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    price?: IntFieldUpdateOperationsInput | number
+    basePrice?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    stock?: NullableIntFieldUpdateOperationsInput | number | null
+    sale?: IntFieldUpdateOperationsInput | number
+    hasDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
+    discountcode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    seller?: UserUpdateOneRequiredWithoutProductsNestedInput
+    category?: CategoriesUpdateOneRequiredWithoutProductsNestedInput
+    subCategory?: SubCategoriesUpdateOneRequiredWithoutProductsNestedInput
+    images?: ProductImageUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductsUncheckedUpdateWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    price?: IntFieldUpdateOperationsInput | number
+    basePrice?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    subCategoryId?: StringFieldUpdateOperationsInput | string
+    stock?: NullableIntFieldUpdateOperationsInput | number | null
+    sale?: IntFieldUpdateOperationsInput | number
+    hasDiscount?: BoolFieldUpdateOperationsInput | boolean
+    discount?: NullableIntFieldUpdateOperationsInput | number | null
+    discountcode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    images?: ProductImageUncheckedUpdateManyWithoutProductNestedInput
+  }
+
+  export type ProductsUncheckedUpdateManyWithoutTagsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    price?: IntFieldUpdateOperationsInput | number
+    basePrice?: IntFieldUpdateOperationsInput | number
+    description?: StringFieldUpdateOperationsInput | string
+    sellerId?: StringFieldUpdateOperationsInput | string
+    categoryId?: StringFieldUpdateOperationsInput | string
+    subCategoryId?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
     sale?: IntFieldUpdateOperationsInput | number
     hasDiscount?: BoolFieldUpdateOperationsInput | boolean

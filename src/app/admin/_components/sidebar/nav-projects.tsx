@@ -17,6 +17,11 @@ export function NavProjects() {
             <Link href={"/admin/categories"}>Categories</Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
+        <SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <Link href={"/admin/tags"}>Tags</Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   );

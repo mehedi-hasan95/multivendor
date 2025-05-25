@@ -31,7 +31,7 @@ const ProductFilter = ({ children, title, className }: Props) => {
 };
 export const ProductFilters = () => {
   const [filters, setFilters] = useProductFilters();
-  const hasAnyFilters = Object.entries(filters).some(([value]) => {
+  const hasAnyFilters = Object.entries(filters).some(([, value]) => {
     if (typeof value === "string") {
       return value !== "";
     }

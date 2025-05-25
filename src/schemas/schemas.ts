@@ -60,6 +60,7 @@ export const productSchema = z
       .optional(),
     discountcode: z.string({ message: "Add Cuppon Code" }).optional(),
     images: z.object({ url: z.string() }).array(),
+    tagSlug: z.string({ message: "Please select a category" }),
   })
   .refine((data) => data.basePrice >= data.price, {
     message: "Base price must be less than or equal to price",
@@ -90,3 +91,18 @@ export const productSchema = z
       path: ["discount"],
     }
   );
+
+export const tagSchema = z.object({
+  name: z
+    .string()
+    .min(2, { message: "At least 2 characters are required" })
+    .regex(/^(?!.*  )[A-Za-z0-9 ]+$/, {
+      message: "Only letters, numbers, and single spaces are allowed",
+    }),
+  slug: z
+    .string({ message: "Slug is required." })
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, {
+      message:
+        "Invalid slug format. Use lowercase letters, numbers, and hyphens only.",
+    }),
+});

@@ -119,6 +119,19 @@ model SubCategories {
   @@index([slug])
 }
 
+model Tags {
+  id        String   @id @default(uuid())
+  name      String
+  slug      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Products[]
+
+  @@unique([slug])
+  @@index([slug])
+}
+
 model Products {
   id            String         @id @default(uuid())
   title         String
@@ -131,6 +144,8 @@ model Products {
   category      Categories     @relation(fields: [categoryId], references: [slug], onDelete: Cascade)
   subCategoryId String
   subCategory   SubCategories  @relation(fields: [subCategoryId], references: [slug], onDelete: Cascade)
+  tagSlug       String         @map("tagId")
+  tags          Tags           @relation(fields: [tagSlug], references: [slug], onDelete: Cascade)
   stock         Int?
   sale          Int            @default(0)
   images        ProductImage[]
