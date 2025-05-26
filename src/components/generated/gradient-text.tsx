@@ -9,9 +9,17 @@ type Props = {
 const GradientText = ({ children, className, element }: Props) => {
   switch (element) {
     case "H1":
-      return <h1 className={cn(className, "text-gradient")}>{children}</h1>;
+      return (
+        <h1 className={cn(className, "text-2xl font-bold text-gradient")}>
+          {children}
+        </h1>
+      );
     case "H2":
-      return <h2 className={cn(className, "text-gradient")}>{children}</h2>;
+      return (
+        <h2 className={cn(className, "text-xl font-bold text-gradient")}>
+          {children}
+        </h2>
+      );
     default:
       return <p className={cn(className, "text-gradient")}>{children}</p>;
   }

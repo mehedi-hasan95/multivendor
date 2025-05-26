@@ -3,8 +3,10 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ProductCard } from "../_components/common/product/product-card";
 import { ProductFilters } from "../_components/common/product/products-filter";
 import { SearchParams } from "nuqs/server";
-import { loadProductFilters } from "../_components/hooks/use-product-filter";
 import { Suspense } from "react";
+import GradientText from "@/components/generated/gradient-text";
+import { loadProductFilters } from "@/constants/nuqs/search-params";
+import { ShortFilter } from "../_components/common/product/sort-filter";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -19,16 +21,22 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
   );
   void queryClient.prefetchQuery(trpc.tags.getMany.queryOptions());
   return (
-    <div className="grid grid-cols-8 gap-4 col-span-full lg:col-span-4 mx-4 lg:mx-12">
-      <div className="col-span-full sm:col-span-2">
-        <ProductFilters />
+    <div className="mx-4 lg:mx-12">
+      <div className="flex justify-between items-center pb-5">
+        <GradientText element="H1">On the market</GradientText>
+        <ShortFilter />
       </div>
-      <div className="col-span-full sm:col-span-6">
-        <HydrationBoundary state={dehydrate(queryClient)}>
-          <Suspense>
-            <ProductCard />
-          </Suspense>
-        </HydrationBoundary>
+      <div className="grid grid-cols-8 gap-4 col-span-full lg:col-span-4">
+        <div className="col-span-full sm:col-span-2">
+          <ProductFilters />
+        </div>
+        <div className="col-span-full sm:col-span-6">
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <Suspense>
+              <ProductCard />
+            </Suspense>
+          </HydrationBoundary>
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+import { sortValues } from "@/constants/nuqs/search-params";
 import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import { productSchema } from "@/schemas/schemas";
@@ -73,8 +74,10 @@ export const productRouter = createTRPCRouter({
         minPrice: z.string().optional(),
         maxPrice: z.string().optional(),
         tags: z.array(z.string()).nullable().optional(),
+        sort: z.enum(sortValues).nullable().optional(),
       })
     )
+
     .query(async ({ input }) => {
       const products = await db.products.findMany({
         where: {
@@ -93,10 +96,24 @@ export const productRouter = createTRPCRouter({
                 }
               : undefined,
         },
+        orderBy: {
+          createdAt:
+            input.sort === "best_seller"
+              ? "desc"
+              : input.sort === "hot_and_new"
+              ? "asc"
+              : undefined,
+        },
         include: {
           images: true,
+          seller: {
+            select: {
+              name: true,
+              username: true,
+              image: true,
+            },
+          },
         },
-        orderBy: { createdAt: "asc" },
       });
       return products;
     }),

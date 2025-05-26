@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useEffect, useRef, useTransition } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { tagSchema } from "@/schemas/schemas";
 import BackdropGradient from "@/components/generated/backdrop-gradient";
@@ -12,7 +12,8 @@ import { CREATE_TAG_FORM } from "@/components/common/form/form-list";
 import { FormGenerator } from "@/components/common/form/form-generator";
 import { toast } from "sonner";
 import { LoadingButton } from "@/components/common/loading-button";
-import { createTagAction } from "@/action/admin";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const slugify = (str: string) =>
   str
@@ -46,18 +47,24 @@ export const TagForm = () => {
     }
   }, [title, slug, form]);
 
-  const [isPending, startTransaction] = useTransition();
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createTags = useMutation(
+    trpc.tags.create.mutationOptions({
+      onError: (e) => {
+        toast.error(e.message);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["tags"] });
+      },
+      onSuccess: () => {
+        toast("Tag created ");
+        router.push("/admin/tags");
+      },
+    })
+  );
   function onSubmit(values: z.infer<typeof tagSchema>) {
-    startTransaction(() => {
-      createTagAction(values).then((data) => {
-        if (data.success) {
-          toast(data.success);
-          router.push("/admin/tags");
-        } else {
-          toast(data.error);
-        }
-      });
-    });
+    createTags.mutate(values);
   }
 
   return (
@@ -74,7 +81,7 @@ export const TagForm = () => {
             {CREATE_TAG_FORM.map((item) => (
               <FormGenerator key={item.id} {...item} form={form} />
             ))}
-            {isPending ? (
+            {createTags.isPending ? (
               <LoadingButton className="w-auto" />
             ) : (
               <Button type="submit">Submit</Button>

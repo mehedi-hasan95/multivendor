@@ -11,9 +11,21 @@ export const loginSchema = z.object({
 
 export const registerSchema = z
   .object({
-    name: z.string().min(2, { message: "Name is required" }),
-    email: z.string().email({ message: "Email is required" }),
-    username: z.string().min(2, { message: "Username is required" }),
+    name: z
+      .string()
+      .min(2, { message: "Name must be atleast 4 characters long" }),
+    email: z.string().email(),
+    username: z
+      .string()
+      .min(2, { message: "Username is required" })
+      .regex(/^(?!.*  )[A-Za-z0-9-]+$/, {
+        message: "Only letters, numbers and dash are allowed",
+      })
+      .refine(
+        (val) => !val.includes("--"),
+        "Username cannot consecutive hyphens"
+      )
+      .transform((val) => val.toLowerCase()),
     password: z
       .string()
       .min(4, { message: "Your password must be atleast 4 characters long" })

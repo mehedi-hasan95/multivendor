@@ -17,6 +17,7 @@ export const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // 1. Define your form.
   const form = useForm<z.infer<typeof registerSchema>>({
+    mode: "onChange",
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useProductFilters } from "../../hooks/use-product-filter";
 import NoProductsFound from "@/components/common/no-products-found";
+import { formatPrice } from "@/lib/utils";
 
 export const ProductCard = () => {
   const [filters] = useProductFilters();
@@ -49,8 +50,23 @@ export const ProductCard = () => {
             <h3 className="font-medium text-lg line-clamp-1">
               {product.title}
             </h3>
-            <div className="mt-2 flex items-center justify-between">
-              <span className="font-semibold">${product.price.toFixed(2)}</span>
+            <Link
+              href={""}
+              className="capitalize font-medium flex gap-1 items-center underline py-3"
+            >
+              <Image
+                src={product.seller.image || "https://github.com/shadcn.png"}
+                alt={product.seller.name}
+                height={20}
+                width={20}
+                className="rounded-full"
+              />
+              <p>{product.seller.name}</p>
+            </Link>
+            <div className="flex items-center justify-between">
+              <span className="font-semibold">
+                {formatPrice(product.price)}
+              </span>
               <button
                 className="relative z-20 rounded-full bg-primary p-2 text-primary-foreground shadow-sm hover:bg-primary/90"
                 aria-label={`Add ${product.title} to cart`}
