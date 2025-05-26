@@ -17,6 +17,7 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
   void queryClient.prefetchQuery(
     trpc.products.getMany.queryOptions({ category, ...filters })
   );
+  void queryClient.prefetchQuery(trpc.tags.getMany.queryOptions());
   return (
     <div className="grid grid-cols-8 gap-4 col-span-full lg:col-span-4 mx-4 lg:mx-12">
       <div className="col-span-full sm:col-span-2">

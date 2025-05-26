@@ -7,6 +7,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { PriceFilter } from "./price-filter";
 import { useProductFilters } from "../../hooks/use-product-filter";
+import { TagFilters } from "./tag-filters";
 
 interface Props {
   title: string;
@@ -32,6 +33,9 @@ const ProductFilter = ({ children, title, className }: Props) => {
 export const ProductFilters = () => {
   const [filters, setFilters] = useProductFilters();
   const hasAnyFilters = Object.entries(filters).some(([, value]) => {
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
     if (typeof value === "string") {
       return value !== "";
     }
@@ -41,6 +45,7 @@ export const ProductFilters = () => {
     setFilters({
       maxPrice: "",
       minPrice: "",
+      tags: [],
     });
   };
   const onChange = (key: keyof typeof filters, value: unknown) => {
@@ -70,6 +75,12 @@ export const ProductFilters = () => {
             maxPrice={filters.maxPrice}
             onMinPriceChange={(value) => onChange("minPrice", value)}
             onMaxPriceChange={(value) => onChange("maxPrice", value)}
+          />
+        </ProductFilter>
+        <ProductFilter title="Tags" className="border-b-0">
+          <TagFilters
+            value={filters.tags}
+            onChange={(value) => onChange("tags", value)}
           />
         </ProductFilter>
       </GlassCard>
