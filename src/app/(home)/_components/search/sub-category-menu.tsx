@@ -4,18 +4,17 @@ import Link from "next/link";
 interface Props {
   category: categoriesGetManyOutput[1];
   isOpen: boolean;
-  position: { top: number; left: number };
 }
-export const SubCategoryMenu = ({ isOpen, position, category }: Props) => {
+export const SubCategoryMenu = ({ isOpen, category }: Props) => {
   if (!isOpen || !category.SubCategories || !category.SubCategories.length) {
     return null;
   }
   return (
     <div
-      className="fixed z-100"
+      className="absolute z-100"
       style={{
-        top: position.top,
-        left: position.left,
+        top: "100%",
+        left: 0,
       }}
     >
       <div className="h-3 w-60" />

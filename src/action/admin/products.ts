@@ -1,3 +1,4 @@
+import { DEFAULT_LIMIT } from "@/constants/default";
 import { sortValues } from "@/constants/nuqs/search-params";
 import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
@@ -75,11 +76,17 @@ export const productRouter = createTRPCRouter({
         maxPrice: z.string().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+
+        cursor: z.string().nullish(),
+        limit: z.number().default(DEFAULT_LIMIT),
       })
     )
 
     .query(async ({ input }) => {
       const products = await db.products.findMany({
+        take: input.limit + 1,
+        cursor: input.cursor ? { id: input.cursor } : undefined,
+        skip: input.cursor ? 1 : 0,
         where: {
           categoryId: input.category,
           subCategoryId: input.subCategory,
@@ -115,6 +122,13 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
-      return products;
+      const hasMore = products.length > input.limit;
+      const items = hasMore ? products.slice(0, -1) : products;
+      const lastItem = items[items.length - 1];
+      const nextCursor = hasMore ? lastItem.id : null;
+      return {
+        products: items,
+        nextCursor,
+      };
     }),
 });

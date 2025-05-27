@@ -5,6 +5,7 @@ import { SearchInput } from "./search-input";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { BreadcrumbNavigation } from "./breadcrumb-navigateion";
+import { Separator } from "@/components/ui/separator";
 
 export const SearchFilters = () => {
   const trpc = useTRPC();
@@ -25,7 +26,7 @@ export const SearchFilters = () => {
       (subcat) => subcat.slug === activeSubCategory
     )?.name || null;
   return (
-    <div className="px-4 lg:px-12 py-3 flex flex-col gap-3 pb-10">
+    <div className="px-4 lg:px-12 py-3 flex flex-col gap-3">
       <SearchInput categories={categories} />
       <div className="hidden lg:flex">
         <HomeCategory categories={categories} />
@@ -35,6 +36,7 @@ export const SearchFilters = () => {
         activeCategoryName={activeCategoryName}
         subCategoryName={activeSubCategoryName}
       />
+      <Separator />
     </div>
   );
 };
