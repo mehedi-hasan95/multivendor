@@ -9622,7 +9622,7 @@ export namespace Prisma {
     price: number | null
     basePrice: number | null
     description: string | null
-    sellerId: string | null
+    sellerUserName: string | null
     categoryId: string | null
     subCategoryId: string | null
     tagSlug: string | null
@@ -9641,7 +9641,7 @@ export namespace Prisma {
     price: number | null
     basePrice: number | null
     description: string | null
-    sellerId: string | null
+    sellerUserName: string | null
     categoryId: string | null
     subCategoryId: string | null
     tagSlug: string | null
@@ -9660,7 +9660,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: number
-    sellerId: number
+    sellerUserName: number
     categoryId: number
     subCategoryId: number
     tagSlug: number
@@ -9697,7 +9697,7 @@ export namespace Prisma {
     price?: true
     basePrice?: true
     description?: true
-    sellerId?: true
+    sellerUserName?: true
     categoryId?: true
     subCategoryId?: true
     tagSlug?: true
@@ -9716,7 +9716,7 @@ export namespace Prisma {
     price?: true
     basePrice?: true
     description?: true
-    sellerId?: true
+    sellerUserName?: true
     categoryId?: true
     subCategoryId?: true
     tagSlug?: true
@@ -9735,7 +9735,7 @@ export namespace Prisma {
     price?: true
     basePrice?: true
     description?: true
-    sellerId?: true
+    sellerUserName?: true
     categoryId?: true
     subCategoryId?: true
     tagSlug?: true
@@ -9841,7 +9841,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     tagSlug: string
@@ -9879,7 +9879,7 @@ export namespace Prisma {
     price?: boolean
     basePrice?: boolean
     description?: boolean
-    sellerId?: boolean
+    sellerUserName?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
     tagSlug?: boolean
@@ -9904,7 +9904,7 @@ export namespace Prisma {
     price?: boolean
     basePrice?: boolean
     description?: boolean
-    sellerId?: boolean
+    sellerUserName?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
     tagSlug?: boolean
@@ -9927,7 +9927,7 @@ export namespace Prisma {
     price?: boolean
     basePrice?: boolean
     description?: boolean
-    sellerId?: boolean
+    sellerUserName?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
     tagSlug?: boolean
@@ -9950,7 +9950,7 @@ export namespace Prisma {
     price?: boolean
     basePrice?: boolean
     description?: boolean
-    sellerId?: boolean
+    sellerUserName?: boolean
     categoryId?: boolean
     subCategoryId?: boolean
     tagSlug?: boolean
@@ -9963,7 +9963,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProductsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "price" | "basePrice" | "description" | "sellerId" | "categoryId" | "subCategoryId" | "tagSlug" | "stock" | "sale" | "hasDiscount" | "discount" | "discountcode" | "createdAt" | "updatedAt", ExtArgs["result"]["products"]>
+  export type ProductsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "price" | "basePrice" | "description" | "sellerUserName" | "categoryId" | "subCategoryId" | "tagSlug" | "stock" | "sale" | "hasDiscount" | "discount" | "discountcode" | "createdAt" | "updatedAt", ExtArgs["result"]["products"]>
   export type ProductsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     seller?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoriesDefaultArgs<ExtArgs>
@@ -10000,7 +10000,7 @@ export namespace Prisma {
       price: number
       basePrice: number
       description: string
-      sellerId: string
+      sellerUserName: string
       categoryId: string
       subCategoryId: string
       tagSlug: string
@@ -10444,7 +10444,7 @@ export namespace Prisma {
     readonly price: FieldRef<"Products", 'Int'>
     readonly basePrice: FieldRef<"Products", 'Int'>
     readonly description: FieldRef<"Products", 'String'>
-    readonly sellerId: FieldRef<"Products", 'String'>
+    readonly sellerUserName: FieldRef<"Products", 'String'>
     readonly categoryId: FieldRef<"Products", 'String'>
     readonly subCategoryId: FieldRef<"Products", 'String'>
     readonly tagSlug: FieldRef<"Products", 'String'>
@@ -12071,7 +12071,7 @@ export namespace Prisma {
     price: 'price',
     basePrice: 'basePrice',
     description: 'description',
-    sellerId: 'sellerId',
+    sellerUserName: 'sellerUserName',
     categoryId: 'categoryId',
     subCategoryId: 'subCategoryId',
     tagSlug: 'tagSlug',
@@ -12725,7 +12725,7 @@ export namespace Prisma {
     price?: IntFilter<"Products"> | number
     basePrice?: IntFilter<"Products"> | number
     description?: StringFilter<"Products"> | string
-    sellerId?: StringFilter<"Products"> | string
+    sellerUserName?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
     tagSlug?: StringFilter<"Products"> | string
@@ -12749,7 +12749,7 @@ export namespace Prisma {
     price?: SortOrder
     basePrice?: SortOrder
     description?: SortOrder
-    sellerId?: SortOrder
+    sellerUserName?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
     tagSlug?: SortOrder
@@ -12776,7 +12776,7 @@ export namespace Prisma {
     price?: IntFilter<"Products"> | number
     basePrice?: IntFilter<"Products"> | number
     description?: StringFilter<"Products"> | string
-    sellerId?: StringFilter<"Products"> | string
+    sellerUserName?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
     tagSlug?: StringFilter<"Products"> | string
@@ -12800,7 +12800,7 @@ export namespace Prisma {
     price?: SortOrder
     basePrice?: SortOrder
     description?: SortOrder
-    sellerId?: SortOrder
+    sellerUserName?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
     tagSlug?: SortOrder
@@ -12827,7 +12827,7 @@ export namespace Prisma {
     price?: IntWithAggregatesFilter<"Products"> | number
     basePrice?: IntWithAggregatesFilter<"Products"> | number
     description?: StringWithAggregatesFilter<"Products"> | string
-    sellerId?: StringWithAggregatesFilter<"Products"> | string
+    sellerUserName?: StringWithAggregatesFilter<"Products"> | string
     categoryId?: StringWithAggregatesFilter<"Products"> | string
     subCategoryId?: StringWithAggregatesFilter<"Products"> | string
     tagSlug?: StringWithAggregatesFilter<"Products"> | string
@@ -13499,7 +13499,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     tagSlug: string
@@ -13539,7 +13539,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
@@ -13559,7 +13559,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     tagSlug: string
@@ -13593,7 +13593,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
@@ -14160,7 +14160,7 @@ export namespace Prisma {
     price?: SortOrder
     basePrice?: SortOrder
     description?: SortOrder
-    sellerId?: SortOrder
+    sellerUserName?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
     tagSlug?: SortOrder
@@ -14187,7 +14187,7 @@ export namespace Prisma {
     price?: SortOrder
     basePrice?: SortOrder
     description?: SortOrder
-    sellerId?: SortOrder
+    sellerUserName?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
     tagSlug?: SortOrder
@@ -14206,7 +14206,7 @@ export namespace Prisma {
     price?: SortOrder
     basePrice?: SortOrder
     description?: SortOrder
-    sellerId?: SortOrder
+    sellerUserName?: SortOrder
     categoryId?: SortOrder
     subCategoryId?: SortOrder
     tagSlug?: SortOrder
@@ -15222,7 +15222,7 @@ export namespace Prisma {
     price?: IntFilter<"Products"> | number
     basePrice?: IntFilter<"Products"> | number
     description?: StringFilter<"Products"> | string
-    sellerId?: StringFilter<"Products"> | string
+    sellerUserName?: StringFilter<"Products"> | string
     categoryId?: StringFilter<"Products"> | string
     subCategoryId?: StringFilter<"Products"> | string
     tagSlug?: StringFilter<"Products"> | string
@@ -15464,7 +15464,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     subCategoryId: string
     tagSlug: string
     stock?: number | null
@@ -15581,7 +15581,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     tagSlug: string
     stock?: number | null
@@ -15676,7 +15676,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     stock?: number | null
@@ -16035,7 +16035,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     tagSlug: string
@@ -16089,7 +16089,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
@@ -16294,7 +16294,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     subCategoryId: string
     tagSlug: string
     stock?: number | null
@@ -16357,7 +16357,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16376,7 +16376,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16394,7 +16394,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     tagSlug: string
     stock?: number | null
@@ -16431,7 +16431,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16450,7 +16450,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     tagSlug?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16468,7 +16468,7 @@ export namespace Prisma {
     price: number
     basePrice: number
     description: string
-    sellerId: string
+    sellerUserName: string
     categoryId: string
     subCategoryId: string
     stock?: number | null
@@ -16505,7 +16505,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null
@@ -16524,7 +16524,7 @@ export namespace Prisma {
     price?: IntFieldUpdateOperationsInput | number
     basePrice?: IntFieldUpdateOperationsInput | number
     description?: StringFieldUpdateOperationsInput | string
-    sellerId?: StringFieldUpdateOperationsInput | string
+    sellerUserName?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
     subCategoryId?: StringFieldUpdateOperationsInput | string
     stock?: NullableIntFieldUpdateOperationsInput | number | null

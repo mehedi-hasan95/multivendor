@@ -2,7 +2,8 @@
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, generateTenentUrl } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface Props {
   productId: string;
@@ -13,7 +14,7 @@ interface Props {
   sellerImage?: string;
   sellerName: string;
   price: number;
-  serlerUserName: string;
+  selerUserName: string;
 }
 export const ProductCard = ({
   categoryId,
@@ -24,8 +25,14 @@ export const ProductCard = ({
   subCategoryId,
   title,
   sellerImage,
-  serlerUserName,
+  selerUserName,
 }: Props) => {
+  const router = useRouter();
+  const tenantUrl = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(generateTenentUrl(selerUserName));
+  };
   return (
     <div
       className="group relative overflow-hidden rounded-lg border bg-background shadow-sm transition-all hover:shadow-md"
@@ -43,36 +50,37 @@ export const ProductCard = ({
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
           />
         </div>
-      </Link>
-      <div className="p-4">
-        <h3 className="font-medium text-lg line-clamp-1">{title}</h3>
-        <Link
-          href={`/${serlerUserName}`}
-          className="capitalize font-medium flex gap-1 items-center underline py-3"
-        >
-          <Image
-            src={sellerImage || "https://github.com/shadcn.png"}
-            alt={sellerName}
-            height={20}
-            width={20}
-            className="rounded-full"
-          />
-          <p>{sellerName}</p>
-        </Link>
-        <div className="flex items-center justify-between">
-          <span className="font-semibold">{formatPrice(price)}</span>
-          <button
-            className="relative z-20 rounded-full bg-primary p-2 text-primary-foreground shadow-sm hover:bg-primary/90"
-            aria-label={`Add ${title} to cart`}
-            onClick={(e) => {
-              e.preventDefault();
-              // Add to cart logic here
-            }}
+
+        <div className="p-4">
+          <h3 className="font-medium text-lg line-clamp-1">{title}</h3>
+          <div
+            onClick={tenantUrl}
+            className="capitalize font-medium flex gap-1 items-center underline py-3"
           >
-            <ShoppingCart className="h-4 w-4" />
-          </button>
+            <Image
+              src={sellerImage || "https://github.com/shadcn.png"}
+              alt={sellerName}
+              height={20}
+              width={20}
+              className="rounded-full"
+            />
+            <p>{sellerName}</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="font-semibold">{formatPrice(price)}</span>
+            <button
+              className="relative z-20 rounded-full bg-primary p-2 text-primary-foreground shadow-sm hover:bg-primary/90"
+              aria-label={`Add ${title} to cart`}
+              onClick={(e) => {
+                e.preventDefault();
+                // Add to cart logic here
+              }}
+            >
+              <ShoppingCart className="h-4 w-4" />
+            </button>
+          </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 };

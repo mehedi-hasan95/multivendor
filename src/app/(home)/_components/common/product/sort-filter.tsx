@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useProductFilters } from "../../hooks/use-product-filter";
 import { cn } from "@/lib/utils";
 
-export const ShortFilter = () => {
+export const SortFilter = () => {
   const [filter, setFilter] = useProductFilters();
   return (
     <div className="flex items-center gap-2">

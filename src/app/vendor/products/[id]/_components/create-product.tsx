@@ -18,7 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ComboboxModify } from "@/components/common/combobox-modify";
 import { useTRPC } from "@/trpc/client";
-import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import BackdropGradient from "@/components/generated/backdrop-gradient";
 import { Switch } from "@/components/ui/switch";
 import { ImageUpload } from "@/components/common/image-upload";
@@ -30,6 +34,7 @@ import { useRouter } from "next/navigation";
 export const CreateProduct = () => {
   const router = useRouter();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
   const { data: tags } = useSuspenseQuery(trpc.tags.getMany.queryOptions());
@@ -74,7 +79,11 @@ export const CreateProduct = () => {
       onError: (e) => {
         toast.error(e.message);
       },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["products"] });
+      },
       onSuccess: () => {
+        toast("Product created ");
         router.push("/vendor/products");
       },
     })

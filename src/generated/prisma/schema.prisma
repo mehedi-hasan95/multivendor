@@ -41,6 +41,7 @@ model User {
 
   @@unique([email])
   @@unique([username])
+  @@index([username])
   @@map("user")
 }
 
@@ -133,27 +134,27 @@ model Tags {
 }
 
 model Products {
-  id            String         @id @default(uuid())
-  title         String
-  price         Int
-  basePrice     Int
-  description   String
-  sellerId      String
-  seller        User           @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  categoryId    String
-  category      Categories     @relation(fields: [categoryId], references: [slug], onDelete: Cascade)
-  subCategoryId String
-  subCategory   SubCategories  @relation(fields: [subCategoryId], references: [slug], onDelete: Cascade)
-  tagSlug       String         @map("tagId")
-  tags          Tags           @relation(fields: [tagSlug], references: [slug], onDelete: Cascade)
-  stock         Int?
-  sale          Int            @default(0)
-  images        ProductImage[]
-  hasDiscount   Boolean        @default(false)
-  discount      Int?
-  discountcode  String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id             String         @id @default(uuid())
+  title          String
+  price          Int
+  basePrice      Int
+  description    String
+  sellerUserName String
+  seller         User           @relation(fields: [sellerUserName], references: [username], onDelete: Cascade)
+  categoryId     String
+  category       Categories     @relation(fields: [categoryId], references: [slug], onDelete: Cascade)
+  subCategoryId  String
+  subCategory    SubCategories  @relation(fields: [subCategoryId], references: [slug], onDelete: Cascade)
+  tagSlug        String         @map("tagId")
+  tags           Tags           @relation(fields: [tagSlug], references: [slug], onDelete: Cascade)
+  stock          Int?
+  sale           Int            @default(0)
+  images         ProductImage[]
+  hasDiscount    Boolean        @default(false)
+  discount       Int?
+  discountcode   String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 
   @@index([id])
 }

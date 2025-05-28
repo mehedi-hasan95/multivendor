@@ -1,32 +1,31 @@
+import { DEFAULT_LIMIT } from "@/constants/default";
+import { loadProductFilters } from "@/constants/nuqs/search-params";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { ProductFilters } from "../_components/common/product/products-filter";
-import { SearchParams } from "nuqs/server";
+import { SearchParams } from "nuqs";
 import { Suspense } from "react";
 import GradientText from "@/components/generated/gradient-text";
-import { loadProductFilters } from "@/constants/nuqs/search-params";
-import { SortFilter } from "../_components/common/product/sort-filter";
-import { DEFAULT_LIMIT } from "@/constants/default";
-import { ProductList } from "../_components/common/product/product-list";
+import { SortFilter } from "@/app/(home)/_components/common/product/sort-filter";
+import { ProductFilters } from "@/app/(home)/_components/common/product/products-filter";
+import { ProductList } from "@/app/(home)/_components/common/product/product-list";
 
 interface Props {
-  params: Promise<{ category: string }>;
   searchParams: Promise<SearchParams>;
+  params: Promise<{ slug: string }>;
 }
-const CategoryPage = async ({ params, searchParams }: Props) => {
-  const { category } = await params;
+const TenantSlug = async ({ params, searchParams }: Props) => {
+  const { slug } = await params;
   const filters = await loadProductFilters(searchParams);
   const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(
+  void queryClient.invalidateQueries(
     trpc.products.getMany.infiniteQueryOptions({
-      category,
+      sellerUserName: slug,
       ...filters,
       limit: DEFAULT_LIMIT,
     })
   );
-  void queryClient.prefetchQuery(trpc.tags.getMany.queryOptions());
   return (
-    <div className="mx-4 lg:mx-12">
+    <>
       <div className="flex justify-between items-center pb-5">
         <GradientText element="H1">On the market</GradientText>
         <SortFilter />
@@ -38,13 +37,13 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
         <div className="col-span-full sm:col-span-6">
           <HydrationBoundary state={dehydrate(queryClient)}>
             <Suspense>
-              <ProductList isManual={true} />
+              <ProductList seller={slug} />
             </Suspense>
           </HydrationBoundary>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default CategoryPage;
+export default TenantSlug;

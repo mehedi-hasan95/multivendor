@@ -4,7 +4,8 @@ import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import { productSchema } from "@/schemas/schemas";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
-// import { revalidatePath } from "next/cache";
+import { TRPCError } from "@trpc/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export const productRouter = createTRPCRouter({
@@ -41,7 +42,7 @@ export const productRouter = createTRPCRouter({
           discount,
           discountcode,
           stock,
-          sellerId: session.user.id,
+          sellerUserName: session.user.username as string,
           tagSlug,
           images: {
             createMany: {
@@ -50,17 +51,22 @@ export const productRouter = createTRPCRouter({
           },
         },
       });
-      // revalidatePath("/vendor/products");
+      revalidatePath("/vendor/products");
       return product;
     } catch (error) {
-      return { error: "Something went wrong", ot: error };
+      // return { error: "Something went wrong", ot: error };
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Something went wrong",
+        cause: error,
+      });
     }
   }),
   getManyBySeller: baseProcedure.query(async () => {
     const session = await authSession();
     const products = await db.products.findMany({
       where: {
-        sellerId: session?.user.id,
+        sellerUserName: session?.user.username as string,
       },
       include: { images: true },
       orderBy: { createdAt: "asc" },
@@ -79,6 +85,7 @@ export const productRouter = createTRPCRouter({
 
         cursor: z.string().nullish(),
         limit: z.number().default(DEFAULT_LIMIT),
+        sellerUserName: z.string().nullable().optional(),
       })
     )
 
@@ -88,6 +95,9 @@ export const productRouter = createTRPCRouter({
         cursor: input.cursor ? { id: input.cursor } : undefined,
         skip: input.cursor ? 1 : 0,
         where: {
+          sellerUserName: {
+            equals: input.sellerUserName || undefined,
+          },
           categoryId: input.category,
           subCategoryId: input.subCategory,
           price: {

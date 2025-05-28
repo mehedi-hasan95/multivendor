@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
-import { useDropdownPosition } from "./use-dropdown-position";
 import { SubCategoryMenu } from "./sub-category-menu";
 import Link from "next/link";
 import { categoriesGetManyOutput } from "@/constants/trpc.types";
@@ -19,8 +18,6 @@ export const CategoryDorupdown = ({
 }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const droupdownRef = useRef<HTMLDivElement>(null);
-  const { getDropdownPostion } = useDropdownPosition(droupdownRef);
-  const droupdownPosition = getDropdownPostion();
   const toggleDropdown = () => {
     if (category.SubCategories.length) {
       setIsOpen(!isOpen);
@@ -64,11 +61,7 @@ export const CategoryDorupdown = ({
           />
         )}
       </div>
-      <SubCategoryMenu
-        isOpen={isOpen}
-        position={droupdownPosition}
-        category={category}
-      />
+      <SubCategoryMenu isOpen={isOpen} category={category} />
     </div>
   );
 };

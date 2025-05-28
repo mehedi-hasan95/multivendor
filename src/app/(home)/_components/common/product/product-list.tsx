@@ -11,8 +11,9 @@ import NoProductsFound from "@/components/common/no-products-found";
 
 interface Props {
   isManual?: boolean;
+  seller?: string;
 }
-export const ProductList = ({ isManual = false }: Props) => {
+export const ProductList = ({ isManual = false, seller }: Props) => {
   const [filters] = useProductFilters();
   const params = useParams();
   const categoryParam = params.category as string | undefined;
@@ -25,6 +26,7 @@ export const ProductList = ({ isManual = false }: Props) => {
           limit: DEFAULT_LIMIT,
           category: categoryParam,
           subCategory: sbuCategoryParam,
+          sellerUserName: seller,
           ...filters,
         },
         {
@@ -52,7 +54,7 @@ export const ProductList = ({ isManual = false }: Props) => {
               productId={product.id}
               productImage={product.images[0].url}
               sellerName={product.seller.name}
-              serlerUserName={product.seller.username}
+              selerUserName={product.seller.username}
               subCategoryId={product.subCategoryId}
               title={product.title}
               sellerImage={product.seller.image || undefined}

@@ -16,3 +16,7 @@ export const formatPrice = (
     currency,
   }).format(amount);
 };
+
+export function generateTenentUrl(tenent: string) {
+  return `/tenants/${tenent}`;
+}
