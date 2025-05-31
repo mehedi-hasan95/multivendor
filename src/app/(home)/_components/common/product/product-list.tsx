@@ -49,13 +49,11 @@ export const ProductList = ({ isManual = false, seller }: Props) => {
           .map((product) => (
             <ProductCard
               key={product.id}
-              categoryId={product.categoryId}
               price={product.price}
               productId={product.id}
               productImage={product.images[0].url}
               sellerName={product.seller.name}
               selerUserName={product.seller.username}
-              subCategoryId={product.subCategoryId}
               title={product.title}
               sellerImage={product.seller.image || undefined}
             />

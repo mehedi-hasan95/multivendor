@@ -141,4 +141,24 @@ export const productRouter = createTRPCRouter({
         nextCursor,
       };
     }),
+  getOne: baseProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const data = await db.products.findUnique({
+        where: {
+          id: input.id,
+        },
+        include: {
+          images: true,
+          seller: {
+            select: {
+              image: true,
+              username: true,
+              name: true,
+            },
+          },
+        },
+      });
+      return data;
+    }),
 });

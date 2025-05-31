@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   productId: string;
-  categoryId: string;
-  subCategoryId: string;
   title: string;
   productImage: string;
   sellerImage?: string;
@@ -17,12 +15,10 @@ interface Props {
   selerUserName: string;
 }
 export const ProductCard = ({
-  categoryId,
   price,
   productId,
   productImage,
   sellerName,
-  subCategoryId,
   title,
   sellerImage,
   selerUserName,
@@ -38,7 +34,7 @@ export const ProductCard = ({
       className="group relative overflow-hidden rounded-lg border bg-background shadow-sm transition-all hover:shadow-md"
       key={productId}
     >
-      <Link href={`/${categoryId}/${subCategoryId}/${productId}`}>
+      <Link href={`/products/${productId}`}>
         <span className="sr-only">View {title}</span>
 
         <div className="relative aspect-square overflow-hidden">

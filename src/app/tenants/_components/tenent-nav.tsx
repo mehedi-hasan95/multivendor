@@ -1,5 +1,6 @@
 "use client";
 
+import { Logo } from "@/components/common/logo";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { generateTenentUrl } from "@/lib/utils";
@@ -22,22 +23,25 @@ export const TenentNav = ({ username }: Props) => {
     redirect("/");
   }
   return (
-    <div className="flex flex-col py-3">
-      <Link
-        href={generateTenentUrl(data.username)}
-        className="flex gap-2 items-center"
-      >
-        <Image
-          src={data.image || "https://github.com/shadcn.png"}
-          alt={data.username}
-          height={32}
-          width={32}
-          className="rounded-full"
-        />
-        <div className="font-medium text-xl">{data.username}</div>
-      </Link>
+    <>
+      <div className="flex items-center justify-between pt-5">
+        <Link
+          href={generateTenentUrl(data.username)}
+          className="flex gap-2 items-center"
+        >
+          <Image
+            src={data.image || "https://github.com/shadcn.png"}
+            alt={data.username}
+            height={32}
+            width={32}
+            className="rounded-full"
+          />
+          <div className="font-medium text-xl">{data.username}</div>
+        </Link>
+        <Logo />
+      </div>
       <Separator className="mt-3" />
-    </div>
+    </>
   );
 };
 

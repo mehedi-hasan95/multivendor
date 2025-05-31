@@ -1,0 +1,23 @@
+import { getQueryClient, trpc } from "@/trpc/server";
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { SingleProduct } from "./_components/single-product";
+
+interface Props {
+  params: Promise<{ id: string }>;
+}
+const ProductId = async ({ params }: Props) => {
+  const { id } = await params;
+  const queryClient = getQueryClient();
+  void queryClient.prefetchQuery(
+    trpc.products.getOne.queryOptions({
+      id,
+    })
+  );
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <SingleProduct id={id} />
+    </HydrationBoundary>
+  );
+};
+
+export default ProductId;

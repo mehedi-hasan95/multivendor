@@ -10,3 +10,5 @@ export type productBySeller =
 
 export type productGetMany =
   inferRouterOutputs<AppRouter>["products"]["getMany"];
+
+export type productGetOne = inferRouterOutputs<AppRouter>["products"]["getOne"];

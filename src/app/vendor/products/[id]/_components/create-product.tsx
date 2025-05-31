@@ -80,7 +80,8 @@ export const CreateProduct = () => {
         toast.error(e.message);
       },
       onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: ["products"] });
+        // queryClient.invalidateQueries({ queryKey: ["products"] });
+        queryClient.invalidateQueries();
       },
       onSuccess: () => {
         toast("Product created ");
