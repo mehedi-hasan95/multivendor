@@ -226,6 +226,15 @@ exports.Prisma.ProductImageScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.CartScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  productId: 'productId',
+  quantity: 'quantity',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -255,7 +264,8 @@ exports.Prisma.ModelName = {
   SubCategories: 'SubCategories',
   Tags: 'Tags',
   Products: 'Products',
-  ProductImage: 'ProductImage'
+  ProductImage: 'ProductImage',
+  Cart: 'Cart'
 };
 
 /**

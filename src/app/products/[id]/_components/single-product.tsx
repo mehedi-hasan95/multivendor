@@ -20,13 +20,14 @@ import {
   CarouselThumbsContainer,
   SliderThumbItem,
 } from "@/components/generated/carousel-modify";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 
 interface ProductDetailsProps {
   id: string;
 }
 export const SingleProduct = ({ id }: ProductDetailsProps) => {
+  const [quentity, setQuantity] = useState<number>(1);
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id }));
   if (!data) {
@@ -98,10 +99,10 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
               <div className="space-y-2">
                 <div className="flex items-baseline space-x-2">
                   <span className="text-3xl font-light">
-                    {formatPrice(data?.price)}
+                    {formatPrice(data?.price * quentity)}
                   </span>
                   <span className="text-lg text-gray-500 line-through">
-                    {formatPrice(data?.basePrice)}
+                    {formatPrice(data?.basePrice * quentity)}
                   </span>
                   <Badge variant="destructive" className="text-xs">
                     {discount}% OFF
@@ -115,13 +116,25 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                     Quantity
                   </label>
                   <div className="flex items-center space-x-3">
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                      -
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() =>
+                        setQuantity((prev) => Math.max(prev - 1, 1))
+                      }
+                    >
+                      <span className="sr-only">Decrease quantity</span>-
                     </Button>
                     <span className="text-sm font-medium w-8 text-center">
-                      1
+                      {quentity}
                     </span>
-                    <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 w-8 p-0"
+                      onClick={() => setQuantity((prev) => prev + 1)}
+                    >
                       +
                     </Button>
                   </div>
