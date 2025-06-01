@@ -12,3 +12,6 @@ export type productGetMany =
   inferRouterOutputs<AppRouter>["products"]["getMany"];
 
 export type productGetOne = inferRouterOutputs<AppRouter>["products"]["getOne"];
+export type addToCartOutput = inferRouterOutputs<AppRouter>["cart"]["create"];
+export type cartGetCartOutput =
+  inferRouterOutputs<AppRouter>["cart"]["getCart"];

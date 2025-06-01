@@ -1,13 +1,17 @@
 "use client";
 
 import { useTRPC } from "@/trpc/client";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Share2 } from "lucide-react";
 import { formatPrice, generateTenentUrl } from "@/lib/utils";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthorImg } from "@/components/common/author-img";
 import { StarRating } from "./star-rating";
@@ -22,14 +26,52 @@ import {
 } from "@/components/generated/carousel-modify";
 import { Fragment, useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { toast } from "sonner";
 
 interface ProductDetailsProps {
   id: string;
 }
 export const SingleProduct = ({ id }: ProductDetailsProps) => {
+  const router = useRouter();
   const [quentity, setQuantity] = useState<number>(1);
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id }));
+  const { data: cartData } = useSuspenseQuery(trpc.cart.getCart.queryOptions());
+  const inCart = cartData?.some((item) => item.product.id === data?.id);
+  const create = useMutation(
+    trpc.cart.create.mutationOptions({
+      onMutate: async (input) => {
+        await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
+        const previousCart = queryClient.getQueryData(
+          trpc.cart.getCart.queryKey()
+        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) => {
+          return [...old, { ...input, product: data }];
+        });
+        router.refresh();
+        return { previousCart };
+      },
+      onError: (err, input, context) => {
+        queryClient.setQueryData(
+          trpc.cart.getCart.queryKey(),
+          context?.previousCart
+        );
+        toast("Please login to add items to the cart");
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
+        queryClient.invalidateQueries(
+          trpc.products.getOne.queryOptions({ id })
+        );
+      },
+    })
+  );
   if (!data) {
     return redirect("/");
   }
@@ -37,6 +79,12 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
     ? Math.round(((data.basePrice - data.price) / data.basePrice) * 100)
     : 0;
 
+  const handleAddToCart = () => {
+    create.mutate({
+      productId: data.id,
+      quantity: quentity,
+    });
+  };
   return (
     <div>
       <div className="">
@@ -142,7 +190,16 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full h-12 text-base">Add to Cart</Button>
+                {inCart ? (
+                  <Button className="w-full h-12 text-base">In Cart</Button>
+                ) : (
+                  <Button
+                    className="w-full h-12 text-base"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </Button>
+                )}
                 <div className="flex space-x-2">
                   <Button variant="outline" className="flex-1 h-12">
                     <Heart className="h-4 w-4 mr-2" />

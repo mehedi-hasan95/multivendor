@@ -1,6 +1,7 @@
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { SingleProduct } from "./_components/single-product";
+import { SingleNav } from "./_components/singleNav";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -13,8 +14,10 @@ const ProductId = async ({ params }: Props) => {
       id,
     })
   );
+  void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
+      <SingleNav />
       <SingleProduct id={id} />
     </HydrationBoundary>
   );
