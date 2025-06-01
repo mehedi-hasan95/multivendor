@@ -4,10 +4,7 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 const CartPage = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery({
-    queryKey: ["cart"],
-    queryFn: () => queryClient.fetchQuery(trpc.cart.getCart.queryOptions()),
-  });
+  void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <CartItems />
