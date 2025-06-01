@@ -1,8 +1,12 @@
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { CartItems } from "./cart-items";
+import dynamic from "next/dynamic";
 
+const CartItems = dynamic(
+  () => import("./cart-items").then((mod) => mod.CartItems),
+  { ssr: false }
+);
 const CartPage = async () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
