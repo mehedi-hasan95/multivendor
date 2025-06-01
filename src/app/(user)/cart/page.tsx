@@ -1,18 +1,5 @@
-import { getQueryClient, trpc } from "@/trpc/server";
-import { CartItems } from "./_components/cart-items";
-import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-import { Suspense } from "react";
-
 const CartPage = async () => {
-  const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div>Loading...</div>}>
-        <CartItems />
-      </Suspense>
-    </HydrationBoundary>
-  );
+  return <div>CartPage</div>;
 };
 
 export default CartPage;
