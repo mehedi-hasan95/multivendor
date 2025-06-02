@@ -69,4 +69,36 @@ export const cartRouter = createTRPCRouter({
       await db.cart.delete({ where: { id: input.id } });
       return { success: true };
     }),
+  updateCart: privateProcedure
+    .input(z.object({ id: z.string(), quantity: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { username } = ctx;
+      if (!username) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You must be logged in to update items in the cart.",
+        });
+      }
+      const { id, quantity } = input;
+      if (quantity < 1 || quantity > 100) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Quantity must be between 1 and 100.",
+        });
+      }
+      const cartItem = await db.cart.findUnique({
+        where: { id },
+      });
+      if (!cartItem || cartItem.username !== username) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Cart item not found or does not belong to the user.",
+        });
+      }
+      const updatedCartItem = await db.cart.update({
+        where: { id },
+        data: { quantity },
+      });
+      return updatedCartItem;
+    }),
 });

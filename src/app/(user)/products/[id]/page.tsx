@@ -14,6 +14,7 @@ const ProductId = async ({ params }: Props) => {
       id,
     })
   );
+  void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SingleNav />

@@ -24,6 +24,7 @@ import {
 import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { cartGetCartOutput } from "@/constants/trpc.types";
 
 export const CartItems = () => {
   const router = useRouter();
@@ -48,7 +49,44 @@ export const CartItems = () => {
     })
   );
 
-  const updateQuantity = (id: string, newQuantity: number) => {
+  const update = useMutation(
+    trpc.cart.updateCart.mutationOptions({
+      onMutate: async ({ id, quantity }) => {
+        await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
+        const previousCart = queryClient.getQueryData(
+          trpc.cart.getCart.queryKey()
+        );
+
+        // Optimistically update the cart item
+        queryClient.setQueryData(
+          trpc.cart.getCart.queryKey(),
+          (old: cartGetCartOutput | undefined) => {
+            if (!old) return old;
+            return old.map((item) =>
+              item.id === id ? { ...item, quantity } : item
+            );
+          }
+        );
+
+        return { previousCart };
+      },
+      onError: (error, variables, context) => {
+        queryClient.setQueryData(
+          trpc.cart.getCart.queryKey(),
+          context?.previousCart
+        );
+        toast.error(`Failed to update quantity: ${error.message}`);
+      },
+      onSuccess: () => {
+        router.refresh();
+        toast.success("Quantity updated successfully");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
+      },
+    })
+  );
+  const updateQuantity = (id: string, newQuantity: number, cartId: string) => {
     if (newQuantity < 1) return;
 
     setCartItems((items) =>
@@ -56,6 +94,7 @@ export const CartItems = () => {
         item.productId === id ? { ...item, quantity: newQuantity } : item
       )
     );
+    update.mutate({ id: cartId, quantity: newQuantity });
   };
 
   const removeItem = (id: string) => {
@@ -162,7 +201,11 @@ export const CartItems = () => {
                           variant="outline"
                           size="sm"
                           onClick={() =>
-                            updateQuantity(item.productId, item.quantity - 1)
+                            updateQuantity(
+                              item.productId,
+                              item.quantity - 1,
+                              item.id
+                            )
                           }
                           disabled={item.quantity <= 1}
                         >
@@ -175,7 +218,11 @@ export const CartItems = () => {
                           variant="outline"
                           size="sm"
                           onClick={() =>
-                            updateQuantity(item.productId, item.quantity + 1)
+                            updateQuantity(
+                              item.productId,
+                              item.quantity + 1,
+                              item.id
+                            )
                           }
                           disabled={item.product.stock === item.product.sale}
                         >
