@@ -250,7 +250,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\multivendor\\src\\generated\\prisma",
+      "value": "/home/mehedi-hasan/Code/multivendor/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -259,12 +259,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\multivendor\\prisma\\schema.prisma",
+    "sourceFilePath": "/home/mehedi-hasan/Code/multivendor/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -278,11 +278,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://postgres:mehedi@localhost:5432/multivendor?schema=public"
+        "value": null
       }
     }
   },
