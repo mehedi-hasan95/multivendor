@@ -235,6 +235,14 @@ exports.Prisma.CartScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WishlistScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  productId: 'productId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -265,7 +273,8 @@ exports.Prisma.ModelName = {
   Tags: 'Tags',
   Products: 'Products',
   ProductImage: 'ProductImage',
-  Cart: 'Cart'
+  Cart: 'Cart',
+  Wishlist: 'Wishlist'
 };
 
 /**

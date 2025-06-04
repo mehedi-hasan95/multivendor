@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Share2 } from "lucide-react";
 import { formatPrice, generateTenentUrl } from "@/lib/utils";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
 import { AuthorImg } from "@/components/common/author-img";
 import { StarRating } from "./star-rating";
@@ -32,6 +32,12 @@ interface ProductDetailsProps {
   id: string;
 }
 export const SingleProduct = ({ id }: ProductDetailsProps) => {
+  const pathName = usePathname();
+  const shareLink = () => {
+    const url = `${process.env.NEXT_PUBLIC_URL}${pathName}`;
+    navigator.clipboard.writeText(url);
+    toast.success(url);
+  };
   const [quentity, setQuantity] = useState<number>(1);
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -60,7 +66,7 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
           trpc.cart.getCart.queryKey(),
           context?.previousCart
         );
-        toast("Please login to add items to the cart");
+        toast.error(err.message);
       },
       onSuccess: () => {
         queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
@@ -73,6 +79,56 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
       },
     })
   );
+
+  // Wishlist action
+  const { data: wishlistData } = useSuspenseQuery(
+    trpc.wishlist.getWishlist.queryOptions()
+  );
+  const isInWishlist = wishlistData?.some(
+    (item) => item.product.id === data?.id
+  );
+  const addToWishlist = useMutation(
+    trpc.wishlist.addWishlist.mutationOptions({
+      onMutate: async (input) => {
+        await queryClient.cancelQueries(
+          trpc.wishlist.getWishlist.queryOptions()
+        );
+        const previousWishlist = queryClient.getQueryData(
+          trpc.wishlist.getWishlist.queryKey()
+        );
+        if (previousWishlist) {
+          const existingItem = previousWishlist.find(
+            (item) => item.product.id === input.id
+          );
+          if (existingItem) {
+            queryClient.setQueryData(
+              trpc.wishlist.getWishlist.queryKey(),
+              previousWishlist.filter((item) => item.product.id !== input.id)
+            );
+          } else {
+            queryClient.setQueryData(
+              trpc.wishlist.getWishlist.queryKey(),
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              [...(previousWishlist as any), { product: data, id: input.id }]
+            );
+          }
+        }
+
+        return { previousWishlist };
+      },
+      onError: (err, input, context) => {
+        queryClient.setQueryData(
+          trpc.wishlist.getWishlist.queryKey(),
+          context?.previousWishlist
+        );
+        toast("Please login to add items to the wishlist");
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(trpc.wishlist.getWishlist.queryOptions());
+      },
+    })
+  );
+
   if (!data) {
     return redirect("/");
   }
@@ -85,6 +141,9 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
       productId: data.id,
       quantity: quentity,
     });
+  };
+  const handleAddToWishlist = () => {
+    addToWishlist.mutate({ id: data.id });
   };
   return (
     <div>
@@ -202,11 +261,23 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                   </Button>
                 )}
                 <div className="flex space-x-2">
-                  <Button variant="outline" className="flex-1 h-12">
-                    <Heart className="h-4 w-4 mr-2" />
+                  <Button
+                    variant="outline"
+                    className="flex-1 h-12"
+                    onClick={handleAddToWishlist}
+                  >
+                    {isInWishlist ? (
+                      <Heart className="h-4 w-4 mr-2 text-red-500 fill-red-500" />
+                    ) : (
+                      <Heart className="h-4 w-4 mr-2" />
+                    )}
                     Save
                   </Button>
-                  <Button variant="outline" className="flex-1 h-12">
+                  <Button
+                    variant="outline"
+                    className="flex-1 h-12"
+                    onClick={shareLink}
+                  >
                     <Share2 className="h-4 w-4 mr-2" />
                     Share
                   </Button>

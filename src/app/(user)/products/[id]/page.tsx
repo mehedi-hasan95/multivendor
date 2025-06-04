@@ -15,6 +15,7 @@ const ProductId = async ({ params }: Props) => {
     })
   );
   void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
+  void queryClient.prefetchQuery(trpc.wishlist.getWishlist.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <SingleNav />

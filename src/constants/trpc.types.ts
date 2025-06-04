@@ -18,3 +18,6 @@ export type cartGetCartOutput =
   | [];
 export type updateCartOutput =
   inferRouterOutputs<AppRouter>["cart"]["updateCart"];
+
+export type getWishlistOutput =
+  | inferRouterOutputs<AppRouter>["wishlist"]["getWishlist"];
