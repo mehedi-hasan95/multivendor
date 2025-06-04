@@ -1,10 +1,21 @@
-export const dynamic = "force-dynamic";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { CartItems } from "./cart-items";
+import { CartItems } from "./_components/cart-items";
+import { authSession } from "@/lib/auth-session";
+import { EmptyCart } from "./_components/empty-cart";
 
 const CartPage = async () => {
+  const sussion = await authSession();
+  if (!sussion?.user) {
+    return (
+      <EmptyCart
+        title="login yet"
+        buttonLink="/login"
+        buttonText="Please Login"
+      />
+    );
+  }
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
   return (

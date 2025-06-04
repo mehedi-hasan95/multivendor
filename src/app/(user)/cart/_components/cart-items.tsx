@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,27 +22,36 @@ import {
 } from "@tanstack/react-query";
 import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { cartGetCartOutput } from "@/constants/trpc.types";
+import { EmptyCart } from "./empty-cart";
 
 export const CartItems = () => {
-  const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data: cartData } = useSuspenseQuery(trpc.cart.getCart.queryOptions());
-  const [cartItems, setCartItems] = useState(cartData);
 
   const deleteCartItem = useMutation(
     trpc.cart.removeCart.mutationOptions({
-      onSuccess: () => {
-        router.refresh();
-        toast.success("Item removed from cart");
+      onMutate: async (variables) => {
+        await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
+        const previousCart = queryClient.getQueryData(
+          trpc.cart.getCart.queryKey()
+        );
+
+        queryClient.setQueryData(
+          trpc.cart.getCart.queryKey(),
+          (old: cartGetCartOutput | undefined) => {
+            if (!old) return old;
+            return old.filter((item) => item.id !== variables.id);
+          }
+        );
+        toast.info("Removing item from cart...");
+        return { previousCart };
       },
       onError: (error) => {
         toast.error(`Failed to remove item: ${error.message}`);
       },
       onSettled: () => {
-        // Refetch cart items after deletion
         queryClient.invalidateQueries();
       },
     })
@@ -56,8 +64,6 @@ export const CartItems = () => {
         const previousCart = queryClient.getQueryData(
           trpc.cart.getCart.queryKey()
         );
-
-        // Optimistically update the cart item
         queryClient.setQueryData(
           trpc.cart.getCart.queryKey(),
           (old: cartGetCartOutput | undefined) => {
@@ -78,7 +84,6 @@ export const CartItems = () => {
         toast.error(`Failed to update quantity: ${error.message}`);
       },
       onSuccess: () => {
-        router.refresh();
         toast.success("Quantity updated successfully");
       },
       onSettled: () => {
@@ -87,22 +92,16 @@ export const CartItems = () => {
     })
   );
   const updateQuantity = (id: string, newQuantity: number, cartId: string) => {
-    if (newQuantity < 1) return;
+    if (cartData.length < 1) return;
 
-    setCartItems((items) =>
-      items.map((item) =>
-        item.productId === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
     update.mutate({ id: cartId, quantity: newQuantity });
   };
 
   const removeItem = (id: string) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
     deleteCartItem.mutate({ id });
   };
 
-  const subtotal = cartItems.reduce(
+  const subtotal = cartData.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
@@ -110,21 +109,8 @@ export const CartItems = () => {
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <ShoppingBag className="mx-auto h-24 w-24 text-muted-foreground mb-6" />
-          <h1 className="text-3xl font-bold mb-4">Your cart is empty</h1>
-          <p className="text-muted-foreground mb-8">
-            Looks like you haven&apos;t added any items to your cart yet.
-          </p>
-          <Button asChild size="lg">
-            <Link href="/">Continue Shopping</Link>
-          </Button>
-        </div>
-      </div>
-    );
+  if (cartData.length === 0) {
+    return <EmptyCart />;
   }
 
   return (
@@ -138,7 +124,7 @@ export const CartItems = () => {
         </Button>
         <h1 className="text-3xl font-bold">Shopping Cart</h1>
         <p className="text-muted-foreground">
-          {cartData.length} {cartItems.length === 1 ? "item" : "items"} in your
+          {cartData.length} {cartData.length === 1 ? "item" : "items"} in your
           cart
         </p>
       </div>
@@ -146,7 +132,7 @@ export const CartItems = () => {
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
-          {cartItems.map((item) => (
+          {cartData.map((item) => (
             <Card key={item.id}>
               <CardContent className="p-6">
                 <div className="flex gap-4">

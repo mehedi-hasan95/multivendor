@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Share2 } from "lucide-react";
 import { formatPrice, generateTenentUrl } from "@/lib/utils";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { AuthorImg } from "@/components/common/author-img";
 import { StarRating } from "./star-rating";
@@ -27,13 +27,11 @@ import {
 import { Fragment, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { cartGetCartOutput } from "@/constants/trpc.types";
 
 interface ProductDetailsProps {
   id: string;
 }
 export const SingleProduct = ({ id }: ProductDetailsProps) => {
-  const router = useRouter();
   const [quentity, setQuantity] = useState<number>(1);
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -43,33 +41,17 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
   const inCart = cartData?.some((item) => item.product.id === data?.id);
   const create = useMutation(
     trpc.cart.create.mutationOptions({
-      // onMutate: async (input) => {
-      //   await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
-      //   const previousCart = queryClient.getQueryData(
-      //     trpc.cart.getCart.queryKey()
-      //   );
-      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      //   queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) => {
-      //     return [...old, { ...input, product: data }];
-      //   });
-      //   router.refresh();
-      //   return { previousCart };
-      // },
-      onMutate: async () => {
+      onMutate: async (input) => {
         await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
         const previousCart = queryClient.getQueryData(
           trpc.cart.getCart.queryKey()
         );
-
-        // Optimistically update the cart item
-        queryClient.setQueryData(
-          trpc.cart.getCart.queryKey(),
-          (old: cartGetCartOutput | undefined) => {
-            if (!old) return old;
-            return old.map((item) => (item.id === id ? { ...item } : item));
-          }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) =>
+          old
+            ? [...old, { ...input, product: data }]
+            : [{ ...input, product: data }]
         );
-        router.refresh();
         return { previousCart };
       },
 
