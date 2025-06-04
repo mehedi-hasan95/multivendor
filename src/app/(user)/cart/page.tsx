@@ -10,7 +10,7 @@ const CartPage = async () => {
   if (!sussion?.user) {
     return (
       <EmptyCart
-        title="login yet"
+        title="Looks like you don't login yet"
         buttonLink="/login"
         buttonText="Please Login"
       />

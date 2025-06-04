@@ -39,19 +39,19 @@ export const CategoryDorupdown = ({
       onClick={toggleDropdown}
     >
       <div className="relative">
-        <Button
-          variant={"elevated"}
-          className={cn(
-            "h-11 capitalize bg-transparent",
-            isActive && !isNavigationHovered && "border-themePurple",
-            isOpen &&
-              "shadow-[4px_4px_0px_0px_rgba(167,110,246,0.8)] -translate-x-1 -translate-y-1"
-          )}
-        >
-          <Link href={`/${category.slug === "all" ? "" : category.slug}`}>
+        <Link href={`/${category.slug === "all" ? "" : category.slug}`}>
+          <Button
+            variant={"elevated"}
+            className={cn(
+              "h-11 capitalize bg-transparent",
+              isActive && !isNavigationHovered && "border-themePurple",
+              isOpen &&
+                "shadow-[4px_4px_0px_0px_rgba(167,110,246,0.8)] -translate-x-1 -translate-y-1"
+            )}
+          >
             {category.name}
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         {category.SubCategories && category.SubCategories.length > 0 && (
           <div
             className={cn(

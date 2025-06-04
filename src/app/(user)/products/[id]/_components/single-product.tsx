@@ -1,15 +1,10 @@
 "use client";
 
 import { useTRPC } from "@/trpc/client";
-import {
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Share2 } from "lucide-react";
 import { formatPrice, generateTenentUrl } from "@/lib/utils";
 import { redirect, usePathname } from "next/navigation";
 import Link from "next/link";
@@ -27,107 +22,58 @@ import {
 import { Fragment, useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { WishListButton } from "./wishlist-button";
+import { Share2 } from "lucide-react";
+import { CartButton } from "./cart-button";
 
 interface ProductDetailsProps {
   id: string;
 }
 export const SingleProduct = ({ id }: ProductDetailsProps) => {
+  const [quentity, setQuantity] = useState<number>(1);
+  const trpc = useTRPC();
   const pathName = usePathname();
   const shareLink = () => {
     const url = `${process.env.NEXT_PUBLIC_URL}${pathName}`;
-    navigator.clipboard.writeText(url);
     toast.success(url);
   };
-  const [quentity, setQuantity] = useState<number>(1);
-  const trpc = useTRPC();
-  const queryClient = useQueryClient();
-
   const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id }));
-  const { data: cartData } = useSuspenseQuery(trpc.cart.getCart.queryOptions());
-  const inCart = cartData?.some((item) => item.product.id === data?.id);
-  const create = useMutation(
-    trpc.cart.create.mutationOptions({
-      onMutate: async (input) => {
-        await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
-        const previousCart = queryClient.getQueryData(
-          trpc.cart.getCart.queryKey()
-        );
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) =>
-          old
-            ? [...old, { ...input, product: data }]
-            : [{ ...input, product: data }]
-        );
-        return { previousCart };
-      },
+  // const { data: cartData } = useSuspenseQuery(trpc.cart.getCart.queryOptions());
+  // const inCart = cartData?.some((item) => item.product.id === data?.id);
+  // const create = useMutation(
+  //   trpc.cart.create.mutationOptions({
+  //     onMutate: async (input) => {
+  //       await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
+  //       const previousCart = queryClient.getQueryData(
+  //         trpc.cart.getCart.queryKey()
+  //       );
+  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //       queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) =>
+  //         old
+  //           ? [...old, { ...input, product: data }]
+  //           : [{ ...input, product: data }]
+  //       );
+  //       return { previousCart };
+  //     },
 
-      onError: (err, input, context) => {
-        queryClient.setQueryData(
-          trpc.cart.getCart.queryKey(),
-          context?.previousCart
-        );
-        toast.error(err.message);
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
-        queryClient.invalidateQueries(
-          trpc.products.getOne.queryOptions({ id })
-        );
-      },
-    })
-  );
-
-  // Wishlist action
-  const { data: wishlistData } = useSuspenseQuery(
-    trpc.wishlist.getWishlist.queryOptions()
-  );
-  const isInWishlist = wishlistData?.some(
-    (item) => item.product.id === data?.id
-  );
-  const addToWishlist = useMutation(
-    trpc.wishlist.addWishlist.mutationOptions({
-      onMutate: async (input) => {
-        await queryClient.cancelQueries(
-          trpc.wishlist.getWishlist.queryOptions()
-        );
-        const previousWishlist = queryClient.getQueryData(
-          trpc.wishlist.getWishlist.queryKey()
-        );
-        if (previousWishlist) {
-          const existingItem = previousWishlist.find(
-            (item) => item.product.id === input.id
-          );
-          if (existingItem) {
-            queryClient.setQueryData(
-              trpc.wishlist.getWishlist.queryKey(),
-              previousWishlist.filter((item) => item.product.id !== input.id)
-            );
-          } else {
-            queryClient.setQueryData(
-              trpc.wishlist.getWishlist.queryKey(),
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              [...(previousWishlist as any), { product: data, id: input.id }]
-            );
-          }
-        }
-
-        return { previousWishlist };
-      },
-      onError: (err, input, context) => {
-        queryClient.setQueryData(
-          trpc.wishlist.getWishlist.queryKey(),
-          context?.previousWishlist
-        );
-        toast("Please login to add items to the wishlist");
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(trpc.wishlist.getWishlist.queryOptions());
-      },
-    })
-  );
+  //     onError: (err, input, context) => {
+  //       queryClient.setQueryData(
+  //         trpc.cart.getCart.queryKey(),
+  //         context?.previousCart
+  //       );
+  //       toast.error(err.message);
+  //     },
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
+  //     },
+  //     onSettled: () => {
+  //       queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
+  //       queryClient.invalidateQueries(
+  //         trpc.products.getOne.queryOptions({ id })
+  //       );
+  //     },
+  //   })
+  // );
 
   if (!data) {
     return redirect("/");
@@ -136,15 +82,13 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
     ? Math.round(((data.basePrice - data.price) / data.basePrice) * 100)
     : 0;
 
-  const handleAddToCart = () => {
-    create.mutate({
-      productId: data.id,
-      quantity: quentity,
-    });
-  };
-  const handleAddToWishlist = () => {
-    addToWishlist.mutate({ id: data.id });
-  };
+  // const handleAddToCart = () => {
+  //   create.mutate({
+  //     productId: data.id,
+  //     quantity: quentity,
+  //   });
+  // };
+
   return (
     <div>
       <div className="">
@@ -250,29 +194,10 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
               </div>
 
               <div className="space-y-3">
-                {inCart ? (
-                  <Button className="w-full h-12 text-base">In Cart</Button>
-                ) : (
-                  <Button
-                    className="w-full h-12 text-base"
-                    onClick={handleAddToCart}
-                  >
-                    Add to Cart
-                  </Button>
-                )}
+                <CartButton data={data} quentity={quentity} />
+
                 <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    className="flex-1 h-12"
-                    onClick={handleAddToWishlist}
-                  >
-                    {isInWishlist ? (
-                      <Heart className="h-4 w-4 mr-2 text-red-500 fill-red-500" />
-                    ) : (
-                      <Heart className="h-4 w-4 mr-2" />
-                    )}
-                    Save
-                  </Button>
+                  <WishListButton data={data} />
                   <Button
                     variant="outline"
                     className="flex-1 h-12"
