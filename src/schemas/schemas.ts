@@ -106,3 +106,25 @@ export const tagSchema = z.object({
         "Invalid slug format. Use lowercase letters, numbers, and hyphens only.",
     }),
 });
+
+export const purchaseSchema = z.object({
+  username: z.string(),
+  id: z.string(),
+  productId: z.string(),
+  quantity: z.coerce.number().min(1),
+  product: z.object({
+    title: z.string(),
+    price: z.coerce.number(),
+    basePrice: z.coerce.number(),
+    stock: z.string(),
+    hasDiscount: z.coerce.number().optional(),
+    discount: z.coerce.number().optional(),
+    discountcode: z.string(),
+    id: z.string(),
+    sellerUserName: z.string(),
+    sale: z.coerce.number(),
+    images: z.object({
+      url: z.array(z.string()),
+    }),
+  }),
+});

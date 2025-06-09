@@ -8,6 +8,7 @@ import { loadProductFilters } from "@/constants/nuqs/search-params";
 import { SortFilter } from "../_components/common/product/sort-filter";
 import { DEFAULT_LIMIT } from "@/constants/default";
 import { ProductList } from "../_components/common/product/product-list";
+import { LoadingSkeleton } from "../_components/common/loading-skeleton";
 
 interface Props {
   params: Promise<{ category: string }>;
@@ -37,7 +38,7 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
         </div>
         <div className="col-span-full sm:col-span-6">
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <Suspense>
+            <Suspense fallback={<LoadingSkeleton key={6} />}>
               <ProductList isManual={true} />
             </Suspense>
           </HydrationBoundary>

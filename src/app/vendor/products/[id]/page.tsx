@@ -3,6 +3,7 @@ import { CreateProduct } from "./_components/create-product";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
+import { LoadingSkeleton } from "@/app/(home)/_components/common/loading-skeleton";
 
 const ProductPage = async () => {
   const queryClient = getQueryClient();
@@ -12,7 +13,7 @@ const ProductPage = async () => {
     <div>
       <Separator className="mb-3" />
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <Suspense>
+        <Suspense fallback={<LoadingSkeleton />}>
           <CreateProduct />
         </Suspense>
       </HydrationBoundary>

@@ -8,6 +8,7 @@ import GradientText from "@/components/generated/gradient-text";
 import { SortFilter } from "@/app/(home)/_components/common/product/sort-filter";
 import { ProductFilters } from "@/app/(home)/_components/common/product/products-filter";
 import { ProductList } from "@/app/(home)/_components/common/product/product-list";
+import { LoadingSkeleton } from "@/app/(home)/_components/common/loading-skeleton";
 
 interface Props {
   searchParams: Promise<SearchParams>;
@@ -36,7 +37,7 @@ const TenantSlug = async ({ params, searchParams }: Props) => {
         </div>
         <div className="col-span-full sm:col-span-6">
           <HydrationBoundary state={dehydrate(queryClient)}>
-            <Suspense>
+            <Suspense fallback={<LoadingSkeleton />}>
               <ProductList seller={slug} />
             </Suspense>
           </HydrationBoundary>

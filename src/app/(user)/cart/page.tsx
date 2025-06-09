@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { CartItems } from "./_components/cart-items";
 import { authSession } from "@/lib/auth-session";
 import { EmptyCart } from "./_components/empty-cart";
+import { LoadingSkeleton } from "@/app/(home)/_components/common/loading-skeleton";
 
 const CartPage = async () => {
   const sussion = await authSession();
@@ -20,7 +21,7 @@ const CartPage = async () => {
   void queryClient.prefetchQuery(trpc.cart.getCart.queryOptions());
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<div>Loading cart...</div>}>
+      <Suspense fallback={<LoadingSkeleton />}>
         <CartItems />
       </Suspense>
     </HydrationBoundary>

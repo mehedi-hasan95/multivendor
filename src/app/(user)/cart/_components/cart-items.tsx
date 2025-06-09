@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Plus, Trash2, ArrowLeft } from "lucide-react";
+import { Minus, Plus, Trash2, ArrowLeft, Truck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +24,10 @@ import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
 import { cartGetCartOutput } from "@/constants/trpc.types";
 import { EmptyCart } from "./empty-cart";
+import { ShippingInfo } from "./shipping-info";
+import { useState } from "react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 
 export const CartItems = () => {
   const trpc = useTRPC();
@@ -101,13 +105,20 @@ export const CartItems = () => {
     deleteCartItem.mutate({ id });
   };
 
+  const [shippingMethod, setShippingMethod] = useState("standard");
+
   const subtotal = cartData.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
-  const shipping = subtotal > 50 ? 0 : 9.99;
+  const shippingCost =
+    shippingMethod === "express"
+      ? 15.99
+      : shippingMethod === "overnight"
+      ? 29.99
+      : 0;
   const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
+  const total = subtotal + shippingCost + tax;
 
   if (cartData.length === 0) {
     return <EmptyCart />;
@@ -220,10 +231,77 @@ export const CartItems = () => {
               </CardContent>
             </Card>
           ))}
+          <ShippingInfo />
         </div>
 
         {/* Order Summary */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Shipping Method</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RadioGroup
+                value={shippingMethod}
+                onValueChange={setShippingMethod}
+              >
+                <div className="flex items-center justify-between space-x-2 p-3 border rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="standard" id="standard" />
+                    <Label
+                      htmlFor="standard"
+                      className="flex items-center gap-2"
+                    >
+                      <Truck className="h-4 w-4" />
+                      <div>
+                        <div className="font-medium">Standard Shipping</div>
+                        <div className="text-sm text-muted-foreground">
+                          5-7 business days
+                        </div>
+                      </div>
+                    </Label>
+                  </div>
+                  <span className="font-semibold">$0.00</span>
+                </div>
+                <div className="flex items-center justify-between space-x-2 p-3 border rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="express" id="express" />
+                    <Label
+                      htmlFor="express"
+                      className="flex items-center gap-2"
+                    >
+                      <Truck className="h-4 w-4" />
+                      <div>
+                        <div className="font-medium">Express Shipping</div>
+                        <div className="text-sm text-muted-foreground">
+                          2-3 business days
+                        </div>
+                      </div>
+                    </Label>
+                  </div>
+                  <span className="font-semibold">$15.99</span>
+                </div>
+                <div className="flex items-center justify-between space-x-2 p-3 border rounded-lg">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="overnight" id="overnight" />
+                    <Label
+                      htmlFor="overnight"
+                      className="flex items-center gap-2"
+                    >
+                      <Truck className="h-4 w-4" />
+                      <div>
+                        <div className="font-medium">Overnight Shipping</div>
+                        <div className="text-sm text-muted-foreground">
+                          Next business day
+                        </div>
+                      </div>
+                    </Label>
+                  </div>
+                  <span className="font-semibold">$29.99</span>
+                </div>
+              </RadioGroup>
+            </CardContent>
+          </Card>
           <Card className="sticky top-4">
             <CardHeader>
               <CardTitle>Order Summary</CardTitle>
@@ -233,23 +311,6 @@ export const CartItems = () => {
                 <span>Subtotal</span>
                 <span>{formatPrice(subtotal)}</span>
               </div>
-
-              <div className="flex justify-between">
-                <span>Shipping</span>
-                <span>
-                  {shipping === 0 ? (
-                    <span className="text-green-600">Free</span>
-                  ) : (
-                    `$${shipping.toFixed(2)}`
-                  )}
-                </span>
-              </div>
-
-              {shipping > 0 && (
-                <p className="text-sm text-muted-foreground">
-                  Free shipping on orders over $50
-                </p>
-              )}
 
               <div className="flex justify-between">
                 <span>Tax</span>
@@ -272,25 +333,6 @@ export const CartItems = () => {
                 Save for Later
               </Button>
             </CardFooter>
-          </Card>
-
-          {/* Promo Code */}
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle className="text-base">Promo Code</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Enter promo code"
-                  className="flex-1 px-3 py-2 border border-input rounded-md text-sm"
-                />
-                <Button variant="outline" size="sm">
-                  Apply
-                </Button>
-              </div>
-            </CardContent>
           </Card>
         </div>
       </div>

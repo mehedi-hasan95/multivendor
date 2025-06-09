@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { productGetOne } from "@/constants/trpc.types";
+import { cartGetCartOutput, productGetOne } from "@/constants/trpc.types";
 import { useTRPC } from "@/trpc/client";
 import {
   useMutation,
@@ -27,12 +27,22 @@ export const CartButton = ({ data, quentity }: Props) => {
         const previousCart = queryClient.getQueryData(
           trpc.cart.getCart.queryKey()
         );
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) =>
-          old
-            ? [...old, { ...input, product: data }]
-            : [{ ...input, product: data }]
-        );
+        if (previousCart) {
+          const existingItem = previousCart.find(
+            (item) => item.product.id === input.productId
+          );
+          if (existingItem) {
+            queryClient.setQueryData(
+              trpc.cart.getCart.queryKey(),
+              previousCart.filter((item) => item.product.id !== input.productId)
+            );
+          } else {
+            queryClient.setQueryData(trpc.cart.getCart.queryKey(), [
+              ...previousCart,
+              { product: data, id: input.productId },
+            ] as cartGetCartOutput);
+          }
+        }
         return { previousCart };
       },
 

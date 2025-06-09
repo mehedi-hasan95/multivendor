@@ -6,6 +6,7 @@ import { loadProductFilters } from "@/constants/nuqs/search-params";
 import { DEFAULT_LIMIT } from "@/constants/default";
 import { ProductFilters } from "./_components/common/product/products-filter";
 import { Suspense } from "react";
+import { LoadingSkeleton } from "./_components/common/loading-skeleton";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +32,13 @@ export default async function Home({ params, searchParams }: Props) {
         <div className="col-span-full sm:col-span-2">
           <ProductFilters />
         </div>
-        <Suspense>
+        <Suspense
+          fallback={
+            <div className="col-span-full sm:col-span-6 space-x-3">
+              <LoadingSkeleton items={8} />
+            </div>
+          }
+        >
           <ProductList />
         </Suspense>
       </div>

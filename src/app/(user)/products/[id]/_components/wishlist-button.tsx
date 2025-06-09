@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { productGetOne } from "@/constants/trpc.types";
+import { getWishlistOutput, productGetOne } from "@/constants/trpc.types";
 import { cn } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import {
@@ -51,11 +51,10 @@ export const WishListButton = ({
               previousWishlist.filter((item) => item.product.id !== input.id)
             );
           } else {
-            queryClient.setQueryData(
-              trpc.wishlist.getWishlist.queryKey(),
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              [...(previousWishlist as any), { product: data, id: input.id }]
-            );
+            queryClient.setQueryData(trpc.wishlist.getWishlist.queryKey(), [
+              ...previousWishlist,
+              { product: data, id: input.id },
+            ] as getWishlistOutput);
           }
         }
 
