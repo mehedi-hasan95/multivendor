@@ -24,10 +24,10 @@ import { formatPrice } from "@/lib/utils";
 import { toast } from "sonner";
 import { cartGetCartOutput } from "@/constants/trpc.types";
 import { EmptyCart } from "./empty-cart";
-import { ShippingInfo } from "./shipping-info";
 import { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { LoadingButton } from "@/components/common/loading-button";
 
 export const CartItems = () => {
   const trpc = useTRPC();
@@ -117,9 +117,39 @@ export const CartItems = () => {
       : shippingMethod === "overnight"
       ? 29.99
       : 0;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shippingCost + tax;
+  // const tax = subtotal * 0.08;
+  // const total = subtotal + shippingCost + tax;
 
+  const total = subtotal + shippingCost;
+
+  const checkOut = useMutation(
+    trpc.cart.purchase.mutationOptions({
+      onSuccess: (data) => {
+        if (data.url) {
+          window.location.href = data.url;
+        }
+      },
+      onError: () => {
+        toast.error(`Checkout failed. Pleae try later`);
+      },
+    })
+  );
+  const purchase = () => {
+    checkOut.mutate({
+      cartItems: cartData.map((item) => ({
+        id: item.id,
+        productId: item.productId,
+        imageUrl: item.product.images[0].url,
+        price: item.product.price,
+        quantity: item.quantity,
+        sale: item.product.sale,
+        sellerUserName: item.product.sellerUserName,
+        stock: item.product.stock,
+        title: item.product.title,
+      })),
+      shippingMethod,
+    });
+  };
   if (cartData.length === 0) {
     return <EmptyCart />;
   }
@@ -231,7 +261,6 @@ export const CartItems = () => {
               </CardContent>
             </Card>
           ))}
-          <ShippingInfo />
         </div>
 
         {/* Order Summary */}
@@ -312,10 +341,10 @@ export const CartItems = () => {
                 <span>{formatPrice(subtotal)}</span>
               </div>
 
-              <div className="flex justify-between">
+              {/* <div className="flex justify-between">
                 <span>Tax</span>
                 <span>${tax.toFixed(2)}</span>
-              </div>
+              </div> */}
 
               <Separator />
 
@@ -326,9 +355,13 @@ export const CartItems = () => {
             </CardContent>
 
             <CardFooter className="flex flex-col gap-3">
-              <Button className="w-full" size="lg">
-                Proceed to Checkout
-              </Button>
+              {checkOut.isPending ? (
+                <LoadingButton title="Processing..." />
+              ) : (
+                <Button className="w-full" size="lg" onClick={purchase}>
+                  Proceed to Checkout
+                </Button>
+              )}
               <Button variant="outline" className="w-full">
                 Save for Later
               </Button>

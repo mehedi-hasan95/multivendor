@@ -38,42 +38,6 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
     toast.success(url);
   };
   const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id }));
-  // const { data: cartData } = useSuspenseQuery(trpc.cart.getCart.queryOptions());
-  // const inCart = cartData?.some((item) => item.product.id === data?.id);
-  // const create = useMutation(
-  //   trpc.cart.create.mutationOptions({
-  //     onMutate: async (input) => {
-  //       await queryClient.cancelQueries(trpc.cart.getCart.queryOptions());
-  //       const previousCart = queryClient.getQueryData(
-  //         trpc.cart.getCart.queryKey()
-  //       );
-  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //       queryClient.setQueryData(trpc.cart.getCart.queryKey(), (old: any) =>
-  //         old
-  //           ? [...old, { ...input, product: data }]
-  //           : [{ ...input, product: data }]
-  //       );
-  //       return { previousCart };
-  //     },
-
-  //     onError: (err, input, context) => {
-  //       queryClient.setQueryData(
-  //         trpc.cart.getCart.queryKey(),
-  //         context?.previousCart
-  //       );
-  //       toast.error(err.message);
-  //     },
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
-  //     },
-  //     onSettled: () => {
-  //       queryClient.invalidateQueries(trpc.cart.getCart.queryOptions());
-  //       queryClient.invalidateQueries(
-  //         trpc.products.getOne.queryOptions({ id })
-  //       );
-  //     },
-  //   })
-  // );
 
   if (!data) {
     return redirect("/");
@@ -81,13 +45,6 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
   const discount = data?.basePrice
     ? Math.round(((data.basePrice - data.price) / data.basePrice) * 100)
     : 0;
-
-  // const handleAddToCart = () => {
-  //   create.mutate({
-  //     productId: data.id,
-  //     quantity: quentity,
-  //   });
-  // };
 
   return (
     <div>
@@ -164,7 +121,7 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-900">
+                  <label className="text-sm font-medium text-gray-300">
                     Quantity
                   </label>
                   <div className="flex items-center space-x-3">

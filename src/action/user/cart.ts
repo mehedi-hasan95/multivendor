@@ -1,5 +1,7 @@
 import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
+import { purchaseSchema } from "@/schemas/schemas";
 import { baseProcedure, createTRPCRouter, privateProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -100,5 +102,127 @@ export const cartRouter = createTRPCRouter({
         data: { quantity },
       });
       return updatedCartItem;
+    }),
+  purchase: privateProcedure
+    .input(
+      z.object({
+        cartItems: z.array(purchaseSchema),
+        shippingMethod: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { cartItems, shippingMethod } = input;
+      const { username, userEmail } = ctx;
+      if (!username) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "Unauthorize access",
+        });
+      }
+      const inCart = await db.cart.findMany({
+        where: {
+          productId: {
+            in: cartItems.map((item) => item.productId),
+          },
+          username,
+        },
+      });
+      if (inCart.length !== cartItems.length) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Some products in your cart are no longer available",
+        });
+      }
+
+      const orderData = await db.order.create({
+        data: {
+          username,
+          shipping: shippingMethod,
+          OrderItems: {
+            create: cartItems.map((item) => ({
+              price: item.price,
+              productId: item.productId,
+              sellerUsername: item.sellerUserName,
+              quantity: item.quantity,
+            })),
+          },
+        },
+      });
+      const shippingCost =
+        shippingMethod === "express"
+          ? 15.99
+          : shippingMethod === "overnight"
+          ? 29.99
+          : 0;
+
+      try {
+        const session = await stripe.checkout.sessions.create({
+          payment_method_types: ["card"],
+          mode: "payment",
+          line_items: cartItems.map((item) => ({
+            price_data: {
+              currency: "USD",
+              product_data: {
+                name: item.title,
+                images: item.imageUrl ? [item.imageUrl] : [],
+              },
+              unit_amount: Math.round(item.price * 100), // Stripe uses cents
+            },
+            quantity: item.quantity,
+          })),
+          shipping_options: [
+            {
+              shipping_rate_data: {
+                type: "fixed_amount",
+                fixed_amount: {
+                  amount: Math.round(shippingCost * 100),
+                  currency: "usd",
+                },
+                display_name:
+                  shippingMethod === "express"
+                    ? "Express Shipping"
+                    : shippingMethod === "overnight"
+                    ? "Overnight Shipping"
+                    : "Standard Shipping",
+                delivery_estimate: {
+                  minimum: {
+                    unit: "business_day",
+                    value:
+                      shippingMethod === "overnight"
+                        ? 1
+                        : shippingMethod === "express"
+                        ? 2
+                        : 5,
+                  },
+                  maximum: {
+                    unit: "business_day",
+                    value:
+                      shippingMethod === "overnight"
+                        ? 1
+                        : shippingMethod === "express"
+                        ? 3
+                        : 7,
+                  },
+                },
+              },
+            },
+          ],
+          metadata: {
+            username,
+            orderId: JSON.stringify(orderData.id),
+          },
+          customer_email: userEmail,
+          success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
+          cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,
+        });
+
+        return { url: session.url };
+      } catch (error) {
+        console.error("Stripe error:", error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create checkout session",
+        });
+      }
     }),
 });

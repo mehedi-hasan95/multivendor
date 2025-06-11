@@ -4,8 +4,12 @@ import { Loader2 } from "lucide-react";
 
 interface LoadingButtonProps {
   className?: string;
+  title?: string;
 }
-export const LoadingButton = ({ className }: LoadingButtonProps) => {
+export const LoadingButton = ({
+  className,
+  title = "Please Wait...",
+}: LoadingButtonProps) => {
   return (
     <Button
       disabled
@@ -15,7 +19,7 @@ export const LoadingButton = ({ className }: LoadingButtonProps) => {
       )}
     >
       <Loader2 className="animate-spin" />
-      Please Wait...
+      {title}
     </Button>
   );
 };
