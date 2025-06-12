@@ -16,11 +16,13 @@ import { formatPrice } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { CreditCard, Package, ShoppingBag, User } from "lucide-react";
+import ProductTable from "./product-table";
 
 export default function Dashboard() {
   const auth = authSessionUser();
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.cart.getSummary.queryOptions());
+
   return (
     <div className="flex flex-1 flex-col gap-4 py-4 pt-0">
       {/* Welcome Section */}
@@ -92,36 +94,11 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle>Recent Orders</CardTitle>
             <CardDescription>
-              Your latest purchase history and order status.
+              Your latest (10) purchase history and order status.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {/* <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Order ID</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Items</TableHead>
-                      <TableHead className="text-right">Total</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">{order.id}</TableCell>
-                        <TableCell>{order.date}</TableCell>
-                        <TableCell>
-                          <Badge className={getStatusColor(order.status)} variant="secondary">
-                            {order.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>{order.items}</TableCell>
-                        <TableCell className="text-right">${order.total}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table> */}
+            <ProductTable />
           </CardContent>
         </Card>
 
