@@ -225,4 +225,53 @@ export const cartRouter = createTRPCRouter({
         });
       }
     }),
+  getSummary: privateProcedure.query(async ({ ctx }) => {
+    const { username } = ctx;
+    if (!username) {
+      return;
+    }
+    const totalOrder = await db.order.count({
+      where: { paid: true, username },
+    });
+    const totalActiveOrder = await db.orderItems.count({
+      where: {
+        status: {
+          in: ["PROCESSING", "SHIPPED"],
+        },
+
+        order: {
+          paid: true,
+          username,
+        },
+      },
+    });
+    const activeOrder = await db.orderItems.groupBy({
+      by: ["status"],
+      where: {
+        status: {
+          in: ["PROCESSING", "SHIPPED"],
+        },
+        order: {
+          paid: true,
+          username,
+        },
+      },
+      _count: {
+        _all: true,
+      },
+    });
+    // total spent
+    const totalSpent = await db.orderItems.aggregate({
+      where: {
+        order: {
+          paid: true,
+          username,
+        },
+      },
+      _sum: {
+        price: true,
+      },
+    });
+    return { totalOrder, activeOrder, totalActiveOrder, totalSpent };
+  }),
 });

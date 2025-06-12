@@ -10,7 +10,7 @@ const HomeLayout = ({ children }: { children: React.ReactNode }) => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.categories.getMany.queryOptions());
   return (
-    <div className="flex flex-col justify-between min-h-screen">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <HydrationBoundary state={dehydrate(queryClient)}>
         <Suspense fallback={<HomeSkeleton />}>

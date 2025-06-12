@@ -41,6 +41,7 @@
 // src/app/api/webhook/route.ts
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
@@ -78,11 +79,8 @@ export async function POST(req: Request) {
     const { orderId, username } = session.metadata || {};
 
     const orderIds = JSON.parse(orderId as string);
-    console.log(orderIds);
 
-    // Here you can add logic to update your database
-    // For example, create an order record, clear the cart, etc.
-    if (username) {
+    if (username && orderIds) {
       try {
         const data = await db.order.findUnique({
           where: {
@@ -123,6 +121,14 @@ export async function POST(req: Request) {
                 sale: {
                   increment: item.quantity,
                 },
+                Order: {
+                  update: {
+                    where: { id: item.id },
+                    data: {
+                      status: "PROCESSING",
+                    },
+                  },
+                },
               },
             });
           }
@@ -134,6 +140,7 @@ export async function POST(req: Request) {
             username,
           },
         });
+        revalidatePath("/cart");
       } catch (error) {
         console.error("Error processing order:", error);
       }
