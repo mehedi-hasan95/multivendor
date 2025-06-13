@@ -17,6 +17,7 @@ import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { CreditCard, Package, ShoppingBag, User } from "lucide-react";
 import ProductTable from "./product-table";
+import GradientText from "@/components/generated/gradient-text";
 
 export default function Dashboard() {
   const auth = authSessionUser();
@@ -94,11 +95,13 @@ export default function Dashboard() {
           <CardHeader>
             <CardTitle>Recent Orders</CardTitle>
             <CardDescription>
-              Your latest (10) purchase history and order status.
+              <GradientText>
+                Your latest (10) purchase history and order status.
+              </GradientText>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ProductTable />
+            <ProductTable limit={10} showPagination={false} />
           </CardContent>
         </Card>
 

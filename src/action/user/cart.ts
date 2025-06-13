@@ -274,33 +274,35 @@ export const cartRouter = createTRPCRouter({
     });
     return { totalOrder, activeOrder, totalActiveOrder, totalSpent };
   }),
-  latestOrder: privateProcedure.query(async ({ ctx }) => {
-    const { username } = ctx;
-    if (!username) {
-      return [];
-    }
-    const data = await db.orderItems.findMany({
-      where: {
-        order: {
-          paid: true,
-          username,
+  latestOrder: privateProcedure
+    .input(z.object({ limit: z.coerce.number().optional() }))
+    .query(async ({ ctx, input }) => {
+      const { username } = ctx;
+      if (!username) {
+        return [];
+      }
+      const data = await db.orderItems.findMany({
+        where: {
+          order: {
+            paid: true,
+            username,
+          },
         },
-      },
-      select: {
-        order: {
-          select: { id: true, shipping: true, createdAt: true },
+        select: {
+          order: {
+            select: { id: true, shipping: true, createdAt: true },
+          },
+          price: true,
+          status: true,
+          user: {
+            select: { email: true },
+          },
         },
-        price: true,
-        status: true,
-        user: {
-          select: { email: true },
+        orderBy: {
+          createdAt: "desc",
         },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      take: 10,
-    });
-    return data;
-  }),
+        take: input.limit,
+      });
+      return data;
+    }),
 });

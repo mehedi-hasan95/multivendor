@@ -7,7 +7,7 @@ import { DashboardSkeleton } from "./_components/main/dashboard-skeleton";
 const DashboardPage = async () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.cart.getSummary.queryOptions());
-  void queryClient.prefetchQuery(trpc.cart.latestOrder.queryOptions());
+  void queryClient.prefetchQuery(trpc.cart.latestOrder.queryOptions({}));
   return (
     <HydrationBoundary>
       <Suspense fallback={<DashboardSkeleton />}>

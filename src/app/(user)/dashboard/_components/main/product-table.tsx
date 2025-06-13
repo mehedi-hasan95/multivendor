@@ -5,10 +5,14 @@ import { useTRPC } from "@/trpc/client";
 import { formatDate } from "@/lib/utils";
 import { DataTable } from "@/lib/data-table";
 
-export default function ProductTable() {
+interface Props {
+  limit?: number;
+  showPagination?: boolean;
+}
+export default function ProductTable({ limit, showPagination }: Props) {
   const trpc = useTRPC();
   const { data: lasestOrder } = useSuspenseQuery(
-    trpc.cart.latestOrder.queryOptions()
+    trpc.cart.latestOrder.queryOptions({ limit: limit })
   );
   const statusFilterOptions = {
     columnId: "status",
@@ -41,9 +45,9 @@ export default function ProductTable() {
     <DataTable
       columns={columns}
       data={data}
-      searchKey={"email"}
+      searchKey={"id"}
       filterOptions={[statusFilterOptions, shippingFilterOptions]}
-      showPagination={false}
+      showPagination={showPagination}
     />
   );
 }
