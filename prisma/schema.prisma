@@ -42,6 +42,7 @@ model User {
   Wishlist        Wishlist[]
   Order           Order[]
   OrderItems      OrderItems[]
+  Ratings         Ratings[]
 
   @@unique([email])
   @@unique([username])
@@ -162,6 +163,7 @@ model Products {
   Cart           Cart[]
   Wishlist       Wishlist[]
   Order          OrderItems[]
+  Ratings        Ratings[]
 
   @@index([id])
 }
@@ -214,6 +216,7 @@ model Order {
   OrderItems OrderItems[]
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
+  Ratings    Ratings[]
 }
 
 enum OrderStatus {
@@ -238,4 +241,20 @@ model OrderItems {
   user           User        @relation(fields: [sellerUsername], references: [username], onDelete: Cascade)
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
+}
+
+model Ratings {
+  id        String   @id @default(uuid())
+  ratings   Int?
+  reviews   String?
+  productId String
+  product   Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  username  String
+  user      User     @relation(fields: [username], references: [username], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([productId, orderId])
 }

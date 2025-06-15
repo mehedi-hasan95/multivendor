@@ -118,3 +118,13 @@ export const purchaseSchema = z.object({
   sale: z.coerce.number().optional(),
   imageUrl: z.string(),
 });
+
+export const ratingsSchame = z
+  .object({
+    rating: z.coerce.number().min(0).max(5).optional(),
+    review: z.string().optional(),
+  })
+  .refine((data) => data.rating !== undefined || data.review !== undefined, {
+    message: "Either ratings or reviews must be provided",
+    path: ["rating", "review"],
+  });

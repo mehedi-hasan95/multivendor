@@ -265,6 +265,17 @@ exports.Prisma.OrderItemsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.RatingsScalarFieldEnum = {
+  id: 'id',
+  ratings: 'ratings',
+  reviews: 'reviews',
+  productId: 'productId',
+  orderId: 'orderId',
+  username: 'username',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -307,7 +318,8 @@ exports.Prisma.ModelName = {
   Cart: 'Cart',
   Wishlist: 'Wishlist',
   Order: 'Order',
-  OrderItems: 'OrderItems'
+  OrderItems: 'OrderItems',
+  Ratings: 'Ratings'
 };
 
 /**

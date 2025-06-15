@@ -1,3 +1,4 @@
+import { OrderStatus } from "@/generated/prisma";
 import { authSession } from "@/lib/auth-session";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
@@ -225,54 +226,103 @@ export const cartRouter = createTRPCRouter({
         });
       }
     }),
+  //   const { username } = ctx;
+  //   if (!username) {
+  //     return;
+  //   }
+  //   const totalOrder = await db.order.count({
+  //     where: { paid: true, username },
+  //   });
+  //   const totalActiveOrder = await db.orderItems.count({
+  //     where: {
+  //       status: {
+  //         in: ["PROCESSING", "SHIPPED"],
+  //       },
+
+  //       order: {
+  //         paid: true,
+  //         username,
+  //       },
+  //     },
+  //   });
+  //   const activeOrder = await db.orderItems.groupBy({
+  //     by: ["status"],
+  //     where: {
+  //       status: {
+  //         in: ["PROCESSING", "SHIPPED"],
+  //       },
+  //       order: {
+  //         paid: true,
+  //         username,
+  //       },
+  //     },
+  //     _count: {
+  //       _all: true,
+  //     },
+  //   });
+  //   // total spent
+  //   const totalSpent = await db.orderItems.aggregate({
+  //     where: {
+  //       order: {
+  //         paid: true,
+  //         username,
+  //       },
+  //     },
+  //     _sum: {
+  //       price: true,
+  //     },
+  //   });
+  //   return { totalOrder, activeOrder, totalActiveOrder, totalSpent };
+  // }),
   getSummary: privateProcedure.query(async ({ ctx }) => {
     const { username } = ctx;
-    if (!username) {
-      return;
-    }
-    const totalOrder = await db.order.count({
-      where: { paid: true, username },
-    });
-    const totalActiveOrder = await db.orderItems.count({
-      where: {
-        status: {
-          in: ["PROCESSING", "SHIPPED"],
-        },
+    if (!username) return;
 
-        order: {
-          paid: true,
-          username,
-        },
-      },
-    });
-    const activeOrder = await db.orderItems.groupBy({
-      by: ["status"],
-      where: {
-        status: {
-          in: ["PROCESSING", "SHIPPED"],
-        },
-        order: {
-          paid: true,
-          username,
-        },
-      },
-      _count: {
-        _all: true,
-      },
-    });
-    // total spent
-    const totalSpent = await db.orderItems.aggregate({
-      where: {
-        order: {
-          paid: true,
-          username,
-        },
-      },
-      _sum: {
-        price: true,
-      },
-    });
-    return { totalOrder, activeOrder, totalActiveOrder, totalSpent };
+    const [totalOrder, totalActiveOrder, activeOrder, totalSpent] =
+      await Promise.all([
+        db.order.count({
+          where: { paid: true, username },
+        }),
+        db.orderItems.count({
+          where: {
+            status: {
+              in: ["PROCESSING", "SHIPPED"],
+            },
+            order: {
+              paid: true,
+              username,
+            },
+          },
+        }),
+        db.orderItems.groupBy({
+          by: ["status"],
+          where: {
+            status: {
+              in: ["PROCESSING", "SHIPPED"],
+            },
+            order: {
+              paid: true,
+              username,
+            },
+          },
+          _count: {
+            _all: true,
+          },
+        }),
+        db.orderItems.aggregate({
+          where: {
+            order: {
+              paid: true,
+              username,
+            },
+          },
+          _sum: {
+            price: true,
+          },
+        }),
+      ]);
+
+    return { totalOrder, totalActiveOrder, activeOrder, totalSpent };
   }),
   latestOrder: privateProcedure
     .input(z.object({ limit: z.coerce.number().optional() }))
@@ -304,5 +354,58 @@ export const cartRouter = createTRPCRouter({
         take: input.limit,
       });
       return data;
+    }),
+  allOrders: privateProcedure
+    .input(
+      z.object({
+        shipping: z
+          .enum([
+            OrderStatus.DELIVERED,
+            OrderStatus.PROCESSING,
+            OrderStatus.SHIPPED,
+          ])
+          .optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { username } = ctx;
+      if (!username) {
+        return [];
+      }
+      const orders = await db.order.findMany({
+        where: {
+          paid: true,
+          username,
+        },
+        select: {
+          id: true,
+          _count: { select: { OrderItems: true } },
+          createdAt: true,
+          OrderItems: {
+            where: {
+              status: input.shipping,
+            },
+            select: {
+              id: true,
+              price: true,
+              quantity: true,
+              status: true,
+              product: {
+                select: {
+                  id: true,
+                  title: true,
+                  images: {
+                    select: { url: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return orders;
     }),
 });

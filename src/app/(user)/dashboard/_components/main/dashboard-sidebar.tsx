@@ -14,10 +14,10 @@ import {
 import {
   CreditCard,
   Home,
+  MessageCircleMoreIcon,
   Package,
   Settings,
   ShoppingBag,
-  User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -35,9 +35,9 @@ export const DashboardSidebar = () => {
       icon: Package,
     },
     {
-      title: "Profile",
-      url: "#",
-      icon: User,
+      title: "Ratings & Reviews",
+      url: "/dashboard/ratings",
+      icon: MessageCircleMoreIcon,
     },
     {
       title: "Payment Methods",

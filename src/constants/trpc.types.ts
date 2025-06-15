@@ -21,3 +21,6 @@ export type updateCartOutput =
 
 export type getWishlistOutput =
   | inferRouterOutputs<AppRouter>["wishlist"]["getWishlist"];
+
+export type getOneReviewOutput =
+  | inferRouterOutputs<AppRouter>["reviews"]["getOneReviews"];
