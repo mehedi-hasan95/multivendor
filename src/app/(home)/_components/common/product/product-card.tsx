@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { formatPrice, generateTenentUrl } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { StarRating } from "@/app/(user)/products/[id]/_components/star-rating";
 
 interface Props {
   productId: string;
@@ -13,6 +14,8 @@ interface Props {
   sellerName: string;
   price: number;
   selerUserName: string;
+  avgRating: number;
+  totalRating: number;
 }
 export const ProductCard = ({
   price,
@@ -22,6 +25,8 @@ export const ProductCard = ({
   title,
   sellerImage,
   selerUserName,
+  avgRating,
+  totalRating,
 }: Props) => {
   const router = useRouter();
   const tenantUrl = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -62,6 +67,10 @@ export const ProductCard = ({
             />
             <p>{sellerName}</p>
           </div>
+          <StarRating
+            rating={avgRating}
+            text={`(${totalRating} ${totalRating > 1 ? "Ratings" : "Rating"})`}
+          />
           <div className="flex items-center justify-between">
             <span className="font-semibold">{formatPrice(price)}</span>
             <button

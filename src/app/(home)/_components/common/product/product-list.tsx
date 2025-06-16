@@ -56,6 +56,8 @@ export const ProductList = ({ isManual = false, seller }: Props) => {
               selerUserName={product.seller.username}
               title={product.title}
               sellerImage={product.seller.image || undefined}
+              avgRating={product.averageRating || 0}
+              totalRating={product.totalRatings}
             />
           ))}
       </div>

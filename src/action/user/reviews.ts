@@ -1,33 +1,34 @@
 import { db } from "@/lib/db";
-import { createTRPCRouter, privateProcedure } from "@/trpc/init";
+import { ratingsSchame } from "@/schemas/schemas";
+import { baseProcedure, createTRPCRouter, privateProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const reviewsRouter = createTRPCRouter({
   createRating: privateProcedure
     .input(
-      z
-        .object({
-          orderId: z.string(),
-          productId: z.string(),
-          ratings: z.number().min(1).max(5).optional(),
-          reviews: z.string().optional(),
-        })
-        .refine(
-          (data) => data.ratings !== undefined || data.reviews !== undefined,
-          {
-            message: "Either ratings or reviews must be provided",
-            path: ["ratings", "reviews"],
-          }
-        )
+      z.object({
+        orderId: z.string(),
+        productId: z.string(),
+        ratingsSchame,
+      })
     )
     .mutation(async ({ ctx, input }) => {
       const { username } = ctx;
-      const { orderId, productId, ratings, reviews } = input;
+      const { orderId, productId, ratingsSchame } = input;
       if (!username) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Unauthorize user",
+        });
+      }
+      if (
+        ratingsSchame.rating === undefined &&
+        ratingsSchame.review === undefined
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Either ratings or reviews must be provided",
         });
       }
       const data = await db.order.findUnique({
@@ -50,8 +51,8 @@ export const reviewsRouter = createTRPCRouter({
       try {
         const create = await db.ratings.create({
           data: {
-            ratings,
-            reviews,
+            ratings: ratingsSchame.rating,
+            reviews: ratingsSchame.review,
             orderId,
             productId,
             username,
@@ -120,6 +121,12 @@ export const reviewsRouter = createTRPCRouter({
           message: "Unauthorize user",
         });
       }
+      if (ratings === undefined && reviews === undefined) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Either ratings or reviews must be provided",
+        });
+      }
       try {
         const updateReview = await db.ratings.update({
           where: { id, productId },
@@ -135,5 +142,15 @@ export const reviewsRouter = createTRPCRouter({
           message: `${error}`,
         });
       }
+    }),
+  getAvgReview: baseProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const data = await db.ratings.aggregate({
+        where: { productId: input.id, ratings: { not: null } },
+        _avg: { ratings: true },
+        _count: { ratings: true },
+      });
+      return data;
     }),
 });

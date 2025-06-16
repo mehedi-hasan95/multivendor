@@ -38,6 +38,9 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
     toast.success(url);
   };
   const { data } = useSuspenseQuery(trpc.products.getOne.queryOptions({ id }));
+  const { data: rating } = useSuspenseQuery(
+    trpc.reviews.getAvgReview.queryOptions({ id })
+  );
 
   if (!data) {
     return redirect("/");
@@ -95,7 +98,12 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                   Minimalist Ceramic Vase
                 </h1>
                 <div className="flex items-center space-x-2">
-                  <StarRating rating={4} text="(128 reviews)" />
+                  <StarRating
+                    rating={rating._avg.ratings as number}
+                    text={`${rating._count.ratings} ${
+                      rating._count.ratings > 1 ? "Ratings" : "Rating"
+                    }`}
+                  />
                 </div>
               </div>
               <Link

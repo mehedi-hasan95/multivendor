@@ -82,13 +82,11 @@ export const productRouter = createTRPCRouter({
         maxPrice: z.string().optional(),
         tags: z.array(z.string()).nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
-
         cursor: z.string().nullish(),
         limit: z.number().default(DEFAULT_LIMIT),
         sellerUserName: z.string().nullable().optional(),
       })
     )
-
     .query(async ({ input }) => {
       const products = await db.products.findMany({
         take: input.limit + 1,
@@ -130,12 +128,45 @@ export const productRouter = createTRPCRouter({
               image: true,
             },
           },
+          _count: {
+            select: { Ratings: { where: { reviews: { not: null } } } },
+          },
+          Ratings: {
+            where: { ratings: { not: null } },
+            select: {
+              ratings: true,
+            },
+          },
         },
       });
-      const hasMore = products.length > input.limit;
-      const items = hasMore ? products.slice(0, -1) : products;
+
+      const productsWithRatings = products.map((product) => {
+        const totalRatings = product._count.Ratings;
+
+        const validRatings = product.Ratings.map((r) => r.ratings).filter(
+          (rating): rating is number => rating !== null
+        );
+
+        const averageRating =
+          totalRatings > 0
+            ? validRatings.reduce((sum, rating) => sum + rating, 0) /
+              totalRatings
+            : null;
+
+        return {
+          ...product,
+          totalRatings,
+          averageRating,
+        };
+      });
+
+      const hasMore = productsWithRatings.length > input.limit;
+      const items = hasMore
+        ? productsWithRatings.slice(0, -1)
+        : productsWithRatings;
       const lastItem = items[items.length - 1];
-      const nextCursor = hasMore ? lastItem.id : null;
+      const nextCursor = hasMore ? lastItem?.id : null;
+
       return {
         products: items,
         nextCursor,
