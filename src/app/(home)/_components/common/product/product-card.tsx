@@ -15,7 +15,7 @@ interface Props {
   price: number;
   selerUserName: string;
   avgRating: number;
-  totalRating: number;
+  totalRatings: number;
 }
 export const ProductCard = ({
   price,
@@ -26,7 +26,7 @@ export const ProductCard = ({
   sellerImage,
   selerUserName,
   avgRating,
-  totalRating,
+  totalRatings,
 }: Props) => {
   const router = useRouter();
   const tenantUrl = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -67,10 +67,7 @@ export const ProductCard = ({
             />
             <p>{sellerName}</p>
           </div>
-          <StarRating
-            rating={avgRating}
-            text={`(${totalRating} ${totalRating > 1 ? "Ratings" : "Rating"})`}
-          />
+          <StarRating rating={avgRating} text={`(${totalRatings})`} />
           <div className="flex items-center justify-between">
             <span className="font-semibold">{formatPrice(price)}</span>
             <button

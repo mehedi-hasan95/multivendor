@@ -93,23 +93,18 @@ export const productRouter = createTRPCRouter({
         cursor: input.cursor ? { id: input.cursor } : undefined,
         skip: input.cursor ? 1 : 0,
         where: {
-          sellerUserName: {
-            equals: input.sellerUserName || undefined,
-          },
+          sellerUserName: input.sellerUserName || undefined,
           categoryId: input.category,
           subCategoryId: input.subCategory,
           price: {
             gte: input.minPrice ? parseFloat(input.minPrice) : undefined,
             lte: input.maxPrice ? parseFloat(input.maxPrice) : undefined,
           },
-          tags:
-            input.tags && input.tags.length > 0
-              ? {
-                  slug: {
-                    in: input.tags,
-                  },
-                }
-              : undefined,
+          tags: input.tags?.length
+            ? {
+                slug: { in: input.tags },
+              }
+            : undefined,
         },
         orderBy: {
           createdAt:
@@ -128,50 +123,47 @@ export const productRouter = createTRPCRouter({
               image: true,
             },
           },
-          _count: {
-            select: { Ratings: { where: { reviews: { not: null } } } },
-          },
-          Ratings: {
-            where: { ratings: { not: null } },
-            select: {
-              ratings: true,
-            },
-          },
         },
       });
 
-      const productsWithRatings = products.map((product) => {
-        const totalRatings = product._count.Ratings;
+      const hasMore = products.length > input.limit;
+      const items = hasMore ? products.slice(0, -1) : products;
+      const nextCursor = hasMore ? items[items.length - 1]?.id : null;
 
-        const validRatings = product.Ratings.map((r) => r.ratings).filter(
-          (rating): rating is number => rating !== null
-        );
-
-        const averageRating =
-          totalRatings > 0
-            ? validRatings.reduce((sum, rating) => sum + rating, 0) /
-              totalRatings
-            : null;
-
-        return {
-          ...product,
-          totalRatings,
-          averageRating,
-        };
+      // 👉 Fetch average and total ratings for each product
+      const ratings = await db.ratings.groupBy({
+        by: ["productId"],
+        where: {
+          ratings: { not: null },
+        },
+        _avg: { ratings: true },
+        _count: { ratings: true },
       });
 
-      const hasMore = productsWithRatings.length > input.limit;
-      const items = hasMore
-        ? productsWithRatings.slice(0, -1)
-        : productsWithRatings;
-      const lastItem = items[items.length - 1];
-      const nextCursor = hasMore ? lastItem?.id : null;
+      // 👉 Map ratings to productId for quick lookup
+      const ratingMap = Object.fromEntries(
+        ratings.map((r) => [
+          r.productId,
+          {
+            avgRating: r._avg.ratings,
+            totalRatings: r._count.ratings,
+          },
+        ])
+      );
+
+      // 👉 Attach rating info to each product
+      const productsWithRatings = items.map((product) => ({
+        ...product,
+        avgRating: ratingMap[product.id]?.avgRating ?? 0,
+        totalRatings: ratingMap[product.id]?.totalRatings ?? 0,
+      }));
 
       return {
-        products: items,
+        products: productsWithRatings,
         nextCursor,
       };
     }),
+
   getOne: baseProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {

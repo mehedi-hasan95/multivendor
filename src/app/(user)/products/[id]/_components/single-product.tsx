@@ -95,13 +95,13 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
             <div className="space-y-6">
               <div className="space-y-2">
                 <h1 className="text-3xl font-light tracking-tight">
-                  Minimalist Ceramic Vase
+                  {data.title}
                 </h1>
                 <div className="flex items-center space-x-2">
                   <StarRating
-                    rating={rating._avg.ratings as number}
-                    text={`${rating._count.ratings} ${
-                      rating._count.ratings > 1 ? "Ratings" : "Rating"
+                    rating={rating.data._avg.ratings as number}
+                    text={`${rating.data._count.ratings} ${
+                      rating.data._count.ratings > 1 ? "Ratings" : "Rating"
                     }`}
                   />
                 </div>
@@ -183,19 +183,22 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                 <div className="pt-4">
                   <p className="text-lg font-medium">Ratings</p>
                   <div className="grid grid-cols-[auto_1fr_auto] gap-3 mt-3">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Fragment key={star}>
-                        <div className="font-medium">
-                          {star}
-                          {star === 1 ? " star" : " stars"}
-                        </div>
-                        <Progress
-                          value={20}
-                          className="h-[1lh] bg-gray-800 [&>div]:bg-amber-200"
-                        />
-                        <div className="font-medium">0%</div>
-                      </Fragment>
-                    ))}
+                    {[5, 4, 3, 2, 1].map((star) => {
+                      const percentage =
+                        rating.percentages[star as 5 | 4 | 3 | 2 | 1] || 0;
+                      return (
+                        <Fragment key={star}>
+                          <div className="font-medium">
+                            {star} {star === 1 ? "star" : "stars"}
+                          </div>
+                          <Progress
+                            value={percentage}
+                            className="h-[1lh] bg-gray-800 [&>div]:bg-amber-200"
+                          />
+                          <div className="font-medium">{percentage}%</div>
+                        </Fragment>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

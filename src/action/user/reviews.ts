@@ -151,6 +151,32 @@ export const reviewsRouter = createTRPCRouter({
         _avg: { ratings: true },
         _count: { ratings: true },
       });
-      return data;
+      const groupedRatings = await db.ratings.groupBy({
+        by: ["ratings"],
+        where: { productId: input.id, ratings: { not: null } },
+        _count: true,
+      });
+
+      const total = data._count.ratings ?? 0;
+
+      const percentages = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+      };
+
+      for (const item of groupedRatings) {
+        const rating = item.ratings ?? 0;
+        if (rating >= 1 && rating <= 5) {
+          percentages[rating as 1 | 2 | 3 | 4 | 5] = Math.round(
+            (item._count / total) * 100
+          );
+        }
+      }
+      console.log(data);
+      console.log("Total", total, percentages);
+      return { data, total, percentages };
     }),
 });
