@@ -1,14 +1,13 @@
 import { db } from "@/lib/db";
 import { createTRPCRouter, privateProcedure } from "@/trpc/init";
-// import { TRPCError } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import {
   subMonths,
   startOfMonth,
   endOfMonth,
-  // startOfYear,
-  // endOfYear,
-  // eachMonthOfInterval,
-  // format,
+  startOfYear,
+  eachMonthOfInterval,
+  format,
 } from "date-fns";
 
 export const analyticsRouter = createTRPCRouter({
@@ -159,65 +158,110 @@ export const analyticsRouter = createTRPCRouter({
       soldPercentageChange,
     };
   }),
-  // monthlyAnalytics: privateProcedure.query(async ({ ctx }) => {
-  //   try {
-  //     const { username } = ctx;
-  //     if (!username) return;
-  //     const currentDate = new Date();
-  //     const yearStart = startOfYear(currentDate);
-  //     const yearEnd = endOfYear(currentDate);
+  monthlyAnalytics: privateProcedure.query(async ({ ctx }) => {
+    try {
+      const { username } = ctx;
+      if (!username) return;
+      const currentDate = new Date();
+      const yearStart = startOfYear(currentDate);
+      const yearEnd = endOfMonth(currentDate); // Changed from endOfYear to endOfMonth
 
-  //     // Get all months in the current year
-  //     const months = eachMonthOfInterval({
-  //       start: yearStart,
-  //       end: yearEnd,
-  //     });
+      // Get months from start of year to current month
+      const months = eachMonthOfInterval({
+        start: yearStart,
+        end: yearEnd,
+      });
 
-  //     // Get delivered/shipped orders for the current year
-  //     const orderItems = await db.orderItems.findMany({
-  //       where: {
-  //         order: { paid: true },
-  //         sellerUsername: username,
-  //         createdAt: {
-  //           gte: yearStart,
-  //           lte: yearEnd,
-  //         },
-  //       },
-  //       select: {
-  //         price: true,
-  //         quantity: true,
-  //         createdAt: true,
-  //       },
-  //     });
+      // Get delivered/shipped orders for the current year up to current month
+      const orderItems = await db.orderItems.findMany({
+        where: {
+          order: { paid: true },
+          sellerUsername: username,
+          createdAt: {
+            gte: yearStart,
+            lte: yearEnd,
+          },
+        },
+        select: {
+          price: true,
+          quantity: true,
+          createdAt: true,
+        },
+      });
 
-  //     // Initialize monthly data
-  //     const monthlyData = months.map((month) => ({
-  //       name: format(month, "MMM"),
-  //       monthNumber: month.getMonth(),
-  //       revenue: 0,
-  //       itemsSold: 0,
-  //     }));
+      // Initialize monthly data only for months up to current month
+      const monthlyData = months.map((month) => ({
+        name: format(month, "MMM"),
+        monthNumber: month.getMonth(),
+        revenue: 0,
+        itemsSold: 0,
+      }));
 
-  //     // Aggregate data by month
-  //     orderItems.forEach((item) => {
-  //       const month = item.createdAt.getMonth();
-  //       monthlyData[month].revenue += item.price * item.quantity;
-  //       monthlyData[month].itemsSold += item.quantity;
-  //     });
+      // Aggregate data by month
+      orderItems.forEach((item) => {
+        const month = item.createdAt.getMonth();
+        // Make sure we only process months within our range
+        if (month <= currentDate.getMonth()) {
+          monthlyData[month].revenue += item.price * item.quantity;
+          monthlyData[month].itemsSold += item.quantity;
+        }
+      });
 
-  //     // Format the response for the chart
-  //     const chartData = monthlyData.map((month) => ({
-  //       name: month.name,
-  //       revenue: month.revenue,
-  //       itemsSold: month.itemsSold,
-  //     }));
+      // Format the response for the chart
+      const chartData = monthlyData.map((month) => ({
+        name: month.name,
+        revenue: month.revenue,
+        itemsSold: month.itemsSold,
+      }));
 
-  //     return chartData;
-  //   } catch (error) {
-  //     throw new TRPCError({
-  //       code: "INTERNAL_SERVER_ERROR",
-  //       message: `Failed to fetch monthly sales data, ${error}`,
-  //     });
-  //   }
-  // }),
+      return chartData;
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Failed to fetch monthly sales data, ${error}`,
+      });
+    }
+  }),
+  topProducts: privateProcedure.query(async ({ ctx }) => {
+    const start = startOfMonth(new Date());
+    const end = endOfMonth(new Date());
+    try {
+      const { username } = ctx;
+      if (!username) return;
+      const result = await db.$queryRaw<
+        {
+          productId: string;
+          totalQuantity: number;
+          totalRevenue: number;
+          title: string;
+          image: string;
+        }[]
+      >`
+        SELECT 
+          "OrderItems"."productId",
+          SUM("OrderItems"."quantity") AS "totalQuantity",
+          SUM("OrderItems"."price" * "OrderItems"."quantity") AS "totalRevenue",
+          "Products"."title",
+          "ProductImage"."url" AS "image"
+        FROM "OrderItems"
+        INNER JOIN "Products" ON "Products"."id" = "OrderItems"."productId"
+        LEFT JOIN "ProductImage" ON "ProductImage"."productId" = "Products"."id"
+        WHERE "OrderItems"."orderId" IN (
+          SELECT "id"
+          FROM "Order"
+          WHERE "paid" = true AND "createdAt" BETWEEN ${start} AND ${end}
+        )
+        GROUP BY "OrderItems"."productId", "Products"."title", "ProductImage"."url"
+        ORDER BY "totalQuantity" DESC
+        LIMIT 5
+      `;
+
+      return result;
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Failed to fetch monthly sales data, ${error}`,
+      });
+    }
+  }),
 });
