@@ -56,7 +56,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {formatPrice(data?.totalSpent._sum.price || 0)}
+              {formatPrice(data?.totalSpent || 0)}
             </div>
           </CardContent>
         </Card>
@@ -69,7 +69,7 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(data?.totalSpent._sum.price || 0) * 1.2}
+              {(data?.totalSpent || 0) * 1.2}
             </div>
           </CardContent>
         </Card>

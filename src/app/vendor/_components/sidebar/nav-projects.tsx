@@ -1,29 +1,56 @@
 "use client";
 
-import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Collapsible } from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Notebook } from "lucide-react";
+import { BarChart3, Home, Package, ShoppingCart } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
+const navigationItems = [
+  {
+    title: "Dashboard",
+    icon: Home,
+    url: "/vendor",
+    isActive: true,
+  },
+  {
+    title: "Orders",
+    icon: ShoppingCart,
+    url: "/vendor/orders",
+  },
+  {
+    title: "Products",
+    icon: Package,
+    url: "/vendor/products",
+  },
+  {
+    title: "Analytics",
+    icon: BarChart3,
+    url: "/vendor/analytics",
+  },
+];
 export function NavProjects() {
+  const pathName = usePathname();
   return (
     <SidebarGroup>
       <SidebarMenu>
-        <Collapsible asChild className="group/collapsible">
-          <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip="Products">
-                <Notebook />
-                <Link href={"/vendor/products"}>Products</Link>
+        {navigationItems.map((item) => (
+          <Collapsible asChild className="group/collapsible" key={item.title}>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild isActive={pathName === item.url}>
+                <Link href={item.url} className="flex items-center gap-2">
+                  <item.icon className="size-4" />
+                  <span>{item.title}</span>
+                </Link>
               </SidebarMenuButton>
-            </CollapsibleTrigger>
-          </SidebarMenuItem>
-        </Collapsible>
+            </SidebarMenuItem>
+          </Collapsible>
+        ))}
       </SidebarMenu>
     </SidebarGroup>
   );

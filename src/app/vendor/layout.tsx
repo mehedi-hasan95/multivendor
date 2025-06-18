@@ -10,6 +10,7 @@ import { authSession } from "@/lib/auth-session";
 import { redirect } from "next/navigation";
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Suspense } from "react";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -22,6 +23,8 @@ const AdminLayout = async ({ children }: AdminLayoutProps) => {
   const queryClient = getQueryClient();
 
   void queryClient.prefetchQuery(trpc.products.getManyBySeller.queryOptions());
+  void queryClient.prefetchQuery(trpc.analytics.analytics.queryOptions());
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -34,7 +37,11 @@ const AdminLayout = async ({ children }: AdminLayoutProps) => {
           </div>
         </header>
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+          <Suspense fallback={<p>Loading...</p>}>
+            <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+              {children}
+            </div>
+          </Suspense>
         </HydrationBoundary>
       </SidebarInset>
     </SidebarProvider>

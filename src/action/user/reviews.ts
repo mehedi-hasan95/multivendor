@@ -146,16 +146,18 @@ export const reviewsRouter = createTRPCRouter({
   getAvgReview: baseProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
-      const data = await db.ratings.aggregate({
-        where: { productId: input.id, ratings: { not: null } },
-        _avg: { ratings: true },
-        _count: { ratings: true },
-      });
-      const groupedRatings = await db.ratings.groupBy({
-        by: ["ratings"],
-        where: { productId: input.id, ratings: { not: null } },
-        _count: true,
-      });
+      const [data, groupedRatings] = await Promise.all([
+        db.ratings.aggregate({
+          where: { productId: input.id, ratings: { not: null } },
+          _avg: { ratings: true },
+          _count: { ratings: true },
+        }),
+        db.ratings.groupBy({
+          by: ["ratings"],
+          where: { productId: input.id, ratings: { not: null } },
+          _count: true,
+        }),
+      ]);
 
       const total = data._count.ratings ?? 0;
 
@@ -175,8 +177,6 @@ export const reviewsRouter = createTRPCRouter({
           );
         }
       }
-      console.log(data);
-      console.log("Total", total, percentages);
-      return { data, total, percentages };
+      return { data, percentages };
     }),
 });

@@ -15,7 +15,7 @@ const VendorProductPage = () => {
       <HeaderTitle
         title="Your Products"
         description="All of your product will shown here"
-        linkText="Create New"
+        linkText="Create Product"
         linkHref="/vendor/products/new"
       />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">

@@ -1,5 +1,11 @@
+import { VendorStatictic } from "./_components/vendor-dashboard/vendor-statistic";
+
 const AdminPage = () => {
-  return <div>Mehedi</div>;
+  return (
+    <div>
+      <VendorStatictic />
+    </div>
+  );
 };
 
 export default AdminPage;

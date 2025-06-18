@@ -226,54 +226,7 @@ export const cartRouter = createTRPCRouter({
         });
       }
     }),
-  //   const { username } = ctx;
-  //   if (!username) {
-  //     return;
-  //   }
-  //   const totalOrder = await db.order.count({
-  //     where: { paid: true, username },
-  //   });
-  //   const totalActiveOrder = await db.orderItems.count({
-  //     where: {
-  //       status: {
-  //         in: ["PROCESSING", "SHIPPED"],
-  //       },
 
-  //       order: {
-  //         paid: true,
-  //         username,
-  //       },
-  //     },
-  //   });
-  //   const activeOrder = await db.orderItems.groupBy({
-  //     by: ["status"],
-  //     where: {
-  //       status: {
-  //         in: ["PROCESSING", "SHIPPED"],
-  //       },
-  //       order: {
-  //         paid: true,
-  //         username,
-  //       },
-  //     },
-  //     _count: {
-  //       _all: true,
-  //     },
-  //   });
-  //   // total spent
-  //   const totalSpent = await db.orderItems.aggregate({
-  //     where: {
-  //       order: {
-  //         paid: true,
-  //         username,
-  //       },
-  //     },
-  //     _sum: {
-  //       price: true,
-  //     },
-  //   });
-  //   return { totalOrder, activeOrder, totalActiveOrder, totalSpent };
-  // }),
   getSummary: privateProcedure.query(async ({ ctx }) => {
     const { username } = ctx;
     if (!username) return;
@@ -309,20 +262,22 @@ export const cartRouter = createTRPCRouter({
             _all: true,
           },
         }),
-        db.orderItems.aggregate({
-          where: {
-            order: {
-              paid: true,
-              username,
-            },
-          },
-          _sum: {
-            price: true,
-          },
-        }),
+        db.$queryRaw<{ total: number }[]>`
+          SELECT SUM("price" * "quantity") as total
+          FROM "OrderItems"
+          WHERE "orderId" IN (
+            SELECT "id" FROM "Order" 
+            WHERE "paid" = true AND "username" = ${username}
+          )
+        `,
       ]);
 
-    return { totalOrder, totalActiveOrder, activeOrder, totalSpent };
+    return {
+      totalOrder,
+      totalActiveOrder,
+      activeOrder,
+      totalSpent: totalSpent[0].total,
+    };
   }),
   latestOrder: privateProcedure
     .input(z.object({ limit: z.coerce.number().optional() }))
