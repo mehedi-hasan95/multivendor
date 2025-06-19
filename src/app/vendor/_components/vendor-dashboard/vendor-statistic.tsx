@@ -8,7 +8,7 @@ import { VendorOrderCard } from "./vendor-order-card";
 
 export const VendorStatictic = () => {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.analytics.analytics.queryOptions());
+  const { data } = useSuspenseQuery(trpc.vendor.analytics.queryOptions());
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

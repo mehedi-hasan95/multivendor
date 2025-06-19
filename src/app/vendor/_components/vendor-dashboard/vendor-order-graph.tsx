@@ -21,7 +21,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 export const VendorOrderGraph = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(
-    trpc.analytics.monthlyAnalytics.queryOptions()
+    trpc.vendor.monthlyAnalytics.queryOptions()
   );
 
   const chartConfig = {

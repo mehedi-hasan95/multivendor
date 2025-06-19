@@ -67,7 +67,12 @@ export const ProductCard = ({
             />
             <p>{sellerName}</p>
           </div>
-          <StarRating rating={avgRating} text={`(${totalRatings})`} />
+          <StarRating
+            rating={avgRating}
+            text={`${
+              totalRatings > 0 ? avgRating.toFixed(1) + "/5" : ""
+            } (${totalRatings})`}
+          />
           <div className="flex items-center justify-between">
             <span className="font-semibold">{formatPrice(price)}</span>
             <button

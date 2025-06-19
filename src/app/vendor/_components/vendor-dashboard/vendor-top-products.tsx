@@ -14,7 +14,7 @@ import Image from "next/image";
 
 export const VendorTopProduct = () => {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.analytics.topProducts.queryOptions());
+  const { data } = useSuspenseQuery(trpc.vendor.topProducts.queryOptions());
   const totalPrice = data?.reduce((sum, item) => sum + item.totalRevenue, 0);
 
   return (

@@ -46,6 +46,8 @@ interface DataTableProps<TData, TValue> {
   disabled?: boolean;
   filterOptions?: FilterOption[];
   showPagination?: boolean;
+  showSelectedRows?: boolean;
+  totalRows?: boolean;
 }
 
 interface ActiveFilters {
@@ -58,6 +60,8 @@ export function DataTable<TData, TValue>({
   searchKey,
   filterOptions = [],
   showPagination = true,
+  showSelectedRows = false,
+  totalRows = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -236,8 +240,15 @@ export function DataTable<TData, TValue>({
       {showPagination && (
         <div className="flex items-center justify-end space-x-2 py-4">
           <div className="flex-1 text-sm text-muted-foreground">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
+            {showSelectedRows && (
+              <>
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </>
+            )}
+            {totalRows && (
+              <>{table.getFilteredRowModel().rows.length} row(s) are in total</>
+            )}
           </div>
 
           <Button

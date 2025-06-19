@@ -1,3 +1,4 @@
+import { OrderStatus } from "@/generated/prisma";
 import { db } from "@/lib/db";
 import { createTRPCRouter, privateProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
@@ -9,8 +10,9 @@ import {
   eachMonthOfInterval,
   format,
 } from "date-fns";
+import { z } from "zod";
 
-export const analyticsRouter = createTRPCRouter({
+export const vendorRouter = createTRPCRouter({
   analytics: privateProcedure.query(async ({ ctx }) => {
     const { username } = ctx;
     if (!username) return;
@@ -264,4 +266,55 @@ export const analyticsRouter = createTRPCRouter({
       });
     }
   }),
+  orders: privateProcedure.query(async ({ ctx }) => {
+    try {
+      const { username } = ctx;
+      const data = await db.orderItems.findMany({
+        where: { sellerUsername: username!, order: { paid: true } },
+        select: {
+          id: true,
+          orderId: true,
+          product: { select: { title: true } },
+          order: {
+            select: { shipping: true, createdAt: true, paymentId: true },
+          },
+          price: true,
+          quantity: true,
+          status: true,
+        },
+        orderBy: { createdAt: "desc" },
+      });
+      return data;
+    } catch (error) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: `Failed to fetch monthly sales data, ${error}`,
+      });
+    }
+  }),
+  updateOrderStatus: privateProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        orderId: z.string(),
+        status: z.nativeEnum(OrderStatus),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      try {
+        const { username } = ctx;
+        const { id, orderId, status } = input;
+        if (!username) return;
+        const data = db.orderItems.update({
+          where: { id, orderId, sellerUsername: username },
+          data: { status },
+        });
+        return data;
+      } catch (error) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Failed to fetch monthly sales data, ${error}`,
+        });
+      }
+    }),
 });

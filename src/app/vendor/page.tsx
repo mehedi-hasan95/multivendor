@@ -7,10 +7,8 @@ import { VendorTopProduct } from "./_components/vendor-dashboard/vendor-top-prod
 
 const AdminPage = async () => {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(
-    trpc.analytics.monthlyAnalytics.queryOptions()
-  );
-  void queryClient.prefetchQuery(trpc.analytics.topProducts.queryOptions());
+  void queryClient.prefetchQuery(trpc.vendor.monthlyAnalytics.queryOptions());
+  void queryClient.prefetchQuery(trpc.vendor.topProducts.queryOptions());
   return (
     <div className="space-y-6">
       <VendorStatictic />

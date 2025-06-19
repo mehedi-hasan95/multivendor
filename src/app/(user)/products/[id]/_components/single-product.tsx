@@ -100,7 +100,14 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                 <div className="flex items-center space-x-2">
                   <StarRating
                     rating={rating.data._avg.ratings as number}
-                    text={`${rating.data._count.ratings} ${
+                    text={`${
+                      rating.data._count.ratings > 0
+                        ? "(" +
+                          rating.data._avg.ratings?.toFixed(1) +
+                          "/5" +
+                          ")"
+                        : ""
+                    } ${rating.data._count.ratings} ${
                       rating.data._count.ratings > 1 ? "Ratings" : "Rating"
                     }`}
                   />
