@@ -42,6 +42,15 @@ export const formatDate = (dateString: string) => {
   return `${month} ${day}, ${year}`;
 };
 
+// export function generateTenentUrl(tenent: string) {
+//   return `/tenants/${tenent}`;
+// }
+
 export function generateTenentUrl(tenent: string) {
-  return `/tenants/${tenent}`;
+  let protocol = "https";
+  const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN!;
+  if (process.env.NODE_ENV === "development") {
+    protocol = "http";
+  }
+  return `${protocol}://${tenent}.${domain}`;
 }
