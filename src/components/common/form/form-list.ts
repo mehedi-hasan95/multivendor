@@ -28,6 +28,10 @@ export const LOGIN_FORM: AuthProps[] = [
   },
 ];
 
+const options = [
+  { value: "user", label: "User", id: "1" },
+  { value: "vendor", label: "Vendor", id: "2" },
+];
 export const REGISTER_FORM: AuthProps[] = [
   {
     id: "1",
@@ -52,6 +56,15 @@ export const REGISTER_FORM: AuthProps[] = [
     placeholder: "me@me.com",
     label: "Email",
     name: "email",
+  },
+  {
+    id: "4",
+    inputType: "select",
+    type: "text",
+    placeholder: "Select Role",
+    label: "Role",
+    name: "role",
+    options: options,
   },
   {
     id: "5",

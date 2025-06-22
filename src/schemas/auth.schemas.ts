@@ -1,3 +1,4 @@
+import { userRole } from "@/generated/prisma";
 import { z } from "zod";
 
 export const loginSchema = z.object({
@@ -26,6 +27,7 @@ export const registerSchema = z
         "Username cannot consecutive hyphens"
       )
       .transform((val) => val.toLowerCase()),
+    role: z.enum([userRole.user, userRole.vendor]),
     password: z
       .string()
       .min(4, { message: "Your password must be atleast 4 characters long" })
