@@ -2404,6 +2404,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: boolean | null
     image: string | null
+    stripeConnectId: string | null
+    stripeConnectLink: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     username: string | null
@@ -2420,6 +2422,8 @@ export namespace Prisma {
     email: string | null
     emailVerified: boolean | null
     image: string | null
+    stripeConnectId: string | null
+    stripeConnectLink: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
     username: string | null
@@ -2436,6 +2440,8 @@ export namespace Prisma {
     email: number
     emailVerified: number
     image: number
+    stripeConnectId: number
+    stripeConnectLink: number
     createdAt: number
     updatedAt: number
     username: number
@@ -2454,6 +2460,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    stripeConnectId?: true
+    stripeConnectLink?: true
     createdAt?: true
     updatedAt?: true
     username?: true
@@ -2470,6 +2478,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    stripeConnectId?: true
+    stripeConnectLink?: true
     createdAt?: true
     updatedAt?: true
     username?: true
@@ -2486,6 +2496,8 @@ export namespace Prisma {
     email?: true
     emailVerified?: true
     image?: true
+    stripeConnectId?: true
+    stripeConnectLink?: true
     createdAt?: true
     updatedAt?: true
     username?: true
@@ -2575,6 +2587,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image: string | null
+    stripeConnectId: string | null
+    stripeConnectLink: boolean
     createdAt: Date
     updatedAt: Date
     username: string
@@ -2608,6 +2622,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    stripeConnectId?: boolean
+    stripeConnectLink?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
@@ -2633,6 +2649,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    stripeConnectId?: boolean
+    stripeConnectLink?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
@@ -2649,6 +2667,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    stripeConnectId?: boolean
+    stripeConnectLink?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
@@ -2665,6 +2685,8 @@ export namespace Prisma {
     email?: boolean
     emailVerified?: boolean
     image?: boolean
+    stripeConnectId?: boolean
+    stripeConnectLink?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     username?: boolean
@@ -2675,7 +2697,7 @@ export namespace Prisma {
     banExpires?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "stripeConnectId" | "stripeConnectLink" | "createdAt" | "updatedAt" | "username" | "displayUsername" | "role" | "banned" | "banReason" | "banExpires", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     accounts?: boolean | User$accountsArgs<ExtArgs>
@@ -2708,6 +2730,8 @@ export namespace Prisma {
       email: string
       emailVerified: boolean
       image: string | null
+      stripeConnectId: string | null
+      stripeConnectLink: boolean
       createdAt: Date
       updatedAt: Date
       username: string
@@ -3152,6 +3176,8 @@ export namespace Prisma {
     readonly email: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'Boolean'>
     readonly image: FieldRef<"User", 'String'>
+    readonly stripeConnectId: FieldRef<"User", 'String'>
+    readonly stripeConnectLink: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly username: FieldRef<"User", 'String'>
@@ -18447,6 +18473,8 @@ export namespace Prisma {
     email: 'email',
     emailVerified: 'emailVerified',
     image: 'image',
+    stripeConnectId: 'stripeConnectId',
+    stripeConnectLink: 'stripeConnectLink',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     username: 'username',
@@ -18771,6 +18799,8 @@ export namespace Prisma {
     email?: StringFilter<"User"> | string
     emailVerified?: BoolFilter<"User"> | boolean
     image?: StringNullableFilter<"User"> | string | null
+    stripeConnectId?: StringNullableFilter<"User"> | string | null
+    stripeConnectLink?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     username?: StringFilter<"User"> | string
@@ -18795,6 +18825,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrderInput | SortOrder
+    stripeConnectId?: SortOrderInput | SortOrder
+    stripeConnectLink?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
@@ -18816,6 +18848,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    stripeConnectId?: string
     username?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -18823,6 +18856,7 @@ export namespace Prisma {
     name?: StringFilter<"User"> | string
     emailVerified?: BoolFilter<"User"> | boolean
     image?: StringNullableFilter<"User"> | string | null
+    stripeConnectLink?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     displayUsername?: StringNullableFilter<"User"> | string | null
@@ -18838,7 +18872,7 @@ export namespace Prisma {
     Order?: OrderListRelationFilter
     OrderItems?: OrderItemsListRelationFilter
     Ratings?: RatingsListRelationFilter
-  }, "id" | "email" | "username">
+  }, "id" | "stripeConnectId" | "email" | "username">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -18846,6 +18880,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrderInput | SortOrder
+    stripeConnectId?: SortOrderInput | SortOrder
+    stripeConnectLink?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
@@ -18868,6 +18904,8 @@ export namespace Prisma {
     email?: StringWithAggregatesFilter<"User"> | string
     emailVerified?: BoolWithAggregatesFilter<"User"> | boolean
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    stripeConnectId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    stripeConnectLink?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     username?: StringWithAggregatesFilter<"User"> | string
@@ -19841,6 +19879,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -19865,6 +19905,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -19889,6 +19931,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -19913,6 +19957,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -19937,6 +19983,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -19953,6 +20001,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -19969,6 +20019,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -21144,6 +21196,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    stripeConnectId?: SortOrder
+    stripeConnectLink?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
@@ -21160,6 +21214,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    stripeConnectId?: SortOrder
+    stripeConnectLink?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
@@ -21176,6 +21232,8 @@ export namespace Prisma {
     email?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    stripeConnectId?: SortOrder
+    stripeConnectLink?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     username?: SortOrder
@@ -23812,6 +23870,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -23835,6 +23895,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -23874,6 +23936,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -23897,6 +23961,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -23920,6 +23986,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -23943,6 +24011,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -23982,6 +24052,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -24005,6 +24077,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -24356,6 +24430,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -24379,6 +24455,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -24623,6 +24701,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -24646,6 +24726,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -24955,6 +25037,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -24978,6 +25062,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25068,6 +25154,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25091,6 +25179,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25171,6 +25261,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25194,6 +25286,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25284,6 +25378,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25307,6 +25403,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25387,6 +25485,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25410,6 +25510,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25511,6 +25613,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25534,6 +25638,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25667,6 +25773,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25690,6 +25798,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25819,6 +25929,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25842,6 +25954,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -25943,6 +26057,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -25966,6 +26082,8 @@ export namespace Prisma {
     email: string
     emailVerified: boolean
     image?: string | null
+    stripeConnectId?: string | null
+    stripeConnectLink?: boolean
     createdAt: Date | string
     updatedAt: Date | string
     username: string
@@ -26095,6 +26213,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string
@@ -26118,6 +26238,8 @@ export namespace Prisma {
     email?: StringFieldUpdateOperationsInput | string
     emailVerified?: BoolFieldUpdateOperationsInput | boolean
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeConnectLink?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     username?: StringFieldUpdateOperationsInput | string

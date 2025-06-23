@@ -29,13 +29,14 @@ const navigationItems = [
     url: "/vendor/products",
   },
   {
-    title: "Analytics",
+    title: "Billing & Analytics",
     icon: BarChart3,
-    url: "/vendor/analytics",
+    url: "/vendor/billing",
   },
 ];
 export function NavProjects() {
   const pathName = usePathname();
+
   return (
     <SidebarGroup>
       <SidebarMenu>

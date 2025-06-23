@@ -212,6 +212,12 @@ export const cartRouter = createTRPCRouter({
             username,
             orderId: JSON.stringify(orderData.id),
           },
+          payment_intent_data: {
+            application_fee_amount: 100,
+            transfer_data: {
+              destination: "",
+            },
+          },
           customer_email: userEmail,
           success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
           cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,

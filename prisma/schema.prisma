@@ -21,15 +21,17 @@ enum userRole {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+  id                String    @id
+  name              String
+  email             String
+  emailVerified     Boolean
+  image             String?
+  stripeConnectId   String?   @unique
+  stripeConnectLink Boolean   @default(false)
+  createdAt         DateTime
+  updatedAt         DateTime
+  sessions          Session[]
+  accounts          Account[]
 
   username        String
   displayUsername String?

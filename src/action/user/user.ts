@@ -1,5 +1,6 @@
 import { authClient } from "@/lib/auth-client";
 import { db } from "@/lib/db";
+import { stripe } from "@/lib/stripe";
 import { registerSchema } from "@/schemas/auth.schemas";
 import { baseProcedure, createTRPCRouter } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
@@ -45,13 +46,24 @@ export const userRouter = createTRPCRouter({
           });
           return data;
         }
-        const updatedUser = await db.user.update({
-          where: { id: user.data?.user.id },
-          data: {
-            role: input.role,
-          },
-        });
-        return updatedUser;
+        if (user.data?.user.email) {
+          const account = await stripe.accounts.create({
+            email: input.email,
+            controller: {
+              losses: { payments: "application" },
+              fees: { payer: "application" },
+              stripe_dashboard: { type: "express" },
+            },
+          });
+          const updatedUser = await db.user.update({
+            where: { id: user.data?.user.id },
+            data: {
+              role: input.role,
+              stripeConnectId: account.id,
+            },
+          });
+          return updatedUser;
+        }
       } catch (error) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

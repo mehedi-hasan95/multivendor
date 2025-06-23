@@ -126,6 +126,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   emailVerified: 'emailVerified',
   image: 'image',
+  stripeConnectId: 'stripeConnectId',
+  stripeConnectLink: 'stripeConnectLink',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   username: 'username',

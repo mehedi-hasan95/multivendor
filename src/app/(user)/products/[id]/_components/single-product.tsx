@@ -193,7 +193,6 @@ export const SingleProduct = ({ id }: ProductDetailsProps) => {
                     {[5, 4, 3, 2, 1].map((star) => {
                       const percentage =
                         rating.percentages[star as 5 | 4 | 3 | 2 | 1] || 0;
-                      console.log(percentage);
                       return (
                         <Fragment key={star}>
                           <div className="font-medium">
