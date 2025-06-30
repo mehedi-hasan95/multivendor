@@ -54,6 +54,10 @@ export const userRouter = createTRPCRouter({
               fees: { payer: "application" },
               stripe_dashboard: { type: "express" },
             },
+            capabilities: {
+              card_payments: { requested: true },
+              transfers: { requested: true },
+            },
           });
           const updatedUser = await db.user.update({
             where: { id: user.data?.user.id },

@@ -157,71 +157,72 @@ export const cartRouter = createTRPCRouter({
           : 0;
 
       try {
-        const session = await stripe.checkout.sessions.create({
-          payment_method_types: ["card"],
-          mode: "payment",
-          line_items: cartItems.map((item) => ({
-            price_data: {
-              currency: "USD",
-              product_data: {
-                name: item.title,
-                images: item.imageUrl ? [item.imageUrl] : [],
-              },
-              unit_amount: Math.round(item.price * 100), // Stripe uses cents
-            },
-            quantity: item.quantity,
-          })),
-          shipping_options: [
-            {
-              shipping_rate_data: {
-                type: "fixed_amount",
-                fixed_amount: {
-                  amount: Math.round(shippingCost * 100),
-                  currency: "usd",
+        const session = await stripe.checkout.sessions.create(
+          {
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: cartItems.map((item) => ({
+              price_data: {
+                currency: "USD",
+                product_data: {
+                  name: item.title,
+                  images: item.imageUrl ? [item.imageUrl] : [],
                 },
-                display_name:
-                  shippingMethod === "express"
-                    ? "Express Shipping"
-                    : shippingMethod === "overnight"
-                    ? "Overnight Shipping"
-                    : "Standard Shipping",
-                delivery_estimate: {
-                  minimum: {
-                    unit: "business_day",
-                    value:
-                      shippingMethod === "overnight"
-                        ? 1
-                        : shippingMethod === "express"
-                        ? 2
-                        : 5,
+                unit_amount: Math.round(item.price * 100), // Stripe uses cents
+              },
+              quantity: item.quantity,
+            })),
+            shipping_options: [
+              {
+                shipping_rate_data: {
+                  type: "fixed_amount",
+                  fixed_amount: {
+                    amount: Math.round(shippingCost * 100),
+                    currency: "usd",
                   },
-                  maximum: {
-                    unit: "business_day",
-                    value:
-                      shippingMethod === "overnight"
-                        ? 1
-                        : shippingMethod === "express"
-                        ? 3
-                        : 7,
+                  display_name:
+                    shippingMethod === "express"
+                      ? "Express Shipping"
+                      : shippingMethod === "overnight"
+                      ? "Overnight Shipping"
+                      : "Standard Shipping",
+                  delivery_estimate: {
+                    minimum: {
+                      unit: "business_day",
+                      value:
+                        shippingMethod === "overnight"
+                          ? 1
+                          : shippingMethod === "express"
+                          ? 2
+                          : 5,
+                    },
+                    maximum: {
+                      unit: "business_day",
+                      value:
+                        shippingMethod === "overnight"
+                          ? 1
+                          : shippingMethod === "express"
+                          ? 3
+                          : 7,
+                    },
                   },
                 },
               },
+            ],
+            metadata: {
+              username,
+              orderId: JSON.stringify(orderData.id),
             },
-          ],
-          metadata: {
-            username,
-            orderId: JSON.stringify(orderData.id),
-          },
-          payment_intent_data: {
-            application_fee_amount: 100,
-            transfer_data: {
-              destination: "",
-            },
-          },
-          customer_email: userEmail,
-          success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
-          cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,
-        });
+            // payment_intent_data: {
+            //   application_fee_amount: 100 * 100 * 0.1,
+            // },
+
+            customer_email: userEmail,
+            success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
+            cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,
+          }
+          // { stripeAccount: "acct_1RfIELPrNXYCYz0z" }
+        );
 
         return { url: session.url };
       } catch (error) {

@@ -112,6 +112,17 @@ export async function POST(req: Request) {
               },
             });
           }
+
+          // // stripe connect
+          // const expandSession = await stripe.checkout.sessions.retrieve(
+          //   session.id,
+          //   {
+          //     expand: ["line_items", "payment_intent"],
+          //   },
+          //   { stripeAccount: "acct_1RfIELPrNXYCYz0z" }
+          // );
+          // console.log(expandSession);
+          // console.log("account: ", event.account, session.id);
         }
 
         // Clear user's cart
