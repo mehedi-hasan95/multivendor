@@ -80,8 +80,8 @@ export async function POST(req: Request) {
                 id: true,
                 quantity: true,
                 productId: true,
-                // price: true,
-                // user: { select: { stripeConnectId: true } },
+                price: true,
+                user: { select: { stripeConnectId: true } },
               },
             },
           },
@@ -99,48 +99,48 @@ export async function POST(req: Request) {
             },
           });
 
-          // const vendorTotals: Record<string, number> = {};
-          // for (const item of order.OrderItems) {
-          //   await db.products.update({
-          //     where: { id: item.productId },
-          //     data: {
-          //       sale: { increment: item.quantity },
-          //     },
-          //   });
-          //   const vendorId = item.user.stripeConnectId;
-          //   if (!vendorId) continue;
+          const vendorTotals: Record<string, number> = {};
+          for (const item of order.OrderItems) {
+            await db.products.update({
+              where: { id: item.productId },
+              data: {
+                sale: { increment: item.quantity },
+              },
+            });
+            const vendorId = item.user.stripeConnectId;
+            if (!vendorId) continue;
 
-          //   const itemTotal = item.quantity * item.price;
-          //   if (!vendorTotals[vendorId]) {
-          //     vendorTotals[vendorId] = 0;
-          //   }
-          //   vendorTotals[vendorId] += itemTotal;
-          //   await db.orderItems.update({
-          //     where: { id: item.id },
-          //     data: {
-          //       status: "PROCESSING",
-          //     },
-          //   });
-          // }
+            const itemTotal = item.quantity * item.price;
+            if (!vendorTotals[vendorId]) {
+              vendorTotals[vendorId] = 0;
+            }
+            vendorTotals[vendorId] += itemTotal;
+            await db.orderItems.update({
+              where: { id: item.id },
+              data: {
+                status: "PROCESSING",
+              },
+            });
+          }
 
-          // const transfers = Object.entries(vendorTotals).map(
-          //   ([destination, amount]) => ({
-          //     amount,
-          //     currency: "usd", // or your preferred currency
-          //     destination,
-          //   })
-          // );
-          // for (const transfer of transfers) {
-          //   try {
-          //     const result = await stripe.transfers.create(transfer);
-          //     console.log(`Transfer created: ${result.id}`);
-          //   } catch (error) {
-          //     console.error(
-          //       `Error creating transfer to ${transfer.destination}:`,
-          //       error
-          //     );
-          //   }
-          // }
+          const transfers = Object.entries(vendorTotals).map(
+            ([destination, amount]) => ({
+              amount: Math.round(amount * 100 * 0.9),
+              currency: "usd", // or your preferred currency
+              destination,
+            })
+          );
+          for (const transfer of transfers) {
+            try {
+              const result = await stripe.transfers.create(transfer);
+              console.log(`Transfer created: ${result.id}`);
+            } catch (error) {
+              console.error(
+                `Error creating transfer to ${transfer.destination}:`,
+                error
+              );
+            }
+          }
         }
 
         // Clear user's cart

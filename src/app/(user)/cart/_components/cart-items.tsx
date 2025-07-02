@@ -125,7 +125,7 @@ export const CartItems = () => {
   const checkOut = useMutation(
     trpc.cart.purchase.mutationOptions({
       onSuccess: (data) => {
-        if (data.url) {
+        if (data?.url) {
           window.location.href = data.url;
         }
       },

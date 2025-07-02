@@ -157,106 +157,75 @@ export const cartRouter = createTRPCRouter({
           ? 29.99
           : 0;
 
-      const order = await db.order.findUnique({
-        where: {
-          id: orderData.id,
-          username,
-        },
-        select: {
-          id: true,
-          OrderItems: {
-            select: {
-              id: true,
-              quantity: true,
-              productId: true,
-              price: true,
-              user: { select: { stripeConnectId: true } },
-            },
-          },
-        },
-      });
-      const vendorTotals: Record<string, number> = {};
-      for (const item of order?.OrderItems as any) {
-        const vendorId = item.user.stripeConnectId;
-        const itemTotal = item.quantity * item.price;
-        if (!vendorTotals[vendorId as string]) {
-          vendorTotals[vendorId as string] = 0;
-        }
-        vendorTotals[vendorId as string] += itemTotal;
-      }
-
       try {
-        for (const [vendorId, amount] of Object.entries(vendorTotals)) {
-          console.log(vendorId, amount);
-          const session = await stripe.checkout.sessions.create(
-            {
-              payment_method_types: ["card"],
-              mode: "payment",
-              line_items: cartItems.map((item) => ({
-                price_data: {
-                  currency: "USD",
-                  product_data: {
-                    name: item.title,
-                    images: item.imageUrl ? [item.imageUrl] : [],
-                  },
-                  unit_amount: Math.round(item.price * 100), // Stripe uses cents
+        const session = await stripe.checkout.sessions.create(
+          {
+            payment_method_types: ["card"],
+            mode: "payment",
+            line_items: cartItems.map((item) => ({
+              price_data: {
+                currency: "USD",
+                product_data: {
+                  name: item.title,
+                  images: item.imageUrl ? [item.imageUrl] : [],
                 },
-                quantity: item.quantity,
-              })),
-              shipping_options: [
-                {
-                  shipping_rate_data: {
-                    type: "fixed_amount",
-                    fixed_amount: {
-                      amount: Math.round(shippingCost * 100),
-                      currency: "usd",
+                unit_amount: Math.round(item.price * 100), // Stripe uses cents
+              },
+              quantity: item.quantity,
+            })),
+            shipping_options: [
+              {
+                shipping_rate_data: {
+                  type: "fixed_amount",
+                  fixed_amount: {
+                    amount: Math.round(shippingCost * 100),
+                    currency: "usd",
+                  },
+                  display_name:
+                    shippingMethod === "express"
+                      ? "Express Shipping"
+                      : shippingMethod === "overnight"
+                      ? "Overnight Shipping"
+                      : "Standard Shipping",
+                  delivery_estimate: {
+                    minimum: {
+                      unit: "business_day",
+                      value:
+                        shippingMethod === "overnight"
+                          ? 1
+                          : shippingMethod === "express"
+                          ? 2
+                          : 5,
                     },
-                    display_name:
-                      shippingMethod === "express"
-                        ? "Express Shipping"
-                        : shippingMethod === "overnight"
-                        ? "Overnight Shipping"
-                        : "Standard Shipping",
-                    delivery_estimate: {
-                      minimum: {
-                        unit: "business_day",
-                        value:
-                          shippingMethod === "overnight"
-                            ? 1
-                            : shippingMethod === "express"
-                            ? 2
-                            : 5,
-                      },
-                      maximum: {
-                        unit: "business_day",
-                        value:
-                          shippingMethod === "overnight"
-                            ? 1
-                            : shippingMethod === "express"
-                            ? 3
-                            : 7,
-                      },
+                    maximum: {
+                      unit: "business_day",
+                      value:
+                        shippingMethod === "overnight"
+                          ? 1
+                          : shippingMethod === "express"
+                          ? 3
+                          : 7,
                     },
                   },
                 },
-              ],
-              metadata: {
-                username,
-                orderId: JSON.stringify(orderData.id),
               },
-              payment_intent_data: {
-                application_fee_amount: amount * 100 * 0.1,
-              },
-
-              customer_email: userEmail,
-              success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
-              cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,
+            ],
+            metadata: {
+              username,
+              orderId: JSON.stringify(orderData.id),
             },
-            { stripeAccount: vendorId }
-          );
+            // payment_intent_data: {
+            //   application_fee_amount: 100 * 100 * 0.1,
+            // },
 
-          return { url: session.url };
-        }
+            customer_email: userEmail,
+            success_url: `${process.env.NEXT_PUBLIC_URL}/cart?success=true`,
+            cancel_url: `${process.env.NEXT_PUBLIC_URL}/cart?cancel=true`,
+          }
+          // { stripeAccount: "acct_1RfIELPrNXYCYz0z" }
+        );
+
+        return { url: session.url };
       } catch (error) {
         console.error("Stripe error:", error);
         throw new TRPCError({
