@@ -253,6 +253,7 @@ export const vendorRouter = createTRPCRouter({
           FROM "Order"
           WHERE "paid" = true AND "createdAt" BETWEEN ${start} AND ${end}
         )
+          AND "OrderItems"."sellerUsername" = ${username}
         GROUP BY "OrderItems"."productId", "Products"."title", "ProductImage"."url"
         ORDER BY "totalQuantity" DESC
         LIMIT 5
