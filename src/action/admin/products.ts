@@ -12,7 +12,15 @@ export const productRouter = createTRPCRouter({
   create: baseProcedure.input(productSchema).mutation(async ({ input }) => {
     try {
       const session = await authSession();
-      if (session?.user.role !== "admin" && session?.user.role !== "vendor")
+      if (!session) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+        });
+      }
+      if (
+        session?.user.role !== "vendor" &&
+        session.user.role !== ("admin" as string)
+      )
         return { error: "Unauthorize user" };
       const validateField = productSchema.safeParse(input);
       if (!validateField.success) return { error: "Something went wrong" };
@@ -76,6 +84,7 @@ export const productRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
       z.object({
+        search: z.string().nullable().optional(),
         category: z.string().optional(),
         subCategory: z.string().optional(),
         minPrice: z.string().optional(),
@@ -105,6 +114,7 @@ export const productRouter = createTRPCRouter({
                 slug: { in: input.tags },
               }
             : undefined,
+          title: { contains: input.search || undefined, mode: "insensitive" },
         },
         orderBy: {
           createdAt:

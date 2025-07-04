@@ -7,6 +7,7 @@ import {
 
 export const sortValues = ["trending", "best_seller", "hot_and_new"] as const;
 const params = {
+  search: parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
   minPrice: parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
   maxPrice: parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
   tags: parseAsArrayOf(parseAsString)

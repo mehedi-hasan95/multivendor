@@ -2,7 +2,7 @@ import { authClient } from "@/lib/auth-client";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { registerSchema } from "@/schemas/auth.schemas";
-import { baseProcedure, createTRPCRouter } from "@/trpc/init";
+import { baseProcedure, createTRPCRouter, privateProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -76,4 +76,8 @@ export const userRouter = createTRPCRouter({
         });
       }
     }),
+  userDetails: privateProcedure.query(async ({ ctx }) => {
+    const user = await db.user.findUnique({ where: { email: ctx.userEmail } });
+    return user;
+  }),
 });
