@@ -39,6 +39,7 @@ export const ProductCard = ({
       className="group relative overflow-hidden rounded-lg border bg-background shadow-sm transition-all hover:shadow-md"
       key={productId}
     >
+      {/* test  */}
       <Link href={`/products/${productId}`}>
         <span className="sr-only">View {title}</span>
 
